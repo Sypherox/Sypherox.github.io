@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sypherox</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://i.imgur.com/G8YZBUi.png');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            filter: blur(3px);
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .profile-section {
+            margin-bottom: 30px;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .profile-image-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-image-container:hover {
+            transform: rotateY(10deg) rotateX(5deg) scale(1.05);
+        }
+
+        .avatar-decorations {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 180px;
+            height: 180px;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 4px solid #ff3333;
+            object-fit: cover;
+            box-shadow: 0 8px 32px rgba(255, 51, 51, 0.3);
+            transition: transform 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .status-indicator {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 4px solid #1a1a1a;
+            z-index: 3;
+        }
+
+        .status-online { background: #23a55a; }
+        .status-idle { background: #f0b232; }
+        .status-dnd { background: #f23f43; }
+        .status-offline { background: #80848e; }
+
+        h1 {
+            color: #ff3333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(255, 51, 51, 0.5);
+        }
+
+        .subtitle {
+            color: #ff6666;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .location {
+            color: #999;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+        }
+
+        .location i {
+            color: #ff3333;
+            margin-right: 5px;
+        }
+
+        .working-stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+            align-items: center;
+        }
+
+        .stat-card-mini {
+            background: rgba(40, 40, 40, 0.4);
+            border: 2px solid #ff3333;
+            border-radius: 12px;
+            padding: 20px 15px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+        }
+
+        .stat-card-mini:hover {
+            transform: translateY(-5px) rotateY(5deg);
+            box-shadow: 0 10px 30px rgba(255, 51, 51, 0.3);
+        }
+
+        .stat-card-mini i {
+            color: #ff3333;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            color: #fff;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+
+        .stat-label {
+            color: #999;
+            font-size: 0.85em;
+        }
+
+        .working-on-section {
+            background: rgba(40, 40, 40, 0.4);
+            border: 2px solid #ff3333;
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+        }
+
+        .working-on-section:hover {
+            transform: translateY(-5px) rotateX(2deg);
+            box-shadow: 0 15px 40px rgba(255, 51, 51, 0.4);
+        }
+
+        .working-on-title {
+            color: #ff6666;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .working-on-project {
+            color: #fff;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .working-on-description {
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .discord-card {
+            background: rgba(40, 40, 40, 0.4);
+            border: 2px solid #ff3333;
+            border-radius: 15px;
+            padding: 15px 20px;
+            margin: 20px 0;
+            display: none;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            transform-style: preserve-3d;
+        }
+
+        .discord-card.active {
+            display: flex;
+        }
+
+        .discord-card:hover {
+            transform: translateY(-5px) rotateX(2deg);
+            box-shadow: 0 10px 40px rgba(255, 51, 51, 0.3);
+        }
+
+        .discord-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid #ff3333;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .discord-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .discord-status-badge {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 3px solid rgba(40, 40, 40, 0.95);
+        }
+
+        .discord-content {
+            flex: 1;
+            text-align: left;
+            min-width: 0;
+        }
+
+        .discord-name {
+            color: #ff3333;
+            font-weight: 600;
+            font-size: 1em;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .badge-icon {
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        .discord-activity {
+            color: #ccc;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .discord-activity a {
+            color: #ff3333;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .discord-activity a:hover {
+            color: #ff6666;
+            text-decoration: underline;
+        }
+
+        .discord-activity small {
+            color: #666;
+            display: block;
+            margin-top: 2px;
+        }
+
+        .spotify-cover {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .spotify-cover:hover {
+            transform: scale(1.05) rotateZ(-2deg);
+            box-shadow: 0 6px 16px rgba(255, 51, 51, 0.4);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .social-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(40, 40, 40, 0.9);
+            border: 2px solid #ff3333;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff3333;
+            font-size: 24px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            transform-style: preserve-3d;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-icon img {
+            width: 28px;
+            height: 28px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .social-icon:hover {
+            background: #ff3333;
+            color: white;
+            transform: translateY(-5px) rotate(5deg) scale(1.1);
+            box-shadow: 0 10px 30px rgba(255, 51, 51, 0.4);
+        }
+
+        .view-counter {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #999;
+            font-size: 0.9em;
+            margin-top: 20px;
+        }
+
+        .view-counter i {
+            color: #ff3333;
+        }
+
+        .sound-control {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sound-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(40, 40, 40, 0.9);
+            border: 2px solid #ff3333;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff3333;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .sound-icon:hover {
+            background: #ff3333;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .sound-icon.playing {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 51, 51, 0.7); }
+            50% { box-shadow: 0 0 0 10px rgba(255, 51, 51, 0); }
+        }
+
+        .volume-slider {
+            background: rgba(40, 40, 40, 0.95);
+            border: 2px solid #ff3333;
+            border-radius: 20px;
+            padding: 10px 15px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(10px);
+            white-space: nowrap;
+        }
+
+        .sound-control:hover .volume-slider {
+            display: flex;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .volume-slider input[type="range"] {
+            width: 100px;
+            height: 4px;
+            background: #555;
+            outline: none;
+            border-radius: 2px;
+            -webkit-appearance: none;
+        }
+
+        .volume-slider input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            background: #ff3333;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .volume-slider input[type="range"]::-webkit-slider-thumb:hover {
+            background: #ff6666;
+            transform: scale(1.2);
+        }
+
+        .volume-slider input[type="range"]::-moz-range-thumb {
+            width: 14px;
+            height: 14px;
+            background: #ff3333;
+            cursor: pointer;
+            border-radius: 50%;
+            border: none;
+        }
+
+        .volume-label {
+            color: #ff3333;
+            font-size: 0.9em;
+            font-weight: bold;
+            min-width: 35px;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            .subtitle { font-size: 1em; }
+            .profile-image { width: 120px; height: 120px; }
+            .avatar-decorations { width: 150px; height: 150px; }
+            .social-icon { width: 45px; height: 45px; font-size: 20px; }
+            .working-stats-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            .volume-slider input[type="range"] { width: 80px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="sound-control">
+        <div class="sound-icon" id="soundToggle" title="Sound">
+            <i class="fas fa-volume-mute"></i>
+        </div>
+        <div class="volume-slider">
+            <input type="range" min="0" max="100" value="10" id="volumeControl">
+            <span class="volume-label" id="volumeLabel">10%</span>
+        </div>
+    </div>
+
+    <audio id="spotifyAudio" preload="metadata"></audio>
+
+    <div class="container">
+        <div class="profile-section">
+            <div class="profile-image-container">
+                <div class="avatar-decorations" id="avatarDecorations"></div>
+                <img src="https://cdn.discordapp.com/avatars/YOUR_DISCORD_ID/YOUR_AVATAR_HASH.png?size=256" 
+                     alt="Profile" class="profile-image" id="profileImg">
+                <div class="status-indicator status-online" id="statusIndicator"></div>
+            </div>
+            <h1 id="displayName">Tom</h1>
+            <p class="subtitle">Developer and Content Creator</p>
+            <p class="location">
+                <i class="fas fa-map-marker-alt"></i>
+                Cologne, Germany
+            </p>
+        </div>
+
+        <div class="working-stats-grid">
+            <div class="stat-card-mini">
+                <i class="fab fa-github"></i>
+                <div class="stat-value" id="githubRepos">30+</div>
+                <div class="stat-label">GitHub Repos</div>
+            </div>
+
+            <div class="working-on-section">
+                <div class="working-on-title">
+                    <i class="fas fa-code"></i>
+                    Currently Working On
+                </div>
+                <div class="working-on-project">Devyl AntiCheat</div>
+                <div class="working-on-description">
+                    Minecraft 1.8.9 Machine Learning based AntiCheat
+                </div>
+            </div>
+
+            <div class="stat-card-mini">
+                <i class="fas fa-code"></i>
+                <div class="stat-value" id="commitCount">500+</div>
+                <div class="stat-label">Commits</div>
+            </div>
+        </div>
+
+        <div class="discord-card" id="discordCard">
+            <div class="discord-avatar">
+                <img src="" alt="Discord Avatar" id="discordAvatar">
+                <div class="discord-status-badge status-online" id="discordStatus"></div>
+            </div>
+            <div class="discord-content">
+                <div class="discord-name">
+                    <span id="discordUsername">sypherox</span>
+                    <span id="discordBadges"></span>
+                </div>
+                <div class="discord-activity" id="discordActivity">
+                    <span id="activityText">Online</span>
+                </div>
+            </div>
+            <img src="" alt="Album Cover" class="spotify-cover" id="spotifyCover" style="display: none;">
+        </div>
+
+        <div class="social-links">
+            <a href="https://youtube.com/@Sypherox" target="_blank" class="social-icon" title="YouTube">
+                <i class="fab fa-youtube"></i>
+            </a>
+            <a href="https://twitch.tv/Sypherox" target="_blank" class="social-icon" title="Twitch">
+                <i class="fab fa-twitch"></i>
+            </a>
+            <a href="https://tiktok.com/@Sypherox" target="_blank" class="social-icon" title="TikTok">
+                <i class="fab fa-tiktok"></i>
+            </a>
+            <a href="https://discord.com/invite/aG4QYP8u5p" target="_blank" class="social-icon" title="Discord">
+                <i class="fab fa-discord"></i>
+            </a>
+            <a href="https://de.namemc.com/profile/Sypherox.3" target="_blank" class="social-icon" title="NameMC">
+                <img src="https://minotar.net/helm/Sypherox/500.png" alt="NameMC">
+            </a>
+            <a href="https://github.com/Sypherox" target="_blank" class="social-icon" title="GitHub">
+                <i class="fab fa-github"></i>
+            </a>
+            <a href="https://reddit.com/SypheroxXD" target="_blank" class="social-icon" title="Reddit">
+                <i class="fab fa-reddit"></i>
+            </a>
+            <a href="https://kick.com/Sypherox" target="_blank" class="social-icon" title="Kick">
+                <i class="fas fa-k"></i>
+            </a>
+            <a href="https://x.com/Syphercx" target="_blank" class="social-icon" title="Twitter/X">
+                <i class="fab fa-twitter"></i>
+            </a>
+        </div>
+
+        <div class="view-counter">
+            <i class="fas fa-eye"></i>
+            <span id="viewCount">156</span> Views
+        </div>
+    </div>
+
+    <script>
+        const DISCORD_USER_ID = '333523819690065921';
+
+        let spotifyAudio = document.getElementById('spotifyAudio');
+        let soundEnabled = false;
+        let currentVolume = 10;
+
+        const soundToggle = document.getElementById('soundToggle');
+        const soundIcon = soundToggle.querySelector('i');
+        const volumeControl = document.getElementById('volumeControl');
+        const volumeLabel = document.getElementById('volumeLabel');
+
+        volumeControl.addEventListener('input', (e) => {
+            currentVolume = parseInt(e.target.value);
+            volumeLabel.textContent = currentVolume + '%';
+            spotifyAudio.volume = currentVolume / 100;
+
+            if (currentVolume === 0) {
+                soundIcon.className = 'fas fa-volume-mute';
+            } else if (currentVolume < 50) {
+                soundIcon.className = 'fas fa-volume-down';
+            } else {
+                soundIcon.className = 'fas fa-volume-up';
+            }
+        });
+
+        soundToggle.addEventListener('click', function() {
+            soundEnabled = !soundEnabled;
+
+            if (soundEnabled && currentVolume > 0) {
+                if (currentVolume < 50) {
+                    soundIcon.className = 'fas fa-volume-down';
+                } else {
+                    soundIcon.className = 'fas fa-volume-up';
+                }
+                soundToggle.classList.add('playing');
+
+                console.log('[Spotify] Error: Fetching not possible');
+            } else {
+                soundIcon.className = 'fas fa-volume-mute';
+                soundToggle.classList.remove('playing');
+                spotifyAudio.pause();
+            }
+        });
+
+        let viewCount = 156; //old count from guns.lol
+        const VIEW_KEY = 'profile_views_' + DISCORD_USER_ID;
+        const LAST_VIEW_KEY = 'last_view_' + DISCORD_USER_ID;
+
+        function initViewCounter() {
+            const storedViews = localStorage.getItem(VIEW_KEY);
+            const lastView = localStorage.getItem(LAST_VIEW_KEY);
+            const now = Date.now();
+
+            if (storedViews) {
+                viewCount = parseInt(storedViews);
+            }
+
+            if (!lastView || (now - parseInt(lastView)) > 300000) {
+                viewCount++;
+                localStorage.setItem(VIEW_KEY, viewCount);
+                localStorage.setItem(LAST_VIEW_KEY, now);
+            }
+
+            updateViewCounter();
+        }
+
+        function updateViewCounter() {
+            document.getElementById('viewCount').textContent = viewCount.toLocaleString('de-DE');
+        }
+
+        let ws;
+
+        function connectToLanyard() {
+            ws = new WebSocket('wss://api.lanyard.rest/socket');
+
+            ws.onopen = () => {
+                console.log('[Discord] connected');
+                ws.send(JSON.stringify({
+                    op: 2,
+                    d: { subscribe_to_id: DISCORD_USER_ID }
+                }));
+            };
+
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+
+                if (data.t === 'INIT_STATE' || data.t === 'PRESENCE_UPDATE') {
+                    updateDiscordPresence(data.d);
+                }
+
+                if (data.op === 1) {
+                    setInterval(() => {
+                        ws.send(JSON.stringify({ op: 3 }));
+                    }, data.d.heartbeat_interval);
+                }
+            };
+
+            ws.onerror = (error) => {
+                console.error('[Discord] Error:', error);
+            };
+
+            ws.onclose = () => {
+                setTimeout(connectToLanyard, 3000);
+            };
+        }
+
+        function updateDiscordPresence(presence) {
+            const card = document.getElementById('discordCard');
+            const avatar = document.getElementById('discordAvatar');
+            const profileImg = document.getElementById('profileImg');
+            const username = document.getElementById('discordUsername');
+            const activityText = document.getElementById('activityText');
+            const statusIndicator = document.getElementById('statusIndicator');
+            const discordStatus = document.getElementById('discordStatus');
+            const avatarDecorations = document.getElementById('avatarDecorations');
+            const badgesContainer = document.getElementById('discordBadges');
+            const spotifyCover = document.getElementById('spotifyCover');
+
+            const avatarUrl = `https://cdn.discordapp.com/avatars/${presence.discord_user.id}/${presence.discord_user.avatar}.png?size=256`;
+            avatar.src = avatarUrl;
+            profileImg.src = avatarUrl;
+
+            if (presence.discord_user.avatar_decoration_data) {
+                const decoAsset = presence.discord_user.avatar_decoration_data.asset;
+                const decoUrl = `https://cdn.discordapp.com/avatar-decoration-presets/${decoAsset}.png?size=240`;
+                avatarDecorations.innerHTML = `<img src="${decoUrl}" style="width: 100%; height: 100%; object-fit: contain;">`;
+            }
+
+            username.textContent = presence.discord_user.username;
+
+            let badgesHTML = '';
+
+            if (presence.discord_user.public_flags) {
+                const flags = presence.discord_user.public_flags;
+
+                if (flags & (1 << 22)) {
+                    badgesHTML += '<i class="fas fa-bolt badge-icon" style="color: #ffcc00;"></i>';
+                }
+
+                if (flags & (1 << 17)) {
+                    badgesHTML += '<svg class="badge-icon" viewBox="0 0 16 16" fill="#5865F2"><path d="M10.8 2.57L8 .8 5.2 2.57 2.05 2.05l-.52 3.15L0 7.98l1.53 2.78.52 3.15 3.15.52L8 16.2l2.8-1.77 3.15-.52.52-3.15L16 7.98l-1.53-2.78-.52-3.15-3.15-.52z"/><path d="M7 10l-3-3 1.5-1.5L7 7l3.5-3.5L12 5l-5 5z" fill="white"/></svg>';
+                }
+            }
+
+            badgesHTML += '<i class="fas fa-laptop-code badge-icon" style="color: #ff3333;"></i>';
+            badgesContainer.innerHTML = badgesHTML;
+
+            const statusClasses = {
+                'online': 'status-online',
+                'idle': 'status-idle',
+                'dnd': 'status-dnd',
+                'offline': 'status-offline'
+            };
+
+            const statusClass = statusClasses[presence.discord_status] || 'status-offline';
+            statusIndicator.className = 'status-indicator ' + statusClass;
+            discordStatus.className = 'discord-status-badge ' + statusClass;
+
+            spotifyCover.style.display = 'none';
+
+            if (presence.activities && presence.activities.length > 0) {
+                card.classList.add('active');
+
+                const activity = presence.activities[0];
+
+                if (activity.type === 2 && presence.spotify) {
+                    const spotify = presence.spotify;
+
+                    activityText.innerHTML = `
+                        Listening to <a href="https://open.spotify.com/track/${spotify.track_id}" target="_blank">${spotify.song}</a>
+                        <br><small>by ${spotify.artist}</small>
+                    `;
+
+                    if (spotify.album_art_url) {
+                        spotifyCover.src = spotify.album_art_url;
+                        spotifyCover.style.display = 'block';
+                        spotifyCover.onclick = () => window.open(`https://open.spotify.com/track/${spotify.track_id}`, '_blank');
+                    }
+                } else if (activity.name === 'Custom Status') {
+                    activityText.innerHTML = activity.state || 'Online';
+                } else {
+                    let text = '';
+                    if (activity.type === 0) text = 'Playing ';
+                    else if (activity.type === 1) text = 'Streaming ';
+                    else if (activity.type === 3) text = 'Watching ';
+                    else if (activity.type === 5) text = 'Competing in ';
+
+                    text += `<strong>${activity.name}</strong>`;
+                    if (activity.details) text += `<br><small>${activity.details}</small>`;
+
+                    activityText.innerHTML = text;
+                }
+            } else {
+                const statusTexts = {
+                    'online': 'Online',
+                    'idle': 'Abwesend',
+                    'dnd': 'Nicht stören',
+                    'offline': 'Offline'
+                };
+                activityText.innerHTML = statusTexts[presence.discord_status] || 'Online';
+                card.classList.add('active');
+            }
+        }
+
+        connectToLanyard();
+        initViewCounter();
+
+        console.log('[DEBUG] site loaded');
+    </script>
+</body>
+</html>
