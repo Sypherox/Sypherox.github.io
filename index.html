@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2VCZWVBX8J"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-2VCZWVBX8J');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sypherox</title>
@@ -656,30 +663,24 @@
             }
         });
 
-        let viewCount = 156; //old count from guns.lol
-        const VIEW_KEY = 'profile_views_' + DISCORD_USER_ID;
-        const LAST_VIEW_KEY = 'last_view_' + DISCORD_USER_ID;
+        let viewCount = 170; //old count from guns.lol & as a  fallback number
 
-        function initViewCounter() {
-            const storedViews = localStorage.getItem(VIEW_KEY);
-            const lastView = localStorage.getItem(LAST_VIEW_KEY);
-            const now = Date.now();
-
-            if (storedViews) {
-                viewCount = parseInt(storedViews);
+        async function initViewCounter() {
+            try {
+                const response = await fetch('https://sypherox-counter.sypheroxyt.workers.dev/count');
+                const data = await response.json();
+                viewCount = data.views;
+                updateViewCounter();
+            } catch (error) {
+                console.error('[View Counter] Error:', error);
+                viewCount = 'Error';
+                updateViewCounter();
             }
-
-            if (!lastView || (now - parseInt(lastView)) > 300000) {
-                viewCount++;
-                localStorage.setItem(VIEW_KEY, viewCount);
-                localStorage.setItem(LAST_VIEW_KEY, now);
-            }
-
-            updateViewCounter();
         }
 
         function updateViewCounter() {
-            document.getElementById('viewCount').textContent = viewCount.toLocaleString('de-DE');
+            const counter = document.getElementById('viewCount');
+            counter.textContent = viewCount !== 'Error' ? viewCount.toLocaleString('de-DE') : '...';
         }
 
         let ws;
