@@ -9,6 +9,12 @@
     gtag('config', 'G-2VCZWVBX8J');
     </script>
     <meta charset="UTF-8">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sypherox.dev/">
+    <meta property="og:title" content="Sypherox">
+    <meta property="og:description" content="Developer and Content Creator">
+    <meta property="og:image" content="https://minotar.net/helm/Sypherox/500.png">
+    <meta name="theme-color" content="#ff3333">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sypherox</title>
     <link rel="icon" type="image/png" href="https://minotar.net/helm/Sypherox/500.png">
@@ -522,7 +528,9 @@
         </div>
     </div>
 
-    <audio id="spotifyAudio" preload="metadata"></audio>
+    <audio id="spotifyAudio" preload="metadata" loop>
+        <source src="background_music.mp3" type="audio/mpeg">
+    </audio>
 
     <div class="container">
         <div class="profile-section">
@@ -645,6 +653,7 @@
         });
 
         soundToggle.addEventListener('click', function() {
+            if (!autoplayStarted) return;
             soundEnabled = !soundEnabled;
 
             if (soundEnabled && currentVolume > 0) {
@@ -654,8 +663,8 @@
                     soundIcon.className = 'fas fa-volume-up';
                 }
                 soundToggle.classList.add('playing');
-
-                console.log('[Spotify] Error: Fetching not possible');
+                spotifyAudio.volume = currentVolume / 100;
+                spotifyAudio.play();
             } else {
                 soundIcon.className = 'fas fa-volume-mute';
                 soundToggle.classList.remove('playing');
@@ -821,7 +830,31 @@
         connectToLanyard();
         initViewCounter();
 
+        let autoplayStarted = false;
+
+        function tryAutoplay() {
+            if (!autoplayStarted) {
+                autoplayStarted = true;
+                soundEnabled = true;
+                spotifyAudio.volume = currentVolume / 100;
+                spotifyAudio.play().then(() => {
+                    soundToggle.classList.add('playing');
+                    soundIcon.className = 'fas fa-volume-down';
+                }).catch(err => {
+                    console.warn('[Audio] Autoplay blocked:', err);
+                    soundEnabled = false;
+                });
+                document.removeEventListener('click', tryAutoplay);
+                document.removeEventListener('keydown', tryAutoplay);
+                document.removeEventListener('touchstart', tryAutoplay);
+            }
+        }
+        
+        document.addEventListener('click', tryAutoplay);
+        document.addEventListener('keydown', tryAutoplay);
+        document.addEventListener('touchstart', tryAutoplay);
+        
         console.log('[DEBUG] site loaded');
-    </script>
-</body>
+        </script>
+    </body>
 </html>
