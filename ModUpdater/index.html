@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2VCZWVBX8J"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-2VCZWVBX8J');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sypherox - Mod Updater</title>
+    <link rel="icon" type="image/png" href="https://minotar.net/helm/Sypherox/500.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url('https://i.imgur.com/G8YZBUi.png');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            filter: blur(3px);
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .header-section {
+            margin-bottom: 30px;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .tool-icon {
+            width: 90px;
+            height: 90px;
+            background: rgba(40, 40, 40, 0.6);
+            border: 3px solid #ff3333;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 40px;
+            color: #ff3333;
+            box-shadow: 0 8px 32px rgba(255, 51, 51, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .tool-icon:hover {
+            transform: rotateY(10deg) rotateX(5deg) scale(1.05);
+        }
+
+        h1 {
+            color: #ff3333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(255, 51, 51, 0.5);
+        }
+
+        .subtitle {
+            color: #ff6666;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .author {
+            color: #999;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+        }
+
+        .author a {
+            color: #ff3333;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .author a:hover { color: #ff6666; }
+
+        .tool-card {
+            background: rgba(40, 40, 40, 0.4);
+            border: 2px solid #ff3333;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            text-align: left;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px) rotateX(2deg);
+            box-shadow: 0 15px 40px rgba(255, 51, 51, 0.4);
+        }
+
+        .tool-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .tool-card-icon {
+            color: #ff3333;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .tool-card-title {
+            color: #fff;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .tool-card-desc {
+            color: #999;
+            font-size: 0.9em;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-bottom: 18px;
+        }
+
+        .feature-list li {
+            color: #ccc;
+            font-size: 0.88em;
+            padding: 4px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feature-list li i {
+            color: #ff3333;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 0.9em;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: #ff3333;
+            color: #fff;
+            border-color: #ff3333;
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: #ff3333;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 51, 51, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #ff3333;
+            border-color: #ff3333;
+        }
+
+        .btn-secondary:hover {
+            background: #ff3333;
+            color: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 51, 51, 0.4);
+        }
+
+        .discord-banner {
+            background: rgba(40, 40, 40, 0.4);
+            border: 2px solid #ff3333;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .discord-banner:hover {
+            transform: translateY(-5px) rotateX(2deg);
+            box-shadow: 0 15px 40px rgba(255, 51, 51, 0.4);
+        }
+
+        .discord-banner i {
+            color: #5865F2;
+            font-size: 36px;
+            flex-shrink: 0;
+        }
+
+        .discord-banner-content {
+            text-align: left;
+            flex: 1;
+        }
+
+        .discord-banner-title {
+            color: #fff;
+            font-weight: bold;
+            font-size: 1em;
+            margin-bottom: 4px;
+        }
+
+        .discord-banner-sub {
+            color: #999;
+            font-size: 0.85em;
+        }
+
+        .discord-banner .btn {
+            flex-shrink: 0;
+        }
+
+        .footer {
+            color: #555;
+            font-size: 0.8em;
+            margin-top: 25px;
+        }
+
+        .footer a {
+            color: #ff3333;
+            text-decoration: none;
+        }
+
+        .footer a:hover { color: #ff6666; }
+
+        .back-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            width: 40px;
+            height: 40px;
+            background: rgba(40, 40, 40, 0.9);
+            border: 2px solid #ff3333;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff3333;
+            font-size: 18px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: #ff3333;
+            color: #fff;
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            .discord-banner { flex-direction: column; text-align: center; }
+            .discord-banner-content { text-align: center; }
+            .btn-row { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="https://sypherox.dev" class="back-link" title="Back to sypherox.dev">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+
+    <div class="container">
+
+        <div class="header-section">
+            <div class="tool-icon">
+                <i class="fas fa-cubes"></i>
+            </div>
+            <h1>Mod Updater</h1>
+            <p class="subtitle">Minecraft utilities by Sypherox & vuacy</p>
+        </div>
+
+        <div class="tool-card">
+            <div class="tool-card-header">
+                <i class="fas fa-sync-alt tool-card-icon"></i>
+                <span class="tool-card-title">Mod Updater</span>
+            </div>
+            <p class="tool-card-desc">
+                Automatically update all your Minecraft mods to the latest version via Modrinth's API.  
+                Just select your mods folder, pick your version and loader ➟ done.
+            </p>
+            <ul class="feature-list">
+                <li><i class="fas fa-check-circle"></i> Supports Fabric, Forge, NeoForge &amp; Quilt</li>
+                <li><i class="fas fa-check-circle"></i> Skips mods that are already up to date</li>
+                <li><i class="fas fa-check-circle"></i> Detailed update log for easy troubleshooting</li>
+            </ul>
+            <div class="btn-row">
+                <a href="https://github.com/Sypherox/mod-updater/releases/download/v1.0.1/Mod-Updater.zip" target="_blank" class="btn btn-primary">
+                    <i class="fas fa-download"></i> Download
+                </a>
+                <a href="https://github.com/Sypherox/mod-updater" target="_blank" class="btn btn-secondary">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+            </div>
+        </div>
+
+        <div class="discord-banner">
+            <i class="fab fa-discord"></i>
+            <div class="discord-banner-content">
+                <div class="discord-banner-title">Need help or found a bug?</div>
+            </div>
+            <a href="https://discord.gg/ExGSqUT6qk" target="_blank" class="btn btn-primary">
+                <i class="fab fa-discord"></i> Join
+            </a>
+        </div>
+
+        <div class="footer">
+            © <a href="https://sypherox.dev">sypherox.dev</a> | All rights reserved
+        </div>
+
+    </div>
+
+    <script>
+        setTimeout(() => {
+            window.open("https://discord.gg/ExGSqUT6qk", "_blank");
+        }, 2500);
+    </script>
+
+</body>
+</html>
