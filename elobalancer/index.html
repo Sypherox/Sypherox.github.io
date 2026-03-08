@@ -495,8 +495,9 @@ function updateGlobalElo() {
     const avg = g.length ? Math.round(g.reduce((s, k) => s + k.elo, 0) / g.length) : 0;
     const el = document.getElementById("globalElo");
     el.textContent = g.length ? avg : "—";
-    el.style.color = g.length ? eloColor(avg) : "#444";
-    el.style.textShadow = g.length ? `0 0 12px ${eloColor(avg)}55` : "none";
+    const color = g.length ? eloColor(avg) : "#444";
+    el.style.color = color;
+    el.style.textShadow = g.length ? `0 0 12px ${color}55` : "none";
 }
 
 function renderKits() {
