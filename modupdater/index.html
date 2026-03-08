@@ -10,6 +10,12 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://sypherox.dev/modupdater">
+	<meta property="og:title" content="Mod Updater">
+	<meta property="og:description" content="Automatically update all your Minecraft mods to the latest version via Modrinth's API. Supports Fabric, Forge, NeoForge & Quilt.">
+	<meta property="og:image" content="https://minotar.net/helm/Sypherox/500.png">
+	<meta name="theme-color" content="#ff3333">
     <title>Sypherox - Mod Updater</title>
     <link rel="icon" type="image/png" href="https://minotar.net/helm/Sypherox/500.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -367,6 +373,11 @@
                 <i class="fab fa-discord"></i> Join
             </a>
         </div>
+		
+		<div style="display:flex; align-items:center; justify-content:center; gap:8px; color:#999; font-size:0.9em; margin-top:20px;">
+			<i class="fas fa-eye" style="color:#ff3333;"></i>
+			<span id="viewCount">...</span> Views
+		</div>
 
         <div class="footer">
             © <a href="https://sypherox.dev">sypherox.dev</a> | All rights reserved
@@ -379,6 +390,19 @@
             window.open("https://discord.gg/ExGSqUT6qk", "_blank");
         }, 2500);
     </script>
+	
+	<script>
+		async function initViewCounter() {
+			try {
+				const response = await fetch('https://sypherox-counter.sypheroxyt.workers.dev/count');
+				const data = await response.json();
+				document.getElementById('viewCount').textContent = data.views.toLocaleString('de-DE');
+			} catch {
+				document.getElementById('viewCount').textContent = '...';
+			}
+		}
+		initViewCounter();
+	</script>
 
 </body>
 </html>
