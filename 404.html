@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="404">
+    <meta property="og:description" content="This page doesn't exist or was moved">
+    <meta name="theme-color" content="#ff3333">
+    <title>404</title>
+    <link rel="icon" type="image/png" href="https://minotar.net/helm/Sypherox/500.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url('https://i.imgur.com/G8YZBUi.png');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            filter: blur(3px);
+            z-index: 0;
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .error-code {
+            font-size: 8em;
+            font-weight: 900;
+            color: #ff3333;
+            text-shadow: 0 0 40px rgba(255, 51, 51, 0.5);
+            line-height: 1;
+            margin-bottom: 10px;
+            animation: glitch 3s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 90%, 100% { text-shadow: 0 0 40px rgba(255,51,51,0.5); transform: none; }
+            92% { text-shadow: -3px 0 #ff6666, 3px 0 #cc0000; transform: translateX(-2px); }
+            94% { text-shadow: 3px 0 #ff6666, -3px 0 #cc0000; transform: translateX(2px); }
+            96% { text-shadow: 0 0 40px rgba(255,51,51,0.5); transform: none; }
+        }
+
+        .error-title {
+            color: #fff;
+            font-size: 1.6em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .error-desc {
+            color: #777;
+            font-size: 1em;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid #ff3333;
+            box-shadow: 0 0 20px rgba(255,51,51,0.3);
+            margin: 0 auto 20px;
+            display: block;
+        }
+
+        .btn-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #ff3333;
+            color: #fff;
+            text-decoration: none;
+            padding: 12px 28px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(255,51,51,0.3);
+        }
+
+        .btn-home:hover {
+            background: transparent;
+            border: 2px solid #ff3333;
+            color: #ff3333;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(255,51,51,0.4);
+        }
+
+        .btn-home {
+            border: 2px solid #ff3333;
+        }
+
+        .suggestion {
+            margin-top: 30px;
+            color: #555;
+            font-size: 0.85em;
+        }
+
+        .suggestion a {
+            color: #ff3333;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .suggestion a:hover { color: #ff6666; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="https://cdn.discordapp.com/avatars/333523819690065921/40e357ddea42e5b6a26b68040c7effdf.png?size=512" alt="Sypherox" class="avatar">
+        <div class="error-code">404</div>
+        <div class="error-title">Page not found</div>
+        <div class="error-desc">
+            This page doesn't exist or was moved.<br>
+            Maybe you mistyped the URL?
+        </div>
+        <a href="https://sypherox.dev" class="btn-home">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+        <div class="suggestion">
+            Or check out <a href="https://sypherox.dev/elobalancer">EloBalancer</a>
+            or <a href="https://sypherox.dev/modupdater">Mod Updater</a>
+        </div>
+    </div>
+</body>
+</html>

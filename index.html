@@ -525,8 +525,31 @@
             backdrop-filter: blur(10px);
             transform-style: preserve-3d;
             position: relative;
-            overflow: hidden;
         }
+		
+		.social-icon::after {
+			content: attr(title);
+			position: absolute;
+			bottom: -34px;
+			left: 50%;
+			transform: translateX(-50%);
+			background: rgba(20, 20, 20, 0.95);
+			color: #fff;
+			font-size: 0.72em;
+			padding: 4px 10px;
+			border-radius: 6px;
+			border: 1px solid #ff3333;
+			white-space: nowrap;
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 0.2s ease, bottom 0.2s ease;
+			z-index: 10;
+		}
+		
+		.social-icon:hover::after {
+			opacity: 1;
+			bottom: -30px;
+		}
 
         .social-icon img {
             width: 28px;
@@ -767,10 +790,10 @@
                     <i class="fas fa-code"></i>
                     Currently Working On
                 </div>
-                <div class="working-on-project">Devyl AntiCheat</div>
-                <div class="working-on-description">
-                    Minecraft 1.8.9 Machine Learning based AntiCheat
-                </div>
+                <div class="working-on-project" id="working-on-project">Devyl AntiCheat</div>
+                <div class="working-on-description" id="working-on-description">
+					Minecraft 1.8.9 Machine Learning based AntiCheat
+				</div>
             </div>
 
             <div class="stat-card-mini">
@@ -880,6 +903,63 @@
         });
 
         let viewCount = 170; //old count from guns.lol & as a  fallback number
+		
+		async function fetchGitHubStats() {
+			try {
+				const [reposRes, eventsRes] = await Promise.all([
+					fetch('https://api.github.com/users/Sypherox/repos?per_page=100'),
+					fetch('https://api.github.com/users/Sypherox/events/public?per_page=100')
+				]);
+		
+				const repos = await reposRes.json();
+				const events = await eventsRes.json();
+		
+				if (Array.isArray(repos)) {
+					document.getElementById('githubRepos').textContent = repos.length + '+';
+		
+					const pushEvents = events.filter(e => e.type === 'PushEvent');
+					const commitCount = pushEvents.reduce((sum, e) => sum + (e.payload.commits?.length || 0), 0);
+					if (commitCount > 0) {
+						document.getElementById('commitCount').textContent = commitCount + '+';
+					}
+
+					const EXCLUDED_REPOS = ['sypherox.github.io', 'sypherox'];
+
+					const filtered = repos
+						.filter(r =>
+							!EXCLUDED_REPOS.includes(r.name.toLowerCase()) &&
+							!r.fork &&
+							!r.archived
+						)
+					.sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at));
+		
+					if (filtered.length > 0) {
+						const latest = filtered[0];
+						document.getElementById('working-on-project').textContent = latest.name;
+						document.getElementById('working-on-description').textContent =
+							latest.description || 'No description available';
+		
+						const titleEl = document.querySelector('.working-on-title');
+						titleEl.innerHTML = `
+							<i class="fas fa-code"></i>
+							Latest Work
+							<span style="
+								background:#ff3333;
+								color:#fff;
+								font-size:0.7em;
+								padding:2px 7px;
+								border-radius:10px;
+								margin-left:6px;
+								vertical-align:middle;
+								letter-spacing:1px;
+							">LIVE</span>
+						`;
+					}
+				}
+			} catch (err) {
+				console.error('[GitHub] Error:', err);
+			}
+		}
 
         async function initViewCounter() {
             try {
@@ -1036,6 +1116,7 @@
 
         connectToLanyard();
         initViewCounter();
+		fetchGitHubStats();
 
         let autoplayStarted = false;
 
@@ -1060,8 +1141,6 @@
         document.addEventListener('click', tryAutoplay);
         document.addEventListener('keydown', tryAutoplay);
         document.addEventListener('touchstart', tryAutoplay);
-        
-        console.log('[DEBUG] site loaded');
 		
 		function openSidebar() {
 			document.getElementById('sidebar').classList.add('active');
@@ -1077,6 +1156,8 @@
 			const sidebar = document.getElementById('sidebar');
 			sidebar.classList.contains('active') ? closeSidebar() : openSidebar();
 		});
+		
+		console.log('[DEBUG] site loaded');
         </script>
     </body>
 </html>
