@@ -81,6 +81,11 @@
             to   { opacity: 1; transform: translateY(0); }
         }
 
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
+
         .header {
             text-align: center;
             margin-bottom: 28px;
@@ -314,6 +319,14 @@
             box-shadow: 0 4px 16px rgba(255,0,51,0.3);
         }
 
+        .btn-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 14px;
+            flex-wrap: wrap;
+        }
+
         .action-cards {
             display: flex;
             gap: 14px;
@@ -408,6 +421,66 @@
 <body>
     <a href="https://sypherox.dev" class="back-btn" title="Back"><i class="fas fa-arrow-left"></i></a>
 
+    <div id="importModal" style="
+        display:none; position:fixed; inset:0;
+        background:rgba(0,0,0,0.7); z-index:999;
+        align-items:center; justify-content:center;
+        backdrop-filter:blur(4px);
+    ">
+        <div style="
+            background:rgba(22,0,11,0.98); border:2px solid #ff0033;
+            border-radius:16px; padding:28px 24px; width:320px;
+            position:relative; animation:fadeIn 0.2s ease-out;
+        ">
+            <button onclick="closeImportModal()" style="
+                position:absolute; top:12px; right:14px;
+                background:transparent; border:none; color:#666;
+                font-size:18px; cursor:pointer; line-height:1;
+            ">✕</button>
+
+            <div style="color:#ff0033; font-size:0.8em; text-transform:uppercase; letter-spacing:2px; font-weight:700; margin-bottom:16px;">
+                <i class="fas fa-download" style="margin-right:6px;"></i>Import from PvPRivals
+            </div>
+
+            <input id="importUsername" type="text" placeholder="Minecraft Username"
+                style="
+                    width:100%; background:#1f000f; border:1.5px solid #3d0018;
+                    border-radius:8px; color:#fff; font-size:1em; padding:10px 12px;
+                    outline:none; font-family:inherit; margin-bottom:12px;
+                "
+                onkeydown="if(event.key==='Enter') doImport()"
+                onfocus="this.style.borderColor='#ff0033'"
+                onblur="this.style.borderColor='#3d0018'"
+            >
+
+            <button onclick="doImport()" style="
+                width:100%; background:#ff0033; color:#fff; border:none;
+                border-radius:8px; padding:10px; font-size:0.95em; font-weight:700;
+                cursor:pointer; font-family:inherit;
+                display:flex; align-items:center; justify-content:center; gap:8px;
+            ">
+                <i class="fas fa-sync-alt" id="importSpinIcon"></i>
+                <span id="importBtnText">Import</span>
+            </button>
+
+            <div id="importStatus" style="margin-top:12px; font-size:0.85em; text-align:center; min-height:20px;"></div>
+
+            <div id="importPreview" style="display:none; margin-top:14px;">
+                <div style="color:#3d0018; font-size:0.75em; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Preview — will be imported:</div>
+                <div id="importPreviewList"></div>
+                <button onclick="confirmImport()" style="
+                    width:100%; margin-top:12px; background:transparent;
+                    border:1.5px solid #ff0033; border-radius:8px; color:#ff0033;
+                    padding:8px; font-size:0.9em; font-weight:700;
+                    cursor:pointer; font-family:inherit; transition:all 0.2s;
+                " onmouseover="this.style.background='#ff0033';this.style.color='#fff'"
+                   onmouseout="this.style.background='transparent';this.style.color='#ff0033'">
+                    ✓ Apply to EloBalancer
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <div class="header">
             <div class="header-icon"><i class="fas fa-chart-line"></i></div>
@@ -432,7 +505,17 @@
 
         <div class="kit-list" id="kitList"></div>
 
-        <button class="add-btn" onclick="addKit()">＋ Add Kit</button>
+        <div class="btn-row">
+            <button class="add-btn" onclick="openImportModal()" style="
+                display:inline-flex; align-items:center; gap:8px;
+                border-color:#ff0033; margin-top:0;
+            ">
+                <i class="fas fa-download"></i> Import from PvPRivals
+            </button>
+            <button class="add-btn" onclick="addKit()" style="margin-top:0;">
+                ＋ Add Kit
+            </button>
+        </div>
 
         <div class="action-cards">
             <div class="action-card">
@@ -456,11 +539,11 @@
                 </a>
             </div>
         </div>
-		
-		<div style="display:flex; align-items:center; justify-content:center; gap:8px; color:#999; font-size:0.9em; margin-top:20px;">
-			<i class="fas fa-eye" style="color:#ff3333;"></i>
-			<span id="viewCount">...</span> Views
-		</div>
+
+        <div style="display:flex; align-items:center; justify-content:center; gap:8px; color:#999; font-size:0.9em; margin-top:20px;">
+            <i class="fas fa-eye" style="color:#ff0033;"></i>
+            <span id="viewCount">...</span> Views
+        </div>
 
         <footer>© 2026 <a href="https://sypherox.dev">sypherox.dev</a> | All rights reserved</footer>
     </div>
@@ -580,20 +663,134 @@ function addKit() {
 }
 
 renderKits();
-</script>
 
-<script>
-    async function initViewCounter() {
-        try {
-            const response = await fetch('https://sypherox-counter.sypheroxyt.workers.dev/count');
-            const data = await response.json();
-            document.getElementById('viewCount').textContent = data.views.toLocaleString('de-DE');
-        } catch {
-            document.getElementById('viewCount').textContent = '...';
-        }
+// ── Import Feature ──────────────────────────────────────────
+const PVPRIVALS_KITS = ['FINALUHC', 'SG', 'HG', 'NODEBUFF', 'ARCHER', 'SKYWARS', 'UHC', 'CAVEUHC', 'NETHERUHHC'];
+const PVPRIVALS_SEASON = 'NINETEEN';
+let importedStats = {};
+
+function openImportModal() {
+    const modal = document.getElementById('importModal');
+    modal.style.display = 'flex';
+    document.getElementById('importUsername').focus();
+    document.getElementById('importPreview').style.display = 'none';
+    document.getElementById('importStatus').textContent = '';
+    document.getElementById('importUsername').value = '';
+}
+
+function closeImportModal() {
+    document.getElementById('importModal').style.display = 'none';
+    importedStats = {};
+}
+
+document.getElementById('importModal').addEventListener('click', function(e) {
+    if (e.target === this) closeImportModal();
+});
+
+async function doImport() {
+    const username = document.getElementById('importUsername').value.trim();
+    if (!username) return;
+
+    const statusEl = document.getElementById('importStatus');
+    const btnText = document.getElementById('importBtnText');
+    const spinIcon = document.getElementById('importSpinIcon');
+    const preview = document.getElementById('importPreview');
+
+    statusEl.style.color = '#f0b232';
+    statusEl.textContent = 'Fetching UUID...';
+    btnText.textContent = 'Loading...';
+    spinIcon.style.animation = 'spin 1s linear infinite';
+    preview.style.display = 'none';
+    importedStats = {};
+
+    try {
+        const mojangRes = await fetch(`https://api.mojang.com/users/profiles/minecraft/${username}`);
+        if (!mojangRes.ok) throw new Error(`Player "${username}" not found`);
+        const mojang = await mojangRes.json();
+        const raw = mojang.id;
+        const uuid = `${raw.slice(0,8)}-${raw.slice(8,12)}-${raw.slice(12,16)}-${raw.slice(16,20)}-${raw.slice(20)}`;
+
+        statusEl.textContent = `UUID found! Fetching ${PVPRIVALS_KITS.length} kits...`;
+
+        const results = await Promise.allSettled(
+            PVPRIVALS_KITS.map(kit =>
+                fetch(`https://api.pvprivals.net/elograph/${uuid}?kit=${kit}&queueSize=SOLO&season=${PVPRIVALS_SEASON}`)
+                    .then(r => r.json())
+                    .then(data => ({ kit, elo: data.entries?.[0]?.value ?? null }))
+            )
+        );
+
+        const previewList = document.getElementById('importPreviewList');
+        previewList.innerHTML = '';
+
+        results.forEach(result => {
+            if (result.status === 'fulfilled' && result.value.elo !== null) {
+                const { kit, elo } = result.value;
+                importedStats[kit] = elo;
+                previewList.innerHTML += `
+                    <div style="display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid #1f000f;">
+                        <span style="color:#ccc; font-size:0.85em;">${kit}</span>
+                        <span style="color:#ff0033; font-weight:700; font-size:0.85em;">${elo}</span>
+                    </div>
+                `;
+            }
+        });
+
+        const count = Object.keys(importedStats).length;
+        statusEl.style.color = '#23a55a';
+        statusEl.textContent = `✓ ${count} kits loaded for ${mojang.name}`;
+        preview.style.display = 'block';
+
+    } catch (err) {
+        statusEl.style.color = '#ff0033';
+        statusEl.textContent = `✗ ${err.message}`;
+    } finally {
+        btnText.textContent = 'Import';
+        spinIcon.style.animation = '';
     }
-    initViewCounter();
-</script>
+}
 
+function confirmImport() {
+    const kitNameMap = {
+        'FINALUHC': 'FinalUHC', 'SG': 'SG', 'HG': 'HG',
+        'NODEBUFF': 'NoDebuff', 'ARCHER': 'Archer',
+        'SKYWARS': 'SkyWars', 'UHC': 'UHC',
+        'CAVEUHC': 'CaveUHC', 'NETHERUHHC': 'NetherUHC'
+    };
+
+    let updated = 0;
+    kits.forEach(kit => {
+        const matchKey = Object.keys(kitNameMap).find(
+            k => kitNameMap[k].toLowerCase() === kit.name.toLowerCase()
+        );
+        if (matchKey && importedStats[matchKey] !== undefined) {
+            kit.elo = importedStats[matchKey];
+            updated++;
+        }
+    });
+
+    saveKits();
+    renderKits();
+    updateGlobalElo();
+    closeImportModal();
+
+    const titleEl = document.querySelector('.global-label');
+    const orig = titleEl.textContent;
+    titleEl.textContent = `✓ ${updated} kits updated!`;
+    titleEl.style.color = '#23a55a';
+    setTimeout(() => { titleEl.textContent = orig; titleEl.style.color = ''; }, 2000);
+}
+
+async function initViewCounter() {
+    try {
+        const response = await fetch('https://sypherox-counter.sypheroxyt.workers.dev/count');
+        const data = await response.json();
+        document.getElementById('viewCount').textContent = data.views.toLocaleString('de-DE');
+    } catch {
+        document.getElementById('viewCount').textContent = '...';
+    }
+}
+initViewCounter();
+</script>
 </body>
 </html>
