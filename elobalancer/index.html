@@ -707,8 +707,8 @@ async function doImport() {
         const mojangRes = await fetch(`https://sypherox-counter.sypheroxyt.workers.dev/mojang?user=${username}`);
         if (!mojangRes.ok) throw new Error(`Player "${username}" not found`);
         const mojang = await mojangRes.json();
-        const raw = mojang.id;
-        const uuid = `${raw.slice(0,8)}-${raw.slice(8,12)}-${raw.slice(12,16)}-${raw.slice(16,20)}-${raw.slice(20)}`;
+		if (mojang.error) throw new Error(mojang.error);
+		const uuid = mojang.uuid;
 
         statusEl.textContent = `UUID found! Fetching ${PVPRIVALS_KITS.length} kits...`;
 
