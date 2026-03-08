@@ -704,7 +704,7 @@ async function doImport() {
     importedStats = {};
 
     try {
-        const mojangRes = await fetch(`https://api.mojang.com/users/profiles/minecraft/${username}`);
+        const mojangRes = await fetch(`https://sypherox-counter.sypheroxyt.workers.dev/mojang?user=${username}`);
         if (!mojangRes.ok) throw new Error(`Player "${username}" not found`);
         const mojang = await mojangRes.json();
         const raw = mojang.id;

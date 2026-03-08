@@ -20,4 +20,4 @@
 ## 📝 TODO
 
 - [X] Background music
-- [ ] Idead?
+- [ ] Ideas?
