@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sypherox.dev/elobalancer">
+    <meta property="og:title" content="EloBalancer — PvPRivals">
+    <meta property="og:description" content="Calculate your Global Elo on PvPRivals based on your kit elos.">
+    <meta property="og:image" content="https://minotar.net/helm/Sypherox/500.png">
+    <meta name="theme-color" content="#ff0033">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EloBalancer — PvPRivals</title>
+    <link rel="icon" type="image/png" href="https://minotar.net/helm/Sypherox/500.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0d0006 0%, #1a0008 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url('https://i.imgur.com/G8YZBUi.png');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.08;
+            filter: blur(3px);
+            z-index: 0;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            width: 40px;
+            height: 40px;
+            background: rgba(20, 0, 8, 0.9);
+            border: 2px solid #ff0033;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff0033;
+            font-size: 18px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .back-btn:hover {
+            background: #ff0033;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .container {
+            max-width: 700px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            animation: fadeIn 0.6s ease-out;
+            padding-top: 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .header-icon {
+            width: 64px;
+            height: 64px;
+            background: rgba(255,0,51,0.12);
+            border: 2px solid #ff0033;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: #ff0033;
+            margin: 0 auto 16px;
+            box-shadow: 0 0 20px rgba(255,0,51,0.25);
+        }
+
+        h1 {
+            color: #ff0033;
+            font-size: 2.2em;
+            text-shadow: 0 0 20px rgba(255,0,51,0.4);
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            color: #660016;
+            font-size: 0.95em;
+        }
+
+        .global-card {
+            background: rgba(22,0,11,0.85);
+            border: 1.5px solid #3d0018;
+            border-radius: 14px;
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 24px rgba(255,0,51,0.08);
+        }
+
+        .global-label {
+            color: #660016;
+            font-size: 1.8em;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .global-value {
+            font-size: 2.4em;
+            font-weight: 800;
+            color: #ff0033;
+            transition: color 0.3s ease;
+            text-shadow: 0 0 12px rgba(255,0,51,0.5);
+        }
+
+        .separator {
+            height: 1px;
+            background: #3d0018;
+            margin: 0 0 8px 0;
+        }
+
+        .col-headers {
+            display: grid;
+            grid-template-columns: 30px 120px 1fr 70px 28px;
+            gap: 8px;
+            align-items: center;
+            padding: 0 14px;
+            margin-bottom: 4px;
+        }
+
+        .col-header {
+            font-size: 0.68em;
+            font-weight: 700;
+            color: #3d0018;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .kit-list { display: flex; flex-direction: column; gap: 6px; }
+
+        .kit-row {
+            background: rgba(22,0,11,0.85);
+            border: 1.5px solid #3d0018;
+            border-radius: 10px;
+            padding: 10px 14px;
+            display: grid;
+            grid-template-columns: 30px 120px 1fr 70px 28px;
+            gap: 8px;
+            align-items: center;
+            backdrop-filter: blur(6px);
+            transition: border-color 0.2s;
+        }
+
+        .kit-row:hover { border-color: #660016; }
+
+        .neon-checkbox {
+            width: 18px;
+            height: 18px;
+            border: 1.5px solid #660016;
+            border-radius: 3px;
+            background: #1f000f;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.15s;
+        }
+
+        .neon-checkbox.checked {
+            background: #99001f;
+            border-color: #ff0033;
+        }
+
+        .neon-checkbox.checked::after {
+            content: '✓';
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            line-height: 1;
+        }
+
+        .kit-name {
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.95em;
+            cursor: pointer;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .kit-name:hover { color: #ff0033; }
+
+        .kit-name-input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #ff0033;
+            color: #ff0033;
+            font-weight: 700;
+            font-size: 0.95em;
+            outline: none;
+            width: 100%;
+            font-family: inherit;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 4px;
+            background: #1f000f;
+            outline: none;
+            border-radius: 2px;
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            background: #ff0033;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 6px rgba(255,0,51,0.6);
+            transition: transform 0.15s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.25); }
+        input[type="range"]::-moz-range-thumb {
+            width: 14px; height: 14px;
+            background: #ff0033;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+        }
+
+        .elo-input {
+            width: 70px;
+            background: #1f000f;
+            border: 1px solid #3d0018;
+            border-radius: 6px;
+            color: #aaaaaa;
+            font-size: 1em;
+            font-weight: 700;
+            text-align: right;
+            padding: 4px 6px;
+            outline: none;
+            font-family: inherit;
+            transition: border-color 0.2s, color 0.2s;
+        }
+
+        .elo-input:focus { border-color: #ff0033; }
+
+        .delete-btn {
+            background: transparent;
+            border: none;
+            color: #3d0018;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 2px;
+            transition: color 0.2s;
+            line-height: 1;
+        }
+
+        .delete-btn:hover { color: #ff0033; }
+
+        .add-btn {
+            display: block;
+            margin: 14px auto 0;
+            background: #1f000f;
+            border: 1.5px solid #3d0018;
+            border-radius: 8px;
+            color: #ff0033;
+            font-size: 0.9em;
+            font-weight: 700;
+            padding: 8px 22px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .add-btn:hover {
+            background: #ff0033;
+            color: white;
+            border-color: #ff0033;
+            box-shadow: 0 4px 16px rgba(255,0,51,0.3);
+        }
+
+        .action-cards {
+            display: flex;
+            gap: 14px;
+            margin-top: 22px;
+        }
+
+        .action-card {
+            flex: 1;
+            background: rgba(22,0,11,0.85);
+            border: 1.5px solid #3d0018;
+            border-radius: 12px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .action-card:hover {
+            border-color: #660016;
+            box-shadow: 0 6px 24px rgba(255,0,51,0.12);
+            transform: translateY(-2px);
+        }
+
+        .action-card i {
+            font-size: 22px;
+            color: #ff0033;
+            flex-shrink: 0;
+        }
+
+        .action-card-text { flex: 1; }
+        .action-card-title { color: #fff; font-weight: 700; font-size: 0.95em; margin-bottom: 2px; }
+        .action-card-sub { color: #660016; font-size: 0.8em; }
+
+        .action-card-btn {
+            background: #ff0033;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            padding: 8px 16px;
+            font-size: 0.85em;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            white-space: nowrap;
+            font-family: inherit;
+        }
+
+        .action-card-btn:hover {
+            background: #cc0022;
+            box-shadow: 0 4px 14px rgba(255,0,51,0.4);
+            transform: translateY(-1px);
+        }
+
+        .action-card-btn.outline {
+            background: transparent;
+            border: 1.5px solid #ff0033;
+            color: #ff0033;
+        }
+
+        .action-card-btn.outline:hover {
+            background: #ff0033;
+            color: white;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 28px;
+            padding-bottom: 20px;
+            color: #3d0018;
+            font-size: 0.82em;
+        }
+
+        footer a { color: #660016; text-decoration: none; }
+        footer a:hover { color: #ff0033; }
+
+        @media (max-width: 600px) {
+            .col-headers, .kit-row {
+                grid-template-columns: 26px 90px 1fr 58px 24px;
+                gap: 5px;
+            }
+            .action-cards { flex-direction: column; }
+            h1 { font-size: 1.7em; }
+        }
+    </style>
+</head>
+<body>
+    <a href="https://sypherox.dev" class="back-btn" title="Back"><i class="fas fa-arrow-left"></i></a>
+
+    <div class="container">
+        <div class="header">
+            <div class="header-icon"><i class="fas fa-chart-line"></i></div>
+            <h1>EloBalancer</h1>
+            <p class="subtitle">by Sypherox</p>
+        </div>
+
+        <div class="global-card">
+            <span class="global-label">GLOBAL ELO</span>
+            <span class="global-value" id="globalElo">1400</span>
+        </div>
+
+        <div class="separator"></div>
+
+        <div class="col-headers">
+            <span class="col-header">GLB</span>
+            <span class="col-header">Kit</span>
+            <span class="col-header">Range</span>
+            <span class="col-header" style="text-align:right;">Elo</span>
+            <span></span>
+        </div>
+
+        <div class="kit-list" id="kitList"></div>
+
+        <button class="add-btn" onclick="addKit()">＋ Add Kit</button>
+
+        <div class="action-cards">
+            <div class="action-card">
+                <i class="fab fa-github"></i>
+                <div class="action-card-text">
+                    <div class="action-card-title">Source Code</div>
+                    <div class="action-card-sub">View on GitHub</div>
+                </div>
+                <a href="https://github.com/Sypherox/EloBalancer" target="_blank" class="action-card-btn outline">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+            </div>
+            <div class="action-card">
+                <i class="fas fa-download"></i>
+                <div class="action-card-text">
+                    <div class="action-card-title">Desktop App</div>
+                    <div class="action-card-sub">Windows .exe</div>
+                </div>
+                <a href="https://github.com/Sypherox/EloBalancer/releases/download/v1.0.0/pvprivals_elo_balancer.exe" class="action-card-btn">
+                    <i class="fas fa-download"></i> Download
+                </a>
+            </div>
+        </div>
+
+        <footer>© 2026 <a href="https://sypherox.dev">sypherox.dev</a> | All rights reserved</footer>
+    </div>
+
+<script>
+const ELO_COLORS = [
+    [2100,"#AA0000"],[2000,"#FF5555"],[1900,"#4EEDDD"],
+    [1800,"#5555FF"],[1700,"#55FF55"],[1600,"#C5C5C5"],
+    [1500,"#FFAA00"],[0,"#AAAAAA"]
+];
+
+function eloColor(v) {
+    for (const [t, c] of ELO_COLORS) if (v >= t) return c;
+    return "#AAAAAA";
+}
+
+const DEFAULT_KITS = [
+    {name:"FinalUHC",global:true,elo:1400},
+    {name:"SG",global:true,elo:1400},
+    {name:"HG",global:true,elo:1400},
+    {name:"NoDebuff",global:true,elo:1400},
+    {name:"Archer",global:true,elo:1400}
+];
+
+function loadKits() {
+    try {
+        const d = localStorage.getItem("elobalancer_kits");
+        return d ? JSON.parse(d) : DEFAULT_KITS.map(k => ({...k}));
+    } catch { return DEFAULT_KITS.map(k => ({...k})); }
+}
+
+function saveKits() {
+    localStorage.setItem("elobalancer_kits", JSON.stringify(kits));
+}
+
+let kits = loadKits();
+
+function updateGlobalElo() {
+    const g = kits.filter(k => k.global);
+    const avg = g.length ? Math.round(g.reduce((s, k) => s + k.elo, 0) / g.length) : 0;
+    const el = document.getElementById("globalElo");
+    el.textContent = g.length ? avg : "—";
+    el.style.color = g.length ? eloColor(avg) : "#444";
+    el.style.textShadow = g.length ? `0 0 12px ${eloColor(avg)}55` : "none";
+}
+
+function renderKits() {
+    const list = document.getElementById("kitList");
+    list.innerHTML = "";
+    kits.forEach((kit, idx) => {
+        const row = document.createElement("div");
+        row.className = "kit-row";
+
+        const cb = document.createElement("div");
+        cb.className = "neon-checkbox" + (kit.global ? " checked" : "");
+        cb.title = "Count in Global Elo";
+        cb.onclick = () => { kits[idx].global = !kits[idx].global; saveKits(); renderKits(); updateGlobalElo(); };
+
+        const nameWrap = document.createElement("div");
+        nameWrap.style.overflow = "hidden";
+        const nameEl = document.createElement("span");
+        nameEl.className = "kit-name";
+        nameEl.textContent = kit.name;
+        nameEl.title = "Double-click to rename";
+        nameEl.ondblclick = () => {
+            const inp = document.createElement("input");
+            inp.className = "kit-name-input";
+            inp.value = kit.name;
+            nameWrap.replaceChild(inp, nameEl);
+            inp.focus();
+            inp.select();
+            const commit = () => {
+                const v = inp.value.trim();
+                if (v) { kits[idx].name = v; saveKits(); }
+                renderKits();
+            };
+            inp.onblur = commit;
+            inp.onkeydown = e => { if (e.key === "Enter") inp.blur(); if (e.key === "Escape") renderKits(); };
+        };
+        nameWrap.appendChild(nameEl);
+
+        const slider = document.createElement("input");
+        slider.type = "range";
+        slider.min = 800; slider.max = 7000; slider.value = kit.elo;
+        slider.oninput = () => { const v = parseInt(slider.value); kits[idx].elo = v; eloInp.value = v; eloInp.style.color = eloColor(v); saveKits(); updateGlobalElo(); };
+
+        const eloInp = document.createElement("input");
+        eloInp.type = "number";
+        eloInp.className = "elo-input";
+        eloInp.min = 800; eloInp.max = 7000; eloInp.value = kit.elo;
+        eloInp.style.color = eloColor(kit.elo);
+        const commitElo = () => {
+            let v = Math.max(800, Math.min(7000, parseInt(eloInp.value) || 1400));
+            kits[idx].elo = v; eloInp.value = v; slider.value = v;
+            eloInp.style.color = eloColor(v); saveKits(); updateGlobalElo();
+        };
+        eloInp.onblur = commitElo;
+        eloInp.onkeydown = e => { if (e.key === "Enter") eloInp.blur(); };
+
+        const del = document.createElement("button");
+        del.className = "delete-btn"; del.innerHTML = "✕"; del.title = "Remove kit";
+        del.onclick = () => { if (confirm(`Remove "${kit.name}"?`)) { kits.splice(idx, 1); saveKits(); renderKits(); updateGlobalElo(); }};
+
+        row.append(cb, nameWrap, slider, eloInp, del);
+        list.appendChild(row);
+    });
+    updateGlobalElo();
+}
+
+function addKit() {
+    const name = prompt("Kit Name:");
+    if (name && name.trim()) {
+        kits.push({name: name.trim(), global: true, elo: 1400});
+        saveKits(); renderKits(); updateGlobalElo();
+    }
+}
+
+renderKits();
+</script>
+</body>
+</html>
