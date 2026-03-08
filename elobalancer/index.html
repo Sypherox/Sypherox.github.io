@@ -664,8 +664,7 @@ function addKit() {
 
 renderKits();
 
-// ── Import Feature ──────────────────────────────────────────
-const PVPRIVALS_KITS = ['FINALUHC', 'SG', 'HG', 'NODEBUFF', 'ARCHER', 'SKYWARS', 'UHC', 'CAVEUHC', 'NETHERUHHC'];
+const PVPRIVALS_KITS = ['FINALUHC', 'SG', 'HG', 'NODEBUFF', 'BOW', 'SKYWARS', 'UHC', 'CAVEUHC', 'NETHERUHC'];
 const PVPRIVALS_SEASON = 'NINETEEN';
 let importedStats = {};
 
@@ -752,11 +751,11 @@ async function doImport() {
 
 function confirmImport() {
     const kitNameMap = {
-        'FINALUHC': 'FinalUHC', 'SG': 'SG', 'HG': 'HG',
-        'NODEBUFF': 'NoDebuff', 'ARCHER': 'Archer',
-        'SKYWARS': 'SkyWars', 'UHC': 'UHC',
-        'CAVEUHC': 'CaveUHC', 'NETHERUHHC': 'NetherUHC'
-    };
+		'FINALUHC': 'FinalUHC', 'SG': 'SG', 'HG': 'HG',
+		'NODEBUFF': 'NoDebuff', 'BOW': 'Archer',
+		'SKYWARS': 'SkyWars', 'UHC': 'UHC',
+		'CAVEUHC': 'CaveUHC', 'NETHERUHC': 'NetherUHC'
+	};
 
     let updated = 0;
     kits.forEach(kit => {
