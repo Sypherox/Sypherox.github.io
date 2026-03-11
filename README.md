@@ -11,8 +11,9 @@
 ## ✨ Features
 
 - Live Discord presence via Lanyard API
-- GitHub stats (latest & second-latest project)
-- PvPRivals stats import via Mojang + PvPRivals API
+- GitHub live stats via API
+- PvPRivals Elo Balancer
+- PvPRivals Elo Calculator
 - View counter via Cloudflare Worker
 - Custom 404 page
 - Fully responsive

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2VCZWVBX8J"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-2VCZWVBX8J');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sypherox.dev/elocalc">
+    <meta property="og:title" content="PvPRivals Elo Calculator">
+    <meta property="og:description" content="Calculate your estimated Elo gain or loss before a PvPRivals match. Shows raw values so you know how confident the estimate is.">
+    <meta property="og:image" content="https://minotar.net/helm/Sypherox/500.png">
+    <meta name="theme-color" content="#ff3333">
+    <title>PvPRivals Elo Calculator</title>
+    <link rel="icon" type="image/png" href="https://minotar.net/helm/Sypherox/500.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url('https://i.imgur.com/G8YZBUi.png');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            filter: blur(3px);
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 560px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            animation: fadeIn 0.8s ease-in;
+            padding-top: 30px;
+            padding-bottom: 40px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .header-section {
+            margin-bottom: 30px;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        .tool-icon {
+            width: 90px; height: 90px;
+            background: rgba(40,40,40,0.6);
+            border: 3px solid #ff3333;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 40px; color: #ff3333;
+            box-shadow: 0 8px 32px rgba(255,51,51,0.3);
+            transition: transform 0.3s ease;
+        }
+        .tool-icon:hover { transform: rotateY(10deg) rotateX(5deg) scale(1.05); }
+
+        h1 {
+            color: #ff3333; font-size: 2.5em; margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(255,51,51,0.5);
+        }
+        .subtitle { color: #ff6666; font-size: 1.1em; margin-bottom: 8px; }
+        .author { color: #999; font-size: 0.9em; margin-bottom: 5px; }
+        .author a { color: #ff3333; text-decoration: none; transition: color 0.2s; }
+        .author a:hover { color: #ff6666; }
+
+        .tool-card {
+            background: rgba(40,40,40,0.4);
+            border: 2px solid #ff3333;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            text-align: left;
+        }
+        .tool-card:hover {
+            transform: translateY(-5px) rotateX(2deg);
+            box-shadow: 0 15px 40px rgba(255,51,51,0.4);
+        }
+
+        .tool-card-header {
+            display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
+        }
+        .tool-card-icon { color: #ff3333; font-size: 22px; flex-shrink: 0; }
+        .tool-card-title { color: #fff; font-size: 1.2em; font-weight: bold; }
+
+        label {
+            display: block; font-size: 0.8em; color: #999;
+            text-transform: uppercase; letter-spacing: 1px;
+            font-weight: 700; margin-bottom: 6px; margin-top: 14px;
+        }
+        label:first-of-type { margin-top: 0; }
+
+        input[type="number"] {
+            width: 100%; padding: 12px 14px;
+            background: rgba(20,20,20,0.8);
+            border: 1.5px solid #444; border-radius: 8px;
+            color: #fff; font-size: 1em; font-family: inherit;
+            transition: border-color 0.2s; outline: none;
+        }
+        input[type="number"]:focus { border-color: #ff3333; }
+
+        .calc-btn {
+            width: 100%; margin-top: 18px; padding: 13px;
+            background: #ff3333; border: none; border-radius: 8px;
+            color: #fff; font-size: 1em; font-weight: 700;
+            cursor: pointer; font-family: inherit;
+            letter-spacing: 0.5px; transition: all 0.2s;
+        }
+        .calc-btn:hover {
+            background: transparent; color: #ff3333;
+            border: 2px solid #ff3333;
+            box-shadow: 0 4px 16px rgba(255,51,51,0.4);
+            transform: translateY(-1px);
+        }
+
+        .result { display: none; margin-top: 0; }
+
+        .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+
+        .result-box {
+            background: rgba(20,20,20,0.7); border: 1.5px solid #333;
+            border-radius: 10px; padding: 16px; text-align: center;
+            transition: border-color 0.2s;
+        }
+        .result-box:hover { border-color: #ff3333; }
+        .result-box .lbl {
+            font-size: 0.7em; color: #666; text-transform: uppercase;
+            letter-spacing: 1px; font-weight: 700; margin-bottom: 6px;
+        }
+        .val-win  { font-size: 1.8rem; font-weight: 800; color: #23a55a; text-shadow: 0 0 10px rgba(35,165,90,0.4); }
+        .val-lose { font-size: 1.8rem; font-weight: 800; color: #ff3333; text-shadow: 0 0 10px rgba(255,51,51,0.4); }
+        .raw-val  { font-size: 0.72em; color: #884444; margin-top: 5px; font-family: monospace; }
+
+        .prob-row {
+            background: rgba(20,20,20,0.7); border: 1.5px solid #333;
+            border-radius: 10px; padding: 12px 16px;
+            display: flex; justify-content: space-between;
+            font-size: 0.82em; color: #666;
+        }
+        .prob-row b { color: #ccc; }
+
+        .disclaimer {
+            background: rgba(40,40,40,0.4);
+            border: 2px solid #ff3333;
+            border-radius: 15px;
+            padding: 20px; margin: 20px 0;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            text-align: left;
+        }
+        .disclaimer:hover {
+            transform: translateY(-5px) rotateX(2deg);
+            box-shadow: 0 15px 40px rgba(255,51,51,0.4);
+        }
+        .disclaimer-header {
+            display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+        }
+        .disclaimer-header i { color: #ff3333; font-size: 18px; }
+        .disclaimer-header span { color: #fff; font-weight: bold; font-size: 1em; }
+        .disclaimer ul { list-style: none; }
+        .disclaimer ul li {
+            color: #999; font-size: 0.88em; padding: 3px 0;
+            line-height: 1.6;
+        }
+        .disclaimer ul li i { color: #ff3333; font-size: 11px; margin-right: 8px; }
+        .disclaimer ul li strong { display: inline; }
+
+        .discord-banner {
+            background: rgba(40,40,40,0.4);
+            border: 2px solid #ff3333;
+            border-radius: 15px;
+            padding: 20px; margin: 20px 0;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            display: flex; align-items: center; gap: 16px;
+        }
+        .discord-banner:hover {
+            transform: translateY(-5px) rotateX(2deg);
+            box-shadow: 0 15px 40px rgba(255,51,51,0.4);
+        }
+        .discord-banner > i { color: #5865F2; font-size: 36px; flex-shrink: 0; }
+        .discord-banner-content { text-align: left; flex: 1; }
+        .discord-banner-title { color: #fff; font-weight: bold; font-size: 1em; margin-bottom: 4px; }
+        .discord-banner-sub { color: #999; font-size: 0.85em; }
+
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 10px 20px; border-radius: 10px;
+            font-size: 0.9em; font-weight: 600;
+            text-decoration: none; transition: all 0.3s ease;
+            border: 2px solid transparent; cursor: pointer;
+        }
+        .btn-primary { background: #ff3333; color: #fff; border-color: #ff3333; }
+        .btn-primary:hover {
+            background: transparent; color: #ff3333;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255,51,51,0.4);
+        }
+
+        .view-counter {
+            display: flex; align-items: center; justify-content: center;
+            gap: 8px; color: #999; font-size: 0.9em; margin-top: 20px;
+        }
+        .view-counter i { color: #ff3333; }
+
+        .footer { color: #555; font-size: 0.8em; margin-top: 20px; }
+        .footer a { color: #ff3333; text-decoration: none; }
+        .footer a:hover { color: #ff6666; }
+
+        .back-link {
+            position: fixed; top: 20px; left: 20px; z-index: 100;
+            width: 40px; height: 40px;
+            background: rgba(40,40,40,0.9);
+            border: 2px solid #ff3333; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: #ff3333; font-size: 18px;
+            text-decoration: none; transition: all 0.3s ease;
+        }
+        .back-link:hover { background: #ff3333; color: #fff; transform: scale(1.1); }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            .discord-banner { flex-direction: column; text-align: center; }
+            .discord-banner-content { text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<a href="https://sypherox.dev" class="back-link" title="Back to sypherox.dev">
+    <i class="fas fa-arrow-left"></i>
+</a>
+
+<div class="container">
+
+    <div class="header-section">
+        <div class="tool-icon">
+            <i class="fas fa-trophy"></i>
+        </div>
+        <h1>Elo Calculator</h1>
+        <p class="author">by <a href="https://sypherox.dev">Sypherox</a></p>
+    </div>
+
+    <div class="tool-card">
+        <div class="tool-card-header">
+            <i class="fas fa-calculator tool-card-icon"></i>
+            <span class="tool-card-title">Calculate Elo Change</span>
+        </div>
+
+        <label>Your current Elo</label>
+        <input type="number" id="myElo" placeholder="e.g. 1652" min="0">
+        <label>Opponent's current Elo</label>
+        <input type="number" id="oppElo" placeholder="e.g. 1875" min="0">
+        <button class="calc-btn" onclick="calculate()">Calculate</button>
+
+        <div class="result" id="result">
+            <div style="height:18px;"></div>
+            <div class="result-grid">
+                <div class="result-box">
+                    <div class="lbl">&#127942; If you win</div>
+                    <div class="val-win" id="winVal"></div>
+                    <div class="raw-val" id="winRaw"></div>
+                </div>
+                <div class="result-box">
+                    <div class="lbl">&#128128; If you lose</div>
+                    <div class="val-lose" id="loseVal"></div>
+                    <div class="raw-val" id="loseRaw"></div>
+                </div>
+            </div>
+            <div class="prob-row">
+                <span>Win chance: <b id="prob"></b></span>
+                <span>Elo diff: <b id="diff"></b></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="disclaimer">
+        <div class="disclaimer-header">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>About accuracy</span>
+        </div>
+        <ul>
+            <li><i class="fas fa-circle"></i> All results are <strong style="color:#ccc">estimates</strong>. The exact PvPRivals formula is not publicly known.</li>
+            <li><i class="fas fa-circle"></i> The <strong style="color:#ccc">raw value</strong> below each result tells you how confident the estimate is.</li>
+        </ul>
+    </div>
+
+    <div class="discord-banner">
+        <i class="fab fa-discord"></i>
+        <div class="discord-banner-content">
+            <div class="discord-banner-title">Questions or found a mistake?</div>
+            <div class="discord-banner-sub">Join my Discord and let me know!</div>
+        </div>
+        <a href="https://discord.com/invite/aG4QYP8u5p" target="_blank" class="btn btn-primary">
+            <i class="fab fa-discord"></i> Join
+        </a>
+    </div>
+
+    <div class="view-counter">
+        <i class="fas fa-eye"></i>
+        <span id="viewCount">...</span> Views
+    </div>
+
+    <div class="footer">
+        &copy; <a href="https://sypherox.dev">sypherox.dev</a> | All rights reserved
+    </div>
+
+</div>
+
+<script>
+    function calculate() {
+        var myElo  = parseFloat(document.getElementById('myElo').value);
+        var oppElo = parseFloat(document.getElementById('oppElo').value);
+
+        if (isNaN(myElo) || isNaN(oppElo) || myElo < 0 || oppElo < 0) {
+            alert('Please enter valid Elo values.');
+            return;
+        }
+
+        var diff = oppElo - myElo;
+        var K = 33.5;
+        var D = 400;
+        var E = 1 / (1 + Math.pow(10, diff / D));
+
+        var eloWin, eloLose, rawWin, rawLose;
+
+        if (myElo === oppElo) {
+            eloWin = 16; eloLose = 16;
+            rawWin = 16.00; rawLose = 16.00;
+        } else {
+            rawWin  = K * (1 - E);
+            rawLose = K * E;
+
+            if (diff > 0) {
+                eloWin  = rawWin  >= 26 ? Math.floor(rawWin)  : Math.ceil(rawWin);
+                eloLose = rawLose >= 26 ? Math.floor(rawLose) : Math.ceil(rawLose);
+            } else {
+                eloWin  = Math.floor(rawWin  + 0.5);
+                eloLose = Math.floor(rawLose + 0.5);
+            }
+
+            eloWin  = Math.max(1, Math.min(31, eloWin));
+            eloLose = Math.max(1, Math.min(31, eloLose));
+        }
+
+        document.getElementById('winVal').textContent  = '+' + eloWin;
+        document.getElementById('loseVal').textContent = '-' + eloLose;
+        document.getElementById('winRaw').textContent  = 'Raw: ' + rawWin.toFixed(2);
+        document.getElementById('loseRaw').textContent = 'Raw: ' + rawLose.toFixed(2);
+        document.getElementById('prob').textContent    = ((1 - E) * 100).toFixed(1) + '%';
+        document.getElementById('diff').textContent    = (diff > 0 ? '-' : diff < 0 ? '+' : '+-') + Math.abs(diff);
+
+        document.getElementById('result').style.display = 'block';
+    }
+
+    document.addEventListener('keydown', function(e) { if (e.key === 'Enter') calculate(); });
+</script>
+
+<script>
+    async function initViewCounter() {
+        try {
+            var response = await fetch('https://sypherox-counter.sypheroxyt.workers.dev/count?page=elocalc');
+            var data = await response.json();
+            document.getElementById('viewCount').textContent = data.views.toLocaleString('de-DE');
+        } catch(e) {
+            document.getElementById('viewCount').textContent = '...';
+        }
+    }
+    initViewCounter();
+</script>
+
+</body>
+</html>
