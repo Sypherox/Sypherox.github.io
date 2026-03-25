@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sypherox.github.io/portfolio/">
+    <meta property="og:title" content="Portfolio">
+    <meta property="og:description" content="Developer & Server Staff">
+    <meta property="og:image" content="https://minotar.net/helm/Sypherox/500.png">
+    <meta name="theme-color" content="#ff3333">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <link rel="icon" type="image/png" href="https://minotar.net/helm/Sypherox/500.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px 20px 60px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url('https://i.imgur.com/G8YZBUi.png');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.10;
+            filter: blur(3px);
+            z-index: 0;
+        }
+        .container {
+            max-width: 680px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            animation: fadeIn 0.8s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .profile-section { margin-bottom: 28px; }
+        .profile-image-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+            transition: transform 0.3s ease;
+        }
+        .profile-image-container:hover {
+            transform: rotateY(10deg) rotateX(5deg) scale(1.05);
+        }
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 4px solid #ff3333;
+            object-fit: cover;
+            box-shadow: 0 8px 32px rgba(255,51,51,0.35);
+        }
+        h1 {
+            color: #ff3333;
+            font-size: 2.5em;
+            margin-bottom: 8px;
+            text-shadow: 0 0 20px rgba(255,51,51,0.5);
+        }
+        .subtitle { color: #ff6666; font-size: 1.05em; margin-bottom: 10px; }
+        .location { color: #999; font-size: 0.9em; }
+        .location i { color: #ff3333; margin-right: 5px; }
+
+        .section-title {
+            color: #ff6666;
+            font-size: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .about-box {
+            background: rgba(40,40,40,0.45);
+            border: 2px solid #ff3333;
+            border-radius: 15px;
+            padding: 22px 24px;
+            margin-bottom: 32px;
+            backdrop-filter: blur(10px);
+            text-align: left;
+            transition: all 0.3s ease;
+        }
+        .about-box:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(255,51,51,0.25);
+        }
+        .about-intro {
+            color: #ccc;
+            font-size: 0.93em;
+            line-height: 1.65;
+            margin-bottom: 18px;
+        }
+        .about-intro strong { color: #fff; }
+        .about-pills { display: flex; flex-wrap: wrap; gap: 10px; }
+        .pill {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(255,51,51,0.08);
+            border: 1.5px solid #3a3a3a;
+            border-radius: 30px;
+            padding: 6px 14px;
+            font-size: 0.82em;
+            color: #bbb;
+            transition: border-color 0.2s, color 0.2s;
+        }
+        .pill:hover { border-color: #ff3333; color: #fff; }
+        .pill i { color: #ff3333; font-size: 0.95em; }
+
+        .experience-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 32px;
+        }
+        .exp-card {
+            background: rgba(40,40,40,0.45);
+            border: 2px solid #333;
+            border-radius: 14px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            text-align: left;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        .exp-card:hover {
+            border-color: #ff3333;
+            transform: translateX(5px);
+            box-shadow: 0 8px 28px rgba(255,51,51,0.2);
+        }
+        .exp-logo {
+            width: 54px;
+            height: 54px;
+            border-radius: 10px;
+            border: 1.5px solid #333;
+            flex-shrink: 0;
+            background: #222;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #555;
+            font-size: 10px;
+            text-align: center;
+            overflow: hidden;
+        }
+        .exp-logo img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
+        .exp-content { flex: 1; min-width: 0; }
+        .exp-server { color: #fff; font-weight: 700; font-size: 0.98em; margin-bottom: 3px; }
+        .exp-server span { color: #555; font-size: 0.78em; font-weight: 400; margin-left: 6px; }
+        .exp-role { color: #ff3333; font-size: 0.88em; font-weight: 600; margin-bottom: 4px; }
+        .exp-period { color: #666; font-size: 0.78em; }
+        .exp-period i { margin-right: 4px; }
+        .exp-badge {
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.72em;
+            font-weight: 700;
+            flex-shrink: 0;
+            letter-spacing: 0.5px;
+            align-self: flex-start;
+        }
+        .badge-staff  { background: rgba(255,51,51,0.12); color: #ff6666; border: 1px solid #ff3333; }
+        .badge-active { background: rgba(35,165,90,0.12);  color: #23a55a; border: 1px solid #23a55a; }
+		
+		.back-link {
+			position: fixed;
+			top: 20px;
+			left: 20px;
+			z-index: 100;
+			width: 40px;
+			height: 40px;
+			background: rgba(40, 40, 40, 0.9);
+			border: 2px solid #ff3333;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: #ff3333;
+			font-size: 18px;
+			text-decoration: none;
+			transition: all 0.3s ease;
+			backdrop-filter: blur(10px);
+		}
+		
+		.back-link:hover {
+			background: #ff3333;
+			color: #fff;
+			transform: scale(1.1);
+		}
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+        .project-card {
+            background: rgba(40,40,40,0.45);
+            border: 2px solid #333;
+            border-radius: 14px;
+            padding: 20px;
+            text-align: left;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        .project-card:hover {
+            border-color: #ff3333;
+            transform: translateY(-5px);
+            box-shadow: 0 12px 32px rgba(255,51,51,0.25);
+        }
+        .project-icon {
+            width: 44px;
+            height: 44px;
+            background: rgba(255,51,51,0.1);
+            border: 1.5px solid #ff3333;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff3333;
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+        .project-name { color: #fff; font-weight: 700; font-size: 1.05em; margin-bottom: 6px; }
+        .project-desc { color: #888; font-size: 0.82em; line-height: 1.55; }
+        .project-tag {
+            display: inline-block;
+            background: rgba(255,51,51,0.1);
+            border: 1px solid #ff3333;
+            color: #ff6666;
+            font-size: 0.7em;
+            padding: 2px 8px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .footer-line { color: #444; font-size: 0.8em; margin-top: 8px; }
+        .footer-line a { color: #ff3333; text-decoration: none; }
+        .footer-line a:hover { color: #ff6666; }
+
+        @media (max-width: 560px) {
+            h1 { font-size: 2em; }
+            .projects-grid { grid-template-columns: 1fr; }
+            .profile-image, .profile-image-container { width: 120px; height: 120px; }
+        }
+    </style>
+</head>
+<body>
+<a href="https://sypherox.github.io" class="back-link" title="Back to main page">
+    <i class="fas fa-arrow-left"></i>
+</a>
+<div class="container">
+
+    <div class="profile-section">
+        <div class="profile-image-container">
+            <img src="avatar.png"
+                 onerror="this.src='https://minotar.net/helm/Sypherox/500.png'"
+                 alt="Sypherox" class="profile-image">
+        </div>
+        <h1>Sypherox</h1>
+        <p class="subtitle">Developer &amp; Server Staff</p>
+    </div>
+
+    <div class="section-title"><i class="fas fa-user"></i> About Me</div>
+    <div class="about-box">
+        <p class="about-intro">
+            Hey, my name is <strong>Tom</strong>. I'm a passionate developer from Cologne, Germany.
+            I have been involved in the Minecraft community for 15+ years. I began programming in 
+            <strong>Java</strong> in 8th grade and have spent the last <strong>3.5 years</strong> building Minecraft projects.
+            My main focus is on <strong>anticheat systems</strong> and <strong>ScreenShare tools</strong>. I work on 
+            anything that helps keep servers fair and free from cheats. In addition, I have
+            created various plugins, including game modes, SMP features, performance 
+            monitors and alt-account detectors. When I'm not writing code, I'm likely playing chess.
+        </p>
+        <div class="about-pills">
+            <span class="pill"><i class="fas fa-birthday-cake"></i> <span id="age-display">23</span> years old</span>
+            <span class="pill"><i class="fas fa-map-marker-alt"></i> Cologne, Germany</span>
+            <span class="pill"><i class="fas fa-shield-alt"></i> AntiCheat &amp; SS Developer</span>
+            <span class="pill"><i class="fas fa-coffee"></i> Java since 8th grade</span>
+            <span class="pill"><i class="fas fa-chess"></i> Chess enthusiast</span>
+            <span class="pill"><i class="fas fa-language"></i> DE &middot; EN &middot; Latin</span>
+        </div>
+    </div>
+
+    <div class="section-title"><i class="fas fa-briefcase"></i> Experience</div>
+    <div class="experience-list">
+
+        <div class="exp-card">
+            <div class="exp-logo">
+                <img src="pvprivals.png"
+                     onerror="this.style.display='none';this.parentElement.innerText='PvPRivals'"
+                     alt="PvPRivals">
+            </div>
+            <div class="exp-content">
+                <div class="exp-server">PvPRivals <span>formerly PvPGym</span></div>
+                <div class="exp-role">AntiCheat Access Administrator</div>
+                <div class="exp-period"><i class="fas fa-calendar-alt"></i> Aug 2024 &ndash; Present</div>
+            </div>
+            <span class="exp-badge badge-active">Active</span>
+        </div>
+
+        <div class="exp-card">
+            <div class="exp-logo">
+                <img src="gommehd.png"
+                     onerror="this.style.display='none';this.parentElement.innerText='GommeHD'"
+                     alt="GommeHD">
+            </div>
+            <div class="exp-content">
+                <div class="exp-server">GommeHD.net</div>
+                <div class="exp-role">SkyWars Expert</div>
+                <div class="exp-period"><i class="fas fa-calendar-alt"></i> May 2023 &ndash; Feb 2024</div>
+            </div>
+            <span class="exp-badge badge-staff">Retired</span>
+        </div>
+
+        <div class="exp-card">
+            <div class="exp-logo">
+                <img src="wasserkampf.png"
+                     onerror="this.style.display='none';this.parentElement.innerText='Wasserkampf'"
+                     alt="Wasserkampf">
+            </div>
+            <div class="exp-content">
+                <div class="exp-server">Wasserkampf.eu <span>formerly SkyWars.world</span></div>
+                <div class="exp-role">Senior Moderator</div>
+                <div class="exp-period"><i class="fas fa-calendar-alt"></i> Jan 2022 &ndash; Jun 2023</div>
+            </div>
+            <span class="exp-badge badge-staff">Retired</span>
+        </div>
+
+    </div>
+
+    <div class="section-title"><i class="fas fa-folder-open"></i> Featured Projects</div>
+    <div class="projects-grid">
+
+        <div class="project-card">
+            <div class="project-icon"><i class="fas fa-search"></i></div>
+            <div class="project-name">Devyl</div>
+            <div class="project-desc">
+                A ScreenShare tool built for Minecraft server staff to efficiently
+                investigate clients for cheats during live investigations.
+            </div>
+            <span class="project-tag">ScreenShare Tool</span>
+        </div>
+
+        <div class="project-card">
+            <div class="project-icon"><i class="fas fa-shield-alt"></i></div>
+            <div class="project-name">DevylAC</div>
+            <div class="project-desc">
+                Machine Learning based AntiCheat for Minecraft 1.7 - 1.8,
+                specialising in highly accurate detections through trained ML models.
+            </div>
+            <span class="project-tag">Machine Learning &middot; AntiCheat</span>
+        </div>
+
+    </div>
+
+    <div class="footer-line">
+        <a href="https://github.com/Sypherox" target="_blank">
+            <i class="fab fa-github"></i> github.com/Sypherox
+        </a>
+    </div>
+
+</div>
+<script>
+    (function () {
+        const birthday = new Date(2003, 1, 13);
+        const today = new Date();
+        let age = today.getFullYear() - birthday.getFullYear();
+        const m = today.getMonth() - birthday.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthday.getDate())) age--;
+        document.getElementById('age-display').textContent = age;
+    })();
+</script>
+</body>
+</html>
