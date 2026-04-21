@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="3;url=https://discord.gg/aG4QYP8u5p">
+    <meta property="og:title" content="Discord">
+    <meta property="og:description" content="Redirecting to Discord server...">
+    <meta name="theme-color" content="#ff3333">
+    <title>Redirecting...</title>
+    <link rel="icon" type="image/png" href="https://minotar.net/helm/Sypherox/500.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url('https://i.imgur.com/G8YZBUi.png');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            filter: blur(3px);
+            z-index: 0;
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .discord-icon {
+            font-size: 3.5em;
+            color: #5865F2;
+            margin-bottom: 16px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+
+        .redirect-title {
+            color: #fff;
+            font-size: 1.6em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .redirect-desc {
+            color: #777;
+            font-size: 1em;
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid #ff3333;
+            box-shadow: 0 0 20px rgba(255,51,51,0.3);
+            margin: 0 auto 20px;
+            display: block;
+        }
+
+        .progress-wrap {
+            width: 260px;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 99px;
+            margin: 0 auto 28px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #ff3333, #5865F2);
+            border-radius: 99px;
+            animation: fill 3s linear forwards;
+        }
+
+        @keyframes fill {
+            from { width: 0%; }
+            to   { width: 100%; }
+        }
+
+        .countdown {
+            color: #555;
+            font-size: 0.85em;
+            margin-bottom: 28px;
+        }
+
+        .countdown span {
+            color: #ff3333;
+            font-weight: 700;
+        }
+
+        .btn-discord {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #5865F2;
+            color: #fff;
+            text-decoration: none;
+            padding: 12px 28px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(88,101,242,0.35);
+            border: 2px solid #5865F2;
+        }
+
+        .btn-discord:hover {
+            background: transparent;
+            color: #5865F2;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(88,101,242,0.45);
+        }
+    </style>
+    <script>
+        window.location.href = "https://discord.gg/aG4QYP8u5p";
+
+        let seconds = 3;
+        document.addEventListener('DOMContentLoaded', function() {
+            const el = document.getElementById('seconds');
+            const interval = setInterval(() => {
+                seconds--;
+                if (el) el.textContent = seconds;
+                if (seconds <= 0) clearInterval(interval);
+            }, 1000);
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <img src="https://cdn.discordapp.com/avatars/333523819690065921/40e357ddea42e5b6a26b68040c7effdf.png?size=512" alt="Sypherox" class="avatar">
+        <div class="discord-icon"><i class="fab fa-discord"></i></div>
+        <div class="redirect-title">Redirecting to Discord...</div>
+        <div class="redirect-desc">
+            You will be redirected to the Discord server shortly.<br>
+            Click the button if it doesn't work.
+        </div>
+        <div class="progress-wrap">
+            <div class="progress-bar"></div>
+        </div>
+        <div class="countdown">Forwarding in <span id="seconds">3</span> seconds...</div>
+        <a href="https://discord.gg/aG4QYP8u5p" class="btn-discord" target="_blank" rel="noopener noreferrer">
+            <i class="fab fa-discord"></i> Join Discord
+        </a>
+    </div>
+</body>
+</html>
