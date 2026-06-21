@@ -37,7 +37,7 @@
 		    position: fixed;
 		    top: 0; left: 0;
 		    width: 100%; height: 100%;
-		    background-image: url('...');
+		    background-image: url('https://i.imgur.com/WmfPJ9W.jpeg');
 		    background-size: cover;
 		    background-position: center;
 		    opacity: 0.15;
@@ -297,6 +297,48 @@
 		    box-shadow: 0 0 12px rgba(255, 51, 51, 0.25);
 		}
 
+		.note-icon {
+		    display: inline-flex;
+		    align-items: center;
+		    justify-content: center;
+		    width: 16px;
+		    height: 16px;
+		    background: rgba(255, 51, 51, 0.15);
+		    border: 1px solid rgba(255, 51, 51, 0.4);
+		    border-radius: 50%;
+		    color: #ff6666;
+		    font-size: 10px;
+		    font-weight: 700;
+		    cursor: help;
+		    position: relative;
+		    flex-shrink: 0;
+		}
+
+		.note-icon::after {
+		    content: attr(data-note);
+		    position: absolute;
+		    bottom: calc(100% + 6px);
+		    left: 50%;
+		    transform: translateX(-50%);
+		    background: #1a1a1a;
+		    border: 1px solid rgba(255, 51, 51, 0.4);
+		    color: #ccc;
+		    font-size: 1.4em;
+		    font-weight: 400;
+		    padding: 7px 14px;
+		    border-radius: 6px;
+		    white-space: nowrap;
+		    pointer-events: none;	
+		    opacity: 0;
+		    transition: opacity 0.2s;
+		    z-index: 99;
+		    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+		}
+
+		.note-icon:hover::after {
+		    opacity: 1;
+		}
+
         .footer {
             color: #555;
             font-size: 0.8em;
@@ -377,9 +419,9 @@ const HIDDEN_HEAD = "https://textures.minecraft.net/texture/90fcf0fe9dbe7d7a4024
 const HIDDEN_IMG = "https://textures.minecraft.net/texture/90fcf0fe9dbe7d7a402401cece915621ef0a1148d38dae12e31cefca1afafea5";
 
 const players = [
-    { rank:1,   uuid:"a22aaa1c89cc46f48bda929559035df6",  name:"lyqas",             kills:125715, deaths:14285, kd:8.80,  games:52291, wins:40000, wl:76.49 },
+    { rank:1,   uuid:"a22aaa1c89cc46f48bda929559035df6",  name:"lyqas",             kills:125715, deaths:14285, kd:8.80,  games:52291, wins:40000, wl:76.49, note: "most Kills" },
     { rank:2,   uuid:"8abbc94c6263421f923a07820f85d4af",  name:"imlaqez",           kills:111075, deaths:12266, kd:9.06,  games:45579, wins:34675, wl:76.08 },
-    { rank:3,   uuid:"2c89a5bc05904a1e8beb6a3defd70242",  name:"xZiooo",            kills:105764, deaths:22973, kd:4.60,  games:54153, wins:34603, wl:63.90 },
+    { rank:3,   uuid:"2c89a5bc05904a1e8beb6a3defd70242",  name:"xZiooo",            kills:105764, deaths:22973, kd:4.60,  games:54153, wins:34603, wl:63.90, note: "most Games" },
     { rank:4,   uuid:"a174e39d75d54b1786c65fd1d9820d1f",  name:"zImRyze",           kills:92355,  deaths:11886, kd:7.77,  games:44801, wins:34080, wl:76.07 },
     { rank:5,   uuid:"76848a2a6f654c6586796c5ff217d195",  name:"yiruzi",            kills:76853,  deaths:22137, kd:3.47,  games:50825, wins:31050, wl:61.09 },
     { rank:6,   uuid:"bd0bd2fc9eb44211a3ec6d99d285de7f",  name:"Flexi_i",           kills:103388, deaths:20038, kd:5.16,  games:48503, wins:30242, wl:62.35 },
@@ -402,7 +444,7 @@ const players = [
     { rank:23,  uuid:"f2dfb6e65b9e4c0595ff8690d0858392",  name:"HotKeyGod",         kills:39902,  deaths:3813,  kd:10.46, games:18824, wins:15847, wl:84.19 },
     { rank:24,  uuid:"88fce9073cd44c20a74e8c5027bc3a41",  name:"FadeReturns",       kills:49925,  deaths:9350,  kd:5.34,  games:24550, wins:15622, wl:63.63 },
     { rank:25,  uuid:"263bc9e0957040c690a1bde307b4283d",  name:"Kaaai",             kills:null,   deaths:null,  kd:null,  games:null,  wins:null,  wl:null  },
-    { rank:26,  uuid:"c98fbfbf6f474350bc6ba10233a2cd8d",  name:"BusfahrerRobert",   kills:36649,  deaths:10344, kd:3.54,  games:24160, wins:15498, wl:64.15 },
+    { rank:26,  uuid:"c98fbfbf6f474350bc6ba10233a2cd8d",  name:"BusfahrerRobert",   kills:36649,  deaths:10344, kd:3.54,  games:24160, wins:15498, wl:64.15, note: "aka xBigMac69" },
     { rank:27,  uuid:"9adac6250c3b453b89511c6d835aa5e7",  name:"Sineax",            kills:41312,  deaths:8351,  kd:4.95,  games:22638, wins:15304, wl:67.60 },
     { rank:28,  uuid:"7e225f9b2e424d2eabb6ef092d4690c3",  name:"J4rn",              kills:37826,  deaths:3160,  kd:11.97, games:17321, wins:15169, wl:87.58 },
     { rank:29,  uuid:null,                                name:null,                kills:null,   deaths:null,  kd:null,  games:null,  wins:null,  wl:null  },
@@ -413,7 +455,7 @@ const players = [
     { rank:34,  uuid:"d63034a8fa364f2c9f732df702522302",  name:"youngdaggerdikkk",  kills:43624,  deaths:11768, kd:3.71,  games:24303, wins:14134, wl:58.16 },
     { rank:35,  uuid:"cbd6c34631db490595a97eb84ebdffba",  name:"Chiiara88",         kills:25128,  deaths:5689,  kd:4.42,  games:18316, wins:14102, wl:76.99 },
     { rank:36,  uuid:"d949a157279840d6b78137d364ee19e0",  name:"Uru361YT",          kills:40630,  deaths:14903, kd:2.73,  games:26799, wins:13994, wl:52.22 },
-    { rank:37,  uuid:"f68636ee3eec4f6e8406956ac4211eb1",  name:"skywars88",         kills:31798,  deaths:9524,  kd:3.34,  games:21985, wins:13953, wl:63.47 },
+    { rank:37,  uuid:"f68636ee3eec4f6e8406956ac4211eb1",  name:"skywars88",         kills:31798,  deaths:9524,  kd:3.34,  games:21985, wins:13953, wl:63.47, note: "aka NXKKES ⇄ Account got hacked" },
     { rank:38,  uuid:"2f286505844445199d79e1fd6b2a82a8",  name:"Reichweite",        kills:30567,  deaths:3487,  kd:8.77,  games:16749, wins:13922, wl:83.12 },
     { rank:39,  uuid:"150c1d25d8264b2aaf56085a81876f62",  name:"xRem0ke",           kills:39751,  deaths:9583,  kd:4.15,  games:21869, wins:13537, wl:61.90 },
     { rank:40,  uuid:"c06cb2c7a8884c96b2f0939741e682bc",  name:"CriticalWolf",      kills:37277,  deaths:9933,  kd:3.75,  games:21296, wins:13223, wl:62.09 },
@@ -451,7 +493,7 @@ const players = [
     { rank:72,  uuid:"f8cdd3b1685a4b79beeb0d99af933198",  name:"Tassimo",           kills:30301,  deaths:8366,  kd:3.62,  games:17531, wins:10493, wl:59.85 },
     { rank:73,  uuid:"93f960ea1e014f44b7d844fa519d2b44",  name:"Rumpelstyle",       kills:36429,  deaths:9285,  kd:3.92,  games:18804, wins:10485, wl:55.76 },
     { rank:74,  uuid:"227c921120df4b7d8d6b99612caaa29d",  name:"zRqlex",            kills:37914,  deaths:8377,  kd:4.53,  games:18288, wins:10461, wl:57.20 },
-    { rank:75,  uuid:"100ad5535b9f42399405c52f0cbdfefe",  name:"pctrik_",           kills:37081,  deaths:21480, kd:1.73,  games:30891, wins:10357, wl:33.53 },
+    { rank:75,  uuid:"100ad5535b9f42399405c52f0cbdfefe",  name:"pctrik_",           kills:37081,  deaths:21480, kd:1.73,  games:30891, wins:10357, wl:33.53, note: "lowest K/D" },
     { rank:76,  uuid:"335c86f64b294e63921cc8f34edabd38",  name:"Threadsmanship",    kills:45758,  deaths:17215, kd:2.66,  games:27163, wins:10160, wl:37.40 },
     { rank:77,  uuid:"b8d6e1de550646879c6deb09e54d9566",  name:"kinqkirito",        kills:30165,  deaths:14765, kd:2.04,  games:23147, wins:10107, wl:43.66 },
     { rank:78,  uuid:"8cec077ef5344b7386aa3ef8adeeb824",  name:"2trys",             kills:28401,  deaths:5098,  kd:5.57,  games:14725, wins:10094, wl:68.55 },
@@ -460,16 +502,16 @@ const players = [
     { rank:81,  uuid:"aa49c0dff26d43fc8e0ecc8732d67e37",  name:"ItalyMafia",        kills:22327,  deaths:9911,  kd:2.25,  games:18519, wins:9878,  wl:53.34 },
     { rank:82,  uuid:"bf898ac01d664e23a43c8608a27bf007",  name:"Ten4You",           kills:23718,  deaths:8344,  kd:2.84,  games:16596, wins:9736,  wl:58.66 },
     { rank:83,  uuid:"49236ed5722049c0ac8b6d685f6fd074",  name:"zeyqo",             kills:25502,  deaths:8604,  kd:2.96,  games:17641, wins:9602,  wl:54.43 },
-    { rank:84,  uuid:"54a07bf782154cc4ae9715f8aa334b5d",  name:"Lrroy",             kills:20569,  deaths:3071,  kd:6.70,  games:12052, wins:9597,  wl:79.63 },
+    { rank:84,  uuid:"54a07bf782154cc4ae9715f8aa334b5d",  name:"Lrroy",             kills:20569,  deaths:3071,  kd:6.70,  games:12052, wins:9597,  wl:79.63, note: "least Kills" },
     { rank:85,  uuid:"36922df1f4cc41b7aa379b4fd2902265",  name:"FreundPlus",        kills:34297,  deaths:13139, kd:2.61,  games:21350, wins:9552,  wl:44.74 },
     { rank:86,  uuid:null,                                name:null,                kills:null,   deaths:null,  kd:null,  games:null,  wins:null,  wl:null  },
     { rank:87,  uuid:"1f7828cf72314a178a129a0d2e16cfc9",  name:"T_co",              kills:26623,  deaths:8153,  kd:3.27,  games:16859, wins:9534,  wl:56.55 },
     { rank:88,  uuid:"e3781fcad07941368f7c762834810ac4",  name:"Vacted",            kills:38236,  deaths:16999, kd:2.25,  games:25601, wins:9504,  wl:37.12 },
-    { rank:89,  uuid:"23ccbb9a373f468487c0e5cc8c3c0eb0",  name:"TooMuchMoon",       kills:45273,  deaths:24994, kd:1.81,  games:33981, wins:9501,  wl:27.96 },
+    { rank:89,  uuid:"23ccbb9a373f468487c0e5cc8c3c0eb0",  name:"TooMuchMoon",       kills:45273,  deaths:24994, kd:1.81,  games:33981, wins:9501,  wl:27.96, note: "most Deaths & worst W/L" },
     { rank:90,  uuid:"e7638f7a586040e49c7531c0670700e0",  name:"godness",           kills:22383,  deaths:1380,  kd:16.22, games:10519, wins:9424,  wl:89.59 },
     { rank:91,  uuid:"ec0355027d3b4ae5b13cd5312aa34b83",  name:"Prainex",           kills:29088,  deaths:7445,  kd:3.91,  games:16003, wins:9288,  wl:58.04 },
     { rank:92,  uuid:"2938696b1f334bf3ba1e74f47a08e766",  name:"athletisch",        kills:27260,  deaths:7557,  kd:3.61,  games:16124, wins:9284,  wl:57.58 },
-    { rank:93,  uuid:"65929ae8e7464d90a2aab5c5a8caf26f",  name:"ryqi",              kills:25431,  deaths:572,   kd:44.46, games:9507,  wins:9152,  wl:96.27 },
+    { rank:93,  uuid:"65929ae8e7464d90a2aab5c5a8caf26f",  name:"ryqi",              kills:25431,  deaths:572,   kd:44.46, games:9507,  wins:9152,  wl:96.27, note: "highest K/D, highest W/L, fewest Deaths & least Games" },
     { rank:94,  uuid:"0536ce2e64a743ddb13e34ef815af151",  name:"Lublas",            kills:30046,  deaths:13524, kd:2.22,  games:19921, wins:9138,  wl:45.87 },
     { rank:95,  uuid:"2f3b8e158a0f495fbe3247d3596777e0",  name:"obv_Enes",          kills:39390,  deaths:12679, kd:3.11,  games:21441, wins:9077,  wl:42.33 },
     { rank:96,  uuid:"345ab45dba6d478c965a41d500c31024",  name:"Jayzox",            kills:28167,  deaths:4773,  kd:5.90,  games:13422, wins:9027,  wl:67.26 },
@@ -520,6 +562,7 @@ function renderTable(data) {
                 <div class="player-cell">
                     <img class="${headClass}" src="${imgUrl}" alt="${p.name}" loading="lazy">
                     <span class="player-name">${p.name}</span>
+					${p.note ? `<span class="note-icon" data-note="${p.note}">?</span>` : ''}
                 </div>`;
         }
 
