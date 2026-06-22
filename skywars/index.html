@@ -21,7 +21,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
+        html {
+			scroll-behavior: smooth;
+			scrollbar-gutter: stable;
+		}
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -138,10 +141,25 @@
         }
 
         table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.92em;
-        }
+			width: 100%;
+			border-collapse: collapse;
+			font-size: 0.92em;
+			table-layout: fixed;
+		}
+		
+		.player-cell {
+			display: flex;
+			align-items: center;
+			gap: 9px;
+			min-width: 0;
+		}
+		
+		.player-name {
+			color: #fff;
+			font-weight: 600;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
 
         thead th {
             color: #ff3333;
@@ -383,16 +401,113 @@
 			z-index: 99;
 			box-shadow: 0 4px 12px rgba(0,0,0,0.5);
 		}
+		
+		tbody tr.deleted-row {
+			opacity: 0.45;
+			background: rgba(255, 100, 0, 0.03);
+		}
+		tbody tr.deleted-row:hover {
+			background: rgba(255, 100, 0, 0.07);
+			opacity: 0.65;
+		}
+	
+		.deleted-icon {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 18px;
+			height: 18px;
+			border-radius: 50%;
+			font-size: 11px;
+			cursor: help;
+			position: relative;
+			flex-shrink: 0;
+			background: rgba(255, 140, 0, 0.15);
+			border: 1px solid rgba(255, 140, 0, 0.5);
+			color: #ff8c00;
+		}
+
+		.deleted-icon::after {
+			content: attr(data-note);
+			position: absolute;
+			bottom: calc(100% + 6px);
+			left: 0;
+			background: #1a1a1a;
+			border: 1px solid rgba(255, 140, 0, 0.4);
+			color: #ccc;
+			font-size: 1.4em;
+			font-weight: 400;
+			padding: 7px 14px;
+			border-radius: 6px;
+			white-space: nowrap;
+			pointer-events: none;
+			opacity: 0;
+			transition: opacity 0.2s;
+			z-index: 99;
+			box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+		}
+
+		.show-deleted-label {
+			display: flex;
+			align-items: center;
+			gap: 7px;
+			white-space: nowrap;
+			color: #888;
+			font-size: 0.85em;
+			cursor: pointer;
+			user-select: none;
+			padding: 8px 12px;
+			border: 2px solid rgba(255, 140, 0, 0.3);
+			border-radius: 10px;
+			background: rgba(40, 40, 40, 0.6);
+			transition: border-color 0.2s, color 0.2s;
+			flex-shrink: 0;
+		}
+
+		.show-deleted-label:hover {
+			border-color: rgba(255, 140, 0, 0.6);
+			color: #ff8c00;
+		}
+
+		.show-deleted-label input[type="checkbox"] {
+			display: none;
+		}
+
+		.show-deleted-label .check-box {
+			width: 16px;
+			height: 16px;
+			border: 2px solid rgba(255, 140, 0, 0.5);
+			border-radius: 4px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 10px;
+			color: #ff8c00;
+			transition: background 0.2s, border-color 0.2s;
+			flex-shrink: 0;
+		}
+
+		.show-deleted-label.checked .check-box {
+			background: rgba(255, 140, 0, 0.2);
+			border-color: #ff8c00;
+		}
+
+		.show-deleted-label.checked {
+			border-color: rgba(255, 140, 0, 0.6);
+			color: #ff8c00;
+		}
 
 		.owner-icon:hover::after { opacity: 1; }
 		.note-icon:hover::after  { opacity: 1; }
 		.best-icon:hover::after  { opacity: 1; border-color: rgba(255, 215, 0, 0.4); }
 		.worst-icon:hover::after { opacity: 1; border-color: rgba(139, 90, 43, 0.5); }
+		.deleted-icon:hover::after { opacity: 1; border-color: rgba(255, 140, 0, 0.5); }
 		
 		.note-icon.active::after,
 		.best-icon.active::after,
 		.worst-icon.active::after,
 		.owner-icon.active::after { opacity: 1; }
+		.deleted-icon.active::after { opacity: 1; }
 
         .footer {
             color: #555;
@@ -428,10 +543,25 @@
 
     <div class="table-wrapper">
         <div class="search-wrapper">
-		    <i class="fas fa-search"></i>
-		    <input type="text" id="searchInput" placeholder="Search player..." oninput="filterTable(this.value)">
+			<i class="fas fa-search"></i>
+			<input type="text" id="searchInput" placeholder="Search player..." oninput="filterTable(this.value)">
+			<label class="show-deleted-label" id="showDeletedLabel">
+				<input type="checkbox" id="showDeletedCheckbox" onchange="toggleShowDeleted()">
+				<span class="check-box" id="checkBoxVisual"></span>
+				Show deleted
+			</label>
 		</div>
 		<table id="leaderboard">
+			<colgroup>
+				<col style="width: 60px;">      <!-- Rank -->
+				<col style="width: 200px;">      <!-- Name-->
+				<col style="width: 100px;">     <!-- Wins -->
+				<col style="width: 100px;">     <!-- Kills -->
+				<col style="width: 100px;">     <!-- Deaths -->
+				<col style="width: 100px;">     <!-- Games -->
+				<col style="width: 80px;">      <!-- K/D -->
+				<col style="width: 90px;">      <!-- W/L -->
+			</colgroup>
             <thead>
     			<tr>
         			<th data-col="rank" class="active" onclick="sortTable(this)">
@@ -552,7 +682,7 @@ const players = [
     { rank:76,  uuid:"335c86f64b294e63921cc8f34edabd38",  name:"Threadsmanship",    kills:45758,  deaths:17215, kd:2.66,  games:27163, wins:10160, wl:37.40, note: "aka SoupFerrero" },
     { rank:77,  uuid:"b8d6e1de550646879c6deb09e54d9566",  name:"kinqkirito",        kills:30165,  deaths:14765, kd:2.04,  games:23147, wins:10107, wl:43.66 },
     { rank:78,  uuid:"8cec077ef5344b7386aa3ef8adeeb824",  name:"2trys",             kills:28401,  deaths:5098,  kd:5.57,  games:14725, wins:10094, wl:68.55 },
-    { rank:79,  uuid:"39610435c21045659a62cc4e1f18f26a",  name:"n2ls",              kills:22313,  deaths:7020,  kd:3.18,  games:15932, wins:10059, wl:63.14, note: "aka Rquki/NoSyWars" },
+    { rank:79,  uuid:"39610435c21045659a62cc4e1f18f26a",  name:"n2ls",              kills:22313,  deaths:7020,  kd:3.18,  games:15932, wins:10059, wl:63.14, note: "aka Ryuki/NoSkyWars" },
     { rank:80,  uuid:"9c2b20fb522441c9954cae6f093d2fc4",  name:"schwert33",         kills:34295,  deaths:9779,  kd:3.51,  games:19781, wins:10042, wl:50.77 },
     { rank:81,  uuid:"aa49c0dff26d43fc8e0ecc8732d67e37",  name:"ItalyMafia",        kills:22327,  deaths:9911,  kd:2.25,  games:18519, wins:9878,  wl:53.34 },
     { rank:82,  uuid:"bf898ac01d664e23a43c8608a27bf007",  name:"Ten4You",           kills:23718,  deaths:8344,  kd:2.84,  games:16596, wins:9736,  wl:58.66 },
@@ -567,34 +697,98 @@ const players = [
     { rank:91,  uuid:"ec0355027d3b4ae5b13cd5312aa34b83",  name:"Prainex",           kills:29088,  deaths:7445,  kd:3.91,  games:16003, wins:9288,  wl:58.04 },
     { rank:92,  uuid:"2938696b1f334bf3ba1e74f47a08e766",  name:"athletisch",        kills:27260,  deaths:7557,  kd:3.61,  games:16124, wins:9284,  wl:57.58 },
     { rank:93,  uuid:"65929ae8e7464d90a2aab5c5a8caf26f",  name:"ryqi",              kills:25431,  deaths:572,   kd:44.46, games:9507,  wins:9152,  wl:96.27, best: ["highest K/D", "highest W/L", "fewest Deaths", "least Games"] },
-    { rank:94,  uuid:"0536ce2e64a743ddb13e34ef815af151",  name:"Lublas",            kills:30046,  deaths:13524, kd:2.22,  games:19921, wins:9138,  wl:45.87 },
+    { rank:94,  uuid:"78e746ac392840a5b199289832d779da",  name:"miro49_",           kills:30046,  deaths:13524, kd:2.22,  games:19921, wins:9138,  wl:45.87, note: "aka Lublas" },
     { rank:95,  uuid:"2f3b8e158a0f495fbe3247d3596777e0",  name:"obv_Enes",          kills:39390,  deaths:12679, kd:3.11,  games:21441, wins:9077,  wl:42.33 },
     { rank:96,  uuid:"345ab45dba6d478c965a41d500c31024",  name:"Jayzox",            kills:28167,  deaths:4773,  kd:5.90,  games:13422, wins:9027,  wl:67.26 },
     { rank:97,  uuid:"1365f6685a1a48b3b404f725568dacf6",  name:"lqxed",             kills:30196,  deaths:11692, kd:2.58,  games:20374, wins:9013,  wl:44.24 },
     { rank:98,  uuid:"5010159502a04a2dbbfe562f684f893c",  name:"VilsaLimetteKorn",  kills:36782,  deaths:13929, kd:2.64,  games:21619, wins:8978,  wl:41.53, note: "aka P4n0x" },
     { rank:99,  uuid:"ecdaa5ba26284b36a84d4703fd290f19",  name:"Motiq",             kills:33652,  deaths:10877, kd:3.09,  games:19161, wins:8976,  wl:46.85 },
     { rank:100, uuid:"3058cd97e96a4c4a9ff2d00c79f2b553",  name:"nassau_",           kills:39411,  deaths:11536, kd:3.42,  games:20011, wins:8920,  wl:44.58, worst: "least Wins" },
+	{ rank:null,uuid:"e5de7e3bef9c437281e3de350f08d3ef",  name:"ySantiago",         kills:null,   deaths:null,  kd:4.97,  games:null,  wins:30644, wl:null, deleted: "banned for Cheating" },
 ];
 
 const Q_MARK_URL = "https://crafatar.com/avatars/069a79f4-44e9-4726-a5be-fca90e38aaf5?size=28&overlay";
 
 let sortCol = "rank";
 let sortAsc = true;
+let showDeleted = false;
 
 function statCell(val, cls) {
     if (val === null) return `<td><span class="hidden-stat">— — —</span></td>`;
-    if (cls === "kd")  return `<td><span class="badge badge-kd">${val.toFixed(2)}</span></td>`;
-    if (cls === "wl")  return `<td><span class="badge badge-wl">${val.toFixed(2)}%</span></td>`;
+    if (cls === "kd") return `<td><span class="badge badge-kd">${val.toFixed(2)}</span></td>`;
+    if (cls === "wl") return `<td><span class="badge badge-wl">${val.toFixed(2)}%</span></td>`;
     return `<td class="${cls === "pos" ? "stat-positive" : "stat-neutral"}">${val.toLocaleString("de-DE")}</td>`;
 }
 
-function renderTable(data, dynamicRank = false) {
+function compareValues(a, b, col, asc) {
+    let av = a[col];
+    let bv = b[col];
+
+    if (col === "rank") {
+        av = a.baseRank;
+        bv = b.baseRank;
+    }
+
+    if (av === null && bv === null) return 0;
+    if (av === null) return 1;
+    if (bv === null) return -1;
+
+    if (typeof av === "string") av = av.toLowerCase();
+    if (typeof bv === "string") bv = bv.toLowerCase();
+
+    if (av < bv) return asc ? -1 : 1;
+    if (av > bv) return asc ? 1 : -1;
+
+    return a.baseRank - b.baseRank;
+}
+
+function getBaseRankMap(includeDeleted) {
+    const basePool = includeDeleted ? [...players] : players.filter(p => !p.deleted);
+    const rankedByWins = [...basePool].sort((a, b) => {
+        if (a.wins === null && b.wins === null) return 0;
+        if (a.wins === null) return 1;
+        if (b.wins === null) return -1;
+        if (b.wins !== a.wins) return b.wins - a.wins;
+        return a.name.localeCompare(b.name);
+    });
+
+    const rankMap = new Map();
+    rankedByWins.forEach((p, index) => {
+        rankMap.set(p.uuid + "|" + p.name, index + 1);
+    });
+    return rankMap;
+}
+
+function getProcessedPlayers() {
+    const query = document.getElementById("searchInput").value.toLowerCase().trim();
+    const visiblePlayers = showDeleted ? [...players] : players.filter(p => !p.deleted);
+    const baseRankMap = getBaseRankMap(showDeleted);
+
+    let processed = visiblePlayers.map(p => ({
+        ...p,
+        baseRank: baseRankMap.get(p.uuid + "|" + p.name) ?? null
+    }));
+
+    processed = processed.filter(p => !query || (p.name && p.name.toLowerCase().includes(query)));
+
+    processed.sort((a, b) => compareValues(a, b, sortCol, sortAsc));
+
+    processed.forEach((p, index) => {
+        p.displayRank = index + 1;
+    });
+
+    return processed;
+}
+
+function renderTable(data) {
     const tbody = document.getElementById("tbody");
     tbody.innerHTML = "";
-    data.forEach((p, index) => {
+
+    data.forEach((p) => {
         const isFullHidden = p.uuid === null && p.name === null;
         const hasAnyHidden = p.kills === null || p.deaths === null || p.kd === null || p.games === null || p.wins === null || p.wl === null;
-        const displayPos = dynamicRank ? (p._sortedRank ?? index + 1) : p.rank;
+
+        const displayPos = sortCol === "rank" ? p.baseRank : p.displayRank;
         const rankClass = displayPos === 1 ? "rank-1" : displayPos === 2 ? "rank-2" : displayPos === 3 ? "rank-3" : "";
         const rankDisplay = displayPos === 1 ? "🥇" : displayPos === 2 ? "🥈" : displayPos === 3 ? "🥉" : "#" + displayPos;
 
@@ -612,105 +806,93 @@ function renderTable(data, dynamicRank = false) {
                     <span class="hidden-badge"><i class="fas fa-user-secret"></i> hidden</span>
                 </div>`;
         } else {
-			const imgUrl = `https://minotar.net/helm/${p.uuid}/28.png`;
-			playerCell = `
-				<div class="player-cell">
-					<img class="player-head" src="${imgUrl}" alt="${p.name}" loading="lazy">
-					<span class="player-name">${p.name}</span>
-					${p.best ? p.best.map(b => `<span class="best-icon" data-note="${b}">🏆</span>`).join('') : ''}
-					${p.worst ? `<span class="worst-icon" data-note="${p.worst}">💩</span>` : ''}
-					${p.note  ? `<span class="note-icon"  data-note="${p.note}">?</span>`   : ''}
-					${p.owner ? `<span class="owner-icon" data-note="${p.owner}">✏️</span>` : ''}
-				</div>`;
-		}
+            const imgUrl = `https://minotar.net/helm/${p.uuid}/28.png`;
+            playerCell = `
+                <div class="player-cell">
+                    <img class="player-head" src="${imgUrl}" alt="${p.name}" loading="lazy">
+                    <span class="player-name">${p.name}</span>
+                    ${p.best ? p.best.map(b => `<span class="best-icon" data-note="${b}">🏆</span>`).join('') : ''}
+                    ${p.worst ? `<span class="worst-icon" data-note="${p.worst}">💩</span>` : ''}
+                    ${p.note ? `<span class="note-icon" data-note="${p.note}">?</span>` : ''}
+                    ${p.owner ? `<span class="owner-icon" data-note="${p.owner}">✏️</span>` : ''}
+                    ${p.deleted ? `<span class="deleted-icon" data-note="${p.deleted}"><i class="fas fa-trash"></i></span>` : ''}
+                </div>`;
+        }
 
         const row = document.createElement("tr");
         if (isFullHidden || hasAnyHidden) row.classList.add("hidden-row");
+        if (p.deleted) row.classList.add("deleted-row");
 
         row.innerHTML = `
-		    <td class="col-rank ${rankClass}">${rankDisplay}</td>
-		    <td>${playerCell}</td>
-		    ${statCell(p.wins, "pos")}
-		    ${statCell(p.kills, "pos")}
-		    ${statCell(p.deaths, "neu")}
-		    ${statCell(p.games, "neu")}
-		    ${statCell(p.kd, "kd")}
-		    ${statCell(p.wl, "wl")}
-		`;
+            <td class="col-rank ${rankClass}">${rankDisplay}</td>
+            <td>${playerCell}</td>
+            ${statCell(p.wins, "pos")}
+            ${statCell(p.kills, "pos")}
+            ${statCell(p.deaths, "neu")}
+            ${statCell(p.games, "neu")}
+            ${statCell(p.kd, "kd")}
+            ${statCell(p.wl, "wl")}
+        `;
         tbody.appendChild(row);
     });
 }
 
+function updateTable() {
+    renderTable(getProcessedPlayers());
+}
+
 function sortTable(th) {
     const col = th.dataset.col;
+
     if (sortCol === col) {
         sortAsc = !sortAsc;
     } else {
         sortCol = col;
-        sortAsc = col === "rank" || col === "name";
+        sortAsc = (col === "rank" || col === "name");
     }
 
     document.querySelectorAll("thead th").forEach(h => {
         h.classList.remove("active");
         h.querySelector(".sort-icon i").className = "fas fa-sort";
     });
+
     th.classList.add("active");
     th.querySelector(".sort-icon i").className = sortAsc ? "fas fa-sort-up" : "fas fa-sort-down";
 
-    const base = document.getElementById("searchInput").value
-    	? players.filter(p => p.name && p.name.toLowerCase().includes(document.getElementById("searchInput").value.toLowerCase().trim()))
-	    : [...players];
-	const sorted = base.sort((a, b) => {
-        let av = a[col], bv = b[col];
-        
-		if (av === null && bv === null) return 0;
-        if (av === null) return 1;
-        if (bv === null) return -1;
-        if (typeof av === "string") av = av.toLowerCase(), bv = bv.toLowerCase();
-        if (av < bv) return sortAsc ? -1 : 1;
-        if (av > bv) return sortAsc ? 1 : -1;
-        return 0;
-    });
-
-    renderTable(sorted, col !== "rank");
+    updateTable();
 }
 
-function filterTable(query) {
-    const q = query.toLowerCase().trim();
-
-    const allSorted = [...players].sort((a, b) => {
-        let av = a[sortCol], bv = b[sortCol];
-        if (av === null && bv === null) return 0;
-        if (av === null) return 1;
-        if (bv === null) return -1;
-        if (typeof av === "string") av = av.toLowerCase(), bv = bv.toLowerCase();
-        if (av < bv) return sortAsc ? -1 : 1;
-        if (av > bv) return sortAsc ? 1 : -1;
-        return 0;
-    });
-
-    allSorted.forEach((p, i) => p._sortedRank = i + 1);
-
-    const filtered = q === ""
-        ? allSorted
-        : allSorted.filter(p => p.name && p.name.toLowerCase().includes(q));
-
-    renderTable(filtered, sortCol !== "rank");
+function filterTable() {
+    updateTable();
 }
 
-document.addEventListener('click', function(e) {
-    const icon = e.target.closest('.note-icon, .best-icon, .worst-icon, .owner-icon');
-    
-    document.querySelectorAll('.note-icon, .best-icon, .worst-icon, .owner-icon')
-        .forEach(el => { if (el !== icon) el.classList.remove('active'); });
-    
+function toggleShowDeleted() {
+    showDeleted = document.getElementById("showDeletedCheckbox").checked;
+
+    const label = document.getElementById("showDeletedLabel");
+    const visual = document.getElementById("checkBoxVisual");
+
+    label.classList.toggle("checked", showDeleted);
+    visual.innerHTML = showDeleted ? "✓" : "";
+
+    updateTable();
+}
+
+document.addEventListener("click", function(e) {
+    const icon = e.target.closest(".note-icon, .best-icon, .worst-icon, .owner-icon, .deleted-icon");
+
+    document.querySelectorAll(".note-icon, .best-icon, .worst-icon, .owner-icon, .deleted-icon")
+        .forEach(el => {
+            if (el !== icon) el.classList.remove("active");
+        });
+
     if (icon) {
         e.stopPropagation();
-        icon.classList.toggle('active');
+        icon.classList.toggle("active");
     }
 });
 
-renderTable(players);
+updateTable();
 </script>
 
 </body>
