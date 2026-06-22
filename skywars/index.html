@@ -496,6 +496,18 @@
 			border-color: rgba(255, 140, 0, 0.6);
 			color: #ff8c00;
 		}
+		
+		a.player-name {
+			color: #fff;
+			font-weight: 600;
+			text-decoration: none;
+			transition: color 0.2s;
+		}
+
+		a.player-name:hover {
+			color: #ff6666;
+			text-decoration: underline;
+		}
 
 		.owner-icon:hover::after { opacity: 1; }
 		.note-icon:hover::after  { opacity: 1; }
@@ -705,6 +717,7 @@ const players = [
     { rank:99,  uuid:"ecdaa5ba26284b36a84d4703fd290f19",  name:"Motiq",             kills:33652,  deaths:10877, kd:3.09,  games:19161, wins:8976,  wl:46.85 },
     { rank:100, uuid:"3058cd97e96a4c4a9ff2d00c79f2b553",  name:"nassau_",           kills:39411,  deaths:11536, kd:3.42,  games:20011, wins:8920,  wl:44.58, worst: "least Wins" },
 	{ rank:null,uuid:"e5de7e3bef9c437281e3de350f08d3ef",  name:"ySantiago",         kills:null,   deaths:null,  kd:4.97,  games:null,  wins:30644, wl:null, deleted: "banned for Cheating" },
+	{ rank:null, uuid:"b03a6b8c638f4d2eac513c135b520f21", name:"ynachten", kills:39742, deaths:10391, kd:3.82, games:23028, wins:14660, wl:63.66, deleted: "banned for cheating, thanks to IllusKoala", note: "aka DarkL4bel" },
 ];
 
 const Q_MARK_URL = "https://crafatar.com/avatars/069a79f4-44e9-4726-a5be-fca90e38aaf5?size=28&overlay";
@@ -810,7 +823,7 @@ function renderTable(data) {
             playerCell = `
                 <div class="player-cell">
                     <img class="player-head" src="${imgUrl}" alt="${p.name}" loading="lazy">
-                    <span class="player-name">${p.name}</span>
+                    <a class="player-name" href="https://namemc.com/profile/${formatUUID(p.uuid)}" target="_blank" rel="noopener noreferrer">${p.name}</a>
                     ${p.best ? p.best.map(b => `<span class="best-icon" data-note="${b}">🏆</span>`).join('') : ''}
                     ${p.worst ? `<span class="worst-icon" data-note="${p.worst}">💩</span>` : ''}
                     ${p.note ? `<span class="note-icon" data-note="${p.note}">?</span>` : ''}
@@ -876,6 +889,10 @@ function toggleShowDeleted() {
     visual.innerHTML = showDeleted ? "✓" : "";
 
     updateTable();
+}
+
+function formatUUID(uuid) {
+    return uuid.replace(/^(.{8})(.{4})(.{4})(.{4})(.{12})$/, "$1-$2-$3-$4-$5");
 }
 
 document.addEventListener("click", function(e) {
