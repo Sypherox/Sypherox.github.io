@@ -574,12 +574,12 @@
 		}
 
 		.profile-skin {
-			width: 160px;
-			height: auto;
-			image-rendering: pixelated;
+			width: 200px;
+			height: 400px;
 			margin: 0 auto 16px;
 			display: block;
 			filter: drop-shadow(0 8px 24px rgba(255,51,51,0.3));
+			transition: opacity 0.3s ease;
 		}
 
 		.profile-name {
@@ -684,6 +684,22 @@
 			gap: 8px;
 		}
 		
+		.profile-skin-wrapper {
+			width: 300px;
+			height: 400px;
+			margin: 0 auto 16px;
+			position: relative;
+		}
+
+		.profile-skin-img {
+			position: absolute;
+			top: 0; left: 0;
+			width: 100%;
+			height: 100%;
+			object-fit: contain;
+			transition: opacity 0.5s ease;
+		}
+
 		.clickable-name {
 			cursor: pointer;
 			transition: color 0.2s;
@@ -701,7 +717,7 @@
 			justify-content: center;
 			margin: 12px 0;
 		}
-
+		
 		.social-btn {
 			display: inline-flex;
 			align-items: center;
@@ -723,11 +739,23 @@
 		}
 
         .footer {
-            color: #555;
-            font-size: 0.8em;
-            margin-top: 25px;
-            text-align: center;
-        }
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 4px;
+			margin-top: 32px;
+		}
+		
+		.footer-views {
+			color: #ff3333;
+			font-size: 0.75em;
+			margin-left: 0;
+		}
+
+		.footer-views i {
+			margin-right: 4px;
+		}
+		
         .footer a { color: #ff3333; text-decoration: none; }
         .footer a:hover { color: #ff6666; }
 
@@ -752,9 +780,11 @@
 		</button>
 		<div class="profile-wrapper">
 			<div class="profile-left">
-				<img id="profileSkin" class="profile-skin" src="" alt="">
+				<div class="profile-skin-wrapper">
+					<img id="profileSkinFallback" class="profile-skin-img" src="" alt="">
+				</div>
 				<div id="profileName" class="profile-name"></div>
-				<div id="profileDeletedBanner"></div>	
+				<div id="profileDeletedBanner"></div>
 				<div class="profile-meta" id="profileMeta"></div>
 			</div>
 			<div class="profile-right">
@@ -831,14 +861,11 @@
 	<div class="stats-counter" id="statsCounter"></div>
 
     <div class="footer">
-        © <a href="https://sypherox.dev">sypherox.dev</a>
-    </div>
+		<span class="footer-views"><i class="fas fa-eye"></i> <span id="viewCount">...</span> views</span>
+		<div>© <a href="https://sypherox.dev">sypherox.dev</a></div>
 </div>
 
 <script>
-const HIDDEN_HEAD = "https://textures.minecraft.net/texture/90fcf0fe9dbe7d7a402401cece9156 21ef0a1148d38dae12e31cefca1afafea5";
-const HIDDEN_IMG = "https://textures.minecraft.net/texture/90fcf0fe9dbe7d7a402401cece915621ef0a1148d38dae12e31cefca1afafea5";
-
 const socialIcons = {
 		youtube: { icon: "fab fa-youtube",  color: "#ff0000", label: "YouTube" },
 		twitter: { icon: "fab fa-twitter",  color: "#1da1f2", label: "Twitter" },
@@ -947,6 +974,11 @@ const players = [
     { rank:98,  uuid:"5010159502a04a2dbbfe562f684f893c",  name:"VilsaLimetteKorn",  kills:36782,  deaths:13929, kd:2.64,  games:21619, wins:8978,  wl:41.53, note: "aka P4n0x" },
     { rank:99,  uuid:"ecdaa5ba26284b36a84d4703fd290f19",  name:"Motiq",             kills:33652,  deaths:10877, kd:3.09,  games:19161, wins:8976,  wl:46.85 },
     { rank:100, uuid:"3058cd97e96a4c4a9ff2d00c79f2b553",  name:"nassau_",           kills:39411,  deaths:11536, kd:3.42,  games:20011, wins:8920,  wl:44.58, worst: "least Wins" },
+	{ rank:101, uuid:"442ee08edb2a490c80db72dd952bf743",  name:"oedtlic",           kills:32772,  deaths:6246,  kd:5.25,  games:14918, wins:8808,  wl:59.04 },
+	{ rank:102, uuid:"4cb34b20d35148a6953a756388ebf6e6",  name:"DungeonCBE",        kills:26268,  deaths:8054,  kd:3.26,  games:16149, wins:8760,  wl:54.24, note: "aka Rxem" },
+	{ rank:103, uuid:"3f9d98ebe5d247d18ae217e1d5e61173",  name:"sadopweb",          kills:17884,  deaths:2934,  kd:6.10,  games:10948, wins:8727,  wl:79.71 },
+	{ rank:104, uuid:"217751afb1474b32b90bae429b2380f2",  name:"Luzzz",          	kills:23956,  deaths:3411,  kd:7.02,  games:11621, wins:8700,  wl:74.86 },
+	{ rank:105, uuid:"df61415c900345d7adbbf8f182c2b8a7",  name:"Sturmcraftt",       kills:28610,  deaths:7140,  kd:4.01,  games:14940, wins:8666,  wl:58.01 },
 	{ rank:null,uuid:"e5de7e3bef9c437281e3de350f08d3ef",  name:"ySantiago",         kills:null,   deaths:null,  kd:4.97,  games:null,  wins:30644, wl:null, deleted: "banned for Cheating on July 17, 2024", socials: { youtube: "https://www.youtube.com/@ySantiagoTheG", twitter: "https://x.com/ySantiagoo", }},
 	{ rank:null, uuid:"b03a6b8c638f4d2eac513c135b520f21", name:"ynachten",          kills:39742,  deaths:10391, kd:3.82,  games:23028, wins:14660, wl:63.66, deleted: "banned for cheating, thanks to IllusKoala", note: "aka DarkL4bel" },
 	{ rank:null,uuid:"0cb53c46b76a4f83913f3604f4b5afa9",  name:"Karamell_Jonas",    kills:null,   deaths:null,  kd:2.96,  games:null,  wins:13380, wl:null, deleted: "most likely banned for Cheating in October 2018", note: "aka emplority" },
@@ -957,11 +989,11 @@ const players = [
 	{ rank:null,uuid:"431088364a4c4ea1bee6ac85fbac3784",  name:"rcsh",         		kills:null,   deaths:null,  kd:4.96,  games:null,  wins:34353, wl:null, deleted: "banned for Boosting in SpeedUHC thanks to DxrkFlo in May 2023", socials: { youtube: "https://www.youtube.com/@rcsh4622", twitter: "https://x.com/xru5h", }},
 	{ rank:null,uuid:"df71e062476b4c12be7c937069f5b36a",  name:"10Rodhits",         kills:null,   deaths:null,  kd:2.73,  games:null,  wins:32378, wl:null, deleted: "banned for Boosting in SpeedUHC thanks to DxrkFlo in May 2023", note: "aka LegitPascal" },
 	{ rank:null,uuid:"6af2b9793e5248cbae455683c370acc7",  name:"Deisuki",  			kills:null,   deaths:null,  kd:4.32,  games:null,  wins:38280, wl:null, deleted: "banned for Boosting in SpeedUHC thanks to DxrkFlo in May 2023", note: "aka ByLolbobYT" }, 
-	{ rank:null,uuid:"05412e514d404b55a2e5a25993161b1d",  name:"steelpatrickYT",  	kills:null,   deaths:null,  kd:null,  games:null,  wins:null,  wl:null, deleted: "banned for Cheating", note: "aka ryqi's old account" }, 
-	{ rank:null,uuid:"cd7cf44ec05146e5a03a33a6f215d803",  name:"mancsl",  			kills:null,   deaths:null,  kd:null,  games:null,  wins:null,  wl:null, deleted: "banned for Doxxing", note: "aka searness' old account" }, 
+	{ rank:null,uuid:"05412e514d404b55a2e5a25993161b1d",  name:"steelpatrickYT",  	kills:null,   deaths:null,  kd:null,  games:null,  wins:null,  wl:null, deleted: "banned for National Socialism & hacking across multiple accounts", note: "aka ryqi's old account" }, 
+	{ rank:null,uuid:"cd7cf44ec05146e5a03a33a6f215d803",  name:"mancsl",  			kills:43938,  deaths:7718,  kd:5.69,  games:24778, wins:18052, wl:72.85, deleted: "banned for Doxxing", note: "aka searness' old account" }, 
+	{ rank:null,uuid:null,  							  name:"DxrkFlo",           kills:null,   deaths:null,  kd:null,  games:null,  wins:null,  wl:null, deleted: "got Hacked", note: "cant find the account" }, 
+	{ rank:null,uuid:"15738672ba4141b6848a6cf032b68ee7",  name:"noying",            kills:null,   deaths:null,  kd:null,  games:null,  wins:null,  wl:null, deleted: "banned for Boosting", note: "aka DarkL4bel V2" }, 
 ];
-
-const Q_MARK_URL = "https://crafatar.com/avatars/069a79f4-44e9-4726-a5be-fca90e38aaf5?size=28&overlay";
 
 let sortCol = "rank";
 let sortAsc = true;
@@ -1045,10 +1077,6 @@ function renderTable(data) {
         const displayPos = sortCol === "rank" ? p.baseRank : p.displayRank;
         const rankClass = displayPos === 1 ? "rank-1" : displayPos === 2 ? "rank-2" : displayPos === 3 ? "rank-3" : "";
         const rankDisplay = displayPos === 1 ? "🥇" : displayPos === 2 ? "🥈" : displayPos === 3 ? "🥉" : "#" + displayPos;
-		
-		const cleanRankMap = getBaseRankMap(false);
-		const deletedRankMap = getBaseRankMap(true);
-		const playerRank = p.deleted ? null : (cleanRankMap.get(p.uuid + "|" + p.name) ?? null);
 
         let playerCell;
         if (isFullHidden) {
@@ -1064,7 +1092,9 @@ function renderTable(data) {
                     <span class="hidden-badge"><i class="fas fa-user-secret"></i> hidden</span>
                 </div>`;
         } else {
-            const imgUrl = `https://minotar.net/helm/${p.uuid}/28.png`;
+            const imgUrl = p.uuid
+				? `https://minotar.net/helm/${p.uuid}/28.png`
+				: `https://minotar.net/helm/MHF_Question/28.png`;
             playerCell = `
                 <div class="player-cell">
                     <img class="player-head" src="${imgUrl}" alt="${p.name}" loading="lazy">
@@ -1154,9 +1184,14 @@ function showPlayerProfile(playerName) {
     document.getElementById('leaderboardView').style.display = 'none';
     document.getElementById('playerProfile').style.display = 'block';
 
-    const fmtUUID = formatUUID(p.uuid);
+    const fmtUUID = p.uuid ? formatUUID(p.uuid) : null;
 	
-	const nameMCLink = { icon: "fas fa-user", label: "NameMC", url: `https://namemc.com/profile/${fmtUUID}`, color: "#4ade80" };
+	const nameMCLink = { 
+		icon: "fas fa-user", 
+		label: "NameMC", 
+		url: fmtUUID ? `https://namemc.com/profile/${fmtUUID}` : `https://namemc.com`, 
+		color: "#4ade80" 
+	};
 	
 	const socialLinks = [
 		nameMCLink,
@@ -1170,8 +1205,13 @@ function showPlayerProfile(playerName) {
 			: [])
 	];
 
-    document.getElementById('profileSkin').src = `https://skins.mcstats.com/body/front/${fmtUUID}?scale=2&disableCosmeticType=all`;
-    document.getElementById('profileSkin').alt = p.name;
+    const skinFallback = document.getElementById('profileSkinFallback');
+	skinFallback.style.opacity = '0';
+	skinFallback.src = fmtUUID
+		? `https://visage.surgeplay.com/full/512/${fmtUUID}`
+		: `https://visage.surgeplay.com/full/512/8288799c-5e2d-4a3d-9a07-541f0744b025`;
+	skinFallback.onload = () => { skinFallback.style.opacity = '1'; };
+
 	document.getElementById('statsCounter').style.display = 'none';
 
     document.getElementById('profileName').innerHTML = `
@@ -1262,7 +1302,6 @@ document.addEventListener('keydown', function(e) {
 
 function updateStatsCounter() {
     const pool = getProcessedPlayers();
-    const validPlayers = pool.filter(p => p.wins !== null);
 
     const totalPlayers = pool.length;
     const totalWins    = pool.reduce((s, p) => s + (p.wins   ?? 0), 0);
@@ -1288,6 +1327,17 @@ function updateStatsCounter() {
         </div>
     `).join('');
 }
+
+async function initViewCounter() {
+	try {
+			const response = await fetch ('https://sypherox-skywars-counter.sypheroxyt.workers.dev/count');
+			const data = await response.json();
+			document.getElementById('viewCount').textContent = data.views.toLocaleString('de-DE');
+			} catch {
+        document.getElementById('viewCount').textContent = '...';
+    }
+}
+initViewCounter();
 
 const urlParams = new URLSearchParams(window.location.search);
 const playerParam = urlParams.get('player');
