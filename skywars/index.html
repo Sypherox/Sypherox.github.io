@@ -558,10 +558,10 @@
 		}
 	
 		.profile-wrapper {
-			display: grid;
+			display: flex;
 			grid-template-columns: 320px 1fr;
 			gap: 20px;
-			align-items: start;
+			align-items: stretch;
 		}
 
 		.profile-left {
@@ -605,7 +605,7 @@
 			font-size: 0.9em;
 		}
 
-		.profile-meta-row .pm-label { color: #666; }
+		.profile-meta-row .pm-label { color: #ffffff; }
 		.profile-meta-row .pm-value { color: #ccc; font-weight: 600; }
 		
 		.profile-right {
@@ -614,6 +614,10 @@
 			border-radius: 15px;
 			padding: 24px;
 			backdrop-filter: blur(10px);
+			justify-content: space-between;
+			display: flex;
+			flex-direction: column;
+			flex: 1;
 		}
 
 		.profile-right h2 {
@@ -626,8 +630,8 @@
 
 		.profile-stats-grid {
 			display: grid;
-			grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-			gap: 12px;
+			grid-template-columns: repeat(4, 1fr);
+			gap: 10px;
 		}
 
 		.profile-stat-card {
@@ -699,7 +703,104 @@
 			object-fit: contain;
 			transition: opacity 0.5s ease;
 		}
+		
+		.profile-insights {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			gap: 12px;
+			margin-top: 24px;
+		}
 
+		.insights-section {
+			background: rgba(255,255,255,0.03);
+			border: 1px solid rgba(255,50,50,0.2);
+			border-radius: 8px;
+			padding: 18px;
+		}
+		
+		.insights-section:last-child {
+			flex: 1;
+		}
+
+		.insights-title {
+			font-size: 0.7em;
+			font-weight: 700;
+			letter-spacing: 0.1em;
+			color: #ff3333;
+			text-transform: uppercase;
+			margin-bottom: 16px;
+		}
+
+		.insight-row {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 6px;
+		}
+
+		.insight-label {
+			font-size: 0.78em;
+			color: #aaa;
+		}
+
+		.insight-badge {
+			font-size: 0.75em;
+			font-weight: 700;
+			padding: 2px 8px;
+			border-radius: 999px;
+		}
+
+		.insight-badge.above { background: rgba(74,222,128,0.15); color: #4ade80; }
+		.insight-badge.below { background: rgba(255,51,51,0.15);  color: #ff3333; }
+
+		.insight-bar-wrap {
+			position: relative;
+			height: 6px;
+			background: rgba(255,255,255,0.08);
+			border-radius: 999px;
+			overflow: visible;
+		}
+
+		.insight-bar {
+			height: 100%;
+			border-radius: 999px;
+			transition: width 0.6s ease;
+		}
+	
+		.insight-bar-avg {
+			position: absolute;
+			top: -3px;
+			width: 2px;
+			height: 12px;
+			background: rgba(255,255,255,0.4);
+			transform: translateX(-50%);
+			border-radius: 1px;
+		}
+
+		.fun-stat-row {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;	
+			padding: 5px 0;
+			border-bottom: 1px solid rgba(255,255,255,0.05);
+			font-size: 0.82em;
+		}
+
+		.fun-stat-row:last-child { border-bottom: none; }
+		.fun-label { color:	#ffffff; }
+		.fun-value { color: #4ade80; font-weight: 600; }
+		
+		.insight-avg-label {
+			position: absolute;
+			bottom: 10px;
+			left: 50%;
+			transform: translateX(-50%);
+			font-size: 0.65em;
+			color: rgba(255,255,255,0.5);
+			white-space: nowrap;
+		}
+		
 		.clickable-name {
 			cursor: pointer;
 			transition: color 0.2s;
@@ -739,16 +840,18 @@
 		}
 
         .footer {
+			color: #ff3333;
 			display: flex;
 			flex-direction: column;
 			align-items: center;
 			gap: 4px;
 			margin-top: 32px;
+			font-size: 0.75em;
 		}
 		
 		.footer-views {
 			color: #ff3333;
-			font-size: 0.75em;
+			font-size: 1.00em;
 			margin-left: 0;
 		}
 
@@ -790,6 +893,7 @@
 			<div class="profile-right">
 				<h2><i class="fas fa-chart-bar" style="margin-right:8px;"></i>Statistics</h2>
 				<div class="profile-stats-grid" id="profileStatsGrid"></div>
+				<div id="profileInsights"></div>
 			</div>
 		</div>
 	</div>
@@ -1231,7 +1335,7 @@ function showPlayerProfile(playerName) {
 		label: "Rank",
 		value: p.deleted
 			? (playerRank ? `<span style="color:#ff8c00">would be #${playerRank}</span>` : "—")
-			: (playerRank ? `#${playerRank}` : "—")
+			: (playerRank ? `<span style="color:${getRankColor(playerRank)}">#${playerRank}</span>` : "—")
 	});
 
     document.getElementById('profileMeta').innerHTML = `
@@ -1266,6 +1370,57 @@ function showPlayerProfile(playerName) {
             <div class="psc-value ${s.cls}">${s.value}</div>
         </div>`
     ).join('');
+
+	const validPlayers = players.filter(q => !q.deleted);
+	const avgKd = validPlayers.filter(q => q.kd !== null).reduce((s, q) => s + q.kd, 0) / validPlayers.filter(q => q.kd !== null).length;
+	const avgWl = validPlayers.filter(q => q.wl !== null).reduce((s, q) => s + q.wl, 0) / validPlayers.filter(q => q.wl !== null).length;
+	
+	const hasKd    = p.kd    !== null;
+	const hasWl    = p.wl    !== null;
+	const hasGames = p.games !== null && p.games > 0;
+	const hasKills = p.kills !== null;
+	const hasWins  = p.wins  !== null;
+	
+	const kdDiff   = hasKd ? ((p.kd - avgKd) / avgKd * 100).toFixed(0) : null;
+	const wlDiff   = hasWl ? ((p.wl - avgWl) / avgWl * 100).toFixed(0) : null;
+	const kdAbove  = hasKd && p.kd >= avgKd;
+	const wlAbove  = hasWl && p.wl >= avgWl;
+	const kdBarPct = hasKd ? Math.min(100, (p.kd / (avgKd * 2)) * 100).toFixed(1) : 0;
+	const wlBarPct = hasWl ? Math.min(100, (p.wl / 100) * 100).toFixed(1) : 0;
+	
+	const killsPerGame = (hasKills && hasGames) ? (p.kills / p.games).toFixed(1) + ' Kills' : '—';
+	const losesEvery   = (hasWins && hasGames && p.wins < p.games) ? (p.games / (p.games - p.wins)).toFixed(2) + ' games' : '—';
+	const totalPlaytime = hasGames ? '~' + Math.round(p.games * 5.5 / 60) + 'h' : '—';
+
+	document.getElementById('profileInsights').innerHTML = `
+		<div class="profile-insights">
+			<div class="insights-section">
+				<div class="insights-title"><i class="fas fa-chart-line"></i> Performance</div>
+				<div class="insight-row">
+					<span class="insight-label">K/D vs. Avg</span>
+					${hasKd ? `<span class="insight-badge ${kdAbove ? 'above' : 'below'}">${kdAbove ? '+' : ''}${kdDiff}%</span>` : '<span class="insight-badge" style="color:#555">—</span>'}
+				</div>
+				<div class="insight-bar-wrap">
+					<div class="insight-bar" style="width:${kdBarPct}%; background:${kdAbove ? '#4ade80' : '#ff3333'}"></div>
+					<div class="insight-bar-avg" style="left:50%"><span class="insight-avg-label">avg ${avgKd.toFixed(2)}</span></div>
+				</div>
+				<div class="insight-row" style="margin-top:10px">
+					<span class="insight-label">W/L vs. Avg</span>
+					${hasWl ? `<span class="insight-badge ${wlAbove ? 'above' : 'below'}">${wlAbove ? '+' : ''}${wlDiff}%</span>` : '<span class="insight-badge" style="color:#555">—</span>'}
+				</div>
+				<div class="insight-bar-wrap">
+					<div class="insight-bar" style="width:${wlBarPct}%; background:${wlAbove ? '#4ade80' : '#ff3333'}"></div>
+					<div class="insight-bar-avg" style="left:50%"><span class="insight-avg-label">avg ${avgWl.toFixed(2)}%</span></div>
+				</div>
+			</div>
+			<div class="insights-section">
+				<div class="insights-title"><i class="fas fa-star"></i> Fun Stats</div>
+				<div class="fun-stat-row"><span class="fun-label">Kills per game</span><span class="fun-value">${killsPerGame}</span></div>
+				<div class="fun-stat-row"><span class="fun-label">Loses every</span><span class="fun-value">${losesEvery}</span></div>
+				<div class="fun-stat-row"><span class="fun-label">Estimated playtime</span><span class="fun-value">${totalPlaytime}</span></div>
+			</div>
+		</div>
+	`;
 
     history.replaceState(null, '', '?player=' + encodeURIComponent(p.name));
 }
@@ -1326,6 +1481,14 @@ function updateStatsCounter() {
             <div class="sc-value">${i.value}</div>
         </div>
     `).join('');
+}
+
+function getRankColor(rank) {
+    if (rank === 1)               return '#FFD700';
+    if (rank === 2)               return '#C0C0C0';
+    if (rank === 3)               return '#CD7F32';
+    if (rank <= 10)               return '#ff6666';
+    return '#4ade80';
 }
 
 async function initViewCounter() {
