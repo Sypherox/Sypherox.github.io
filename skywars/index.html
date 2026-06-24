@@ -741,7 +741,7 @@
 
 		.insight-label {
 			font-size: 0.78em;
-			color: #aaa;
+			color: #fff;
 		}
 
 		.insight-badge {
@@ -1385,8 +1385,14 @@ function showPlayerProfile(playerName) {
 	const wlDiff   = hasWl ? ((p.wl - avgWl) / avgWl * 100).toFixed(0) : null;
 	const kdAbove  = hasKd && p.kd >= avgKd;
 	const wlAbove  = hasWl && p.wl >= avgWl;
-	const kdBarPct = hasKd ? Math.min(100, (p.kd / (avgKd * 2)) * 100).toFixed(1) : 0;
-	const wlBarPct = hasWl ? Math.min(100, (p.wl / 100) * 100).toFixed(1) : 0;
+	const maxKd = hasKd ? Math.max(p.kd * 1.1, avgKd * 1.1) : avgKd * 2;
+	const maxWl    = 100;
+	const kdBarPct = hasKd ? Math.min(100, Math.max(1, (p.kd / maxKd) * 100)).toFixed(1) : 0;
+	const wlBarPct = hasWl ? Math.min(100, Math.max(1, (p.wl / maxWl) * 100)).toFixed(1) : 0;
+	const kdAvgLeftRaw = hasKd ? (avgKd / maxKd) * 100 : 50;
+	const wlAvgLeftRaw = (avgWl / maxWl) * 100;
+	const kdAvgLeft = hasKd ? ((avgKd / maxKd) * 100).toFixed(1) : 50;
+	const wlAvgLeft = ((avgWl / maxWl) * 100).toFixed(1);
 	
 	const killsPerGame = (hasKills && hasGames) ? (p.kills / p.games).toFixed(1) + ' Kills' : '—';
 	const losesEvery   = (hasWins && hasGames && p.wins < p.games) ? (p.games / (p.games - p.wins)).toFixed(2) + ' games' : '—';
@@ -1402,7 +1408,7 @@ function showPlayerProfile(playerName) {
 				</div>
 				<div class="insight-bar-wrap">
 					<div class="insight-bar" style="width:${kdBarPct}%; background:${kdAbove ? '#4ade80' : '#ff3333'}"></div>
-					<div class="insight-bar-avg" style="left:45%"><span class="insight-avg-label">avg ${avgKd.toFixed(2)}</span></div>
+					<div class="insight-bar-avg" style="left:${kdAvgLeft}%"><span class="insight-avg-label">avg ${avgKd.toFixed(2)}</span></div>
 				</div>
 				<div class="insight-row" style="margin-top:10px">
 					<span class="insight-label">W/L vs. Avg</span>
@@ -1410,7 +1416,7 @@ function showPlayerProfile(playerName) {
 				</div>
 				<div class="insight-bar-wrap">
 					<div class="insight-bar" style="width:${wlBarPct}%; background:${wlAbove ? '#4ade80' : '#ff3333'}"></div>
-					<div class="insight-bar-avg" style="left:61%"><span class="insight-avg-label">avg ${avgWl.toFixed(2)}%</span></div>
+					<div class="insight-bar-avg" style="left:${wlAvgLeft}%"><span class="insight-avg-label">avg ${avgWl.toFixed(2)}%</span></div>
 				</div>
 			</div>
 			<div class="insights-section">
