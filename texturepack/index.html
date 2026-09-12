@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Sypherox Texturepack">
+    <meta property="og:description" content="The official Sypherox Overlay, download now!">
+    <meta name="theme-color" content="#ff3333">
+    <title>Texturepack &middot; Sypherox</title>
+    <link rel="icon" type="image/png" href="https://minotar.net/helm/Sypherox/500.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url('https://i.imgur.com/G8YZBUi.png');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            filter: blur(3px);
+            z-index: 0;
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            animation: fadeIn 0.8s ease-out;
+            max-width: 560px;
+            width: 100%;
+            background: rgba(20, 20, 20, 0.55);
+            border: 1px solid rgba(255, 51, 51, 0.25);
+            border-radius: 20px;
+            padding: 40px 32px;
+            backdrop-filter: blur(6px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid #ff3333;
+            box-shadow: 0 0 20px rgba(255, 51, 51, 0.3);
+            margin: 0 auto 20px;
+            display: block;
+        }
+
+        .pack-icon {
+            width: 96px;
+            height: 96px;
+            border-radius: 16px;
+            border: 3px solid #ff3333;
+            box-shadow: 0 0 25px rgba(255, 51, 51, 0.35);
+            margin: 0 auto 20px;
+            display: block;
+            image-rendering: pixelated;
+        }
+
+        .title {
+            color: #fff;
+            font-size: 2em;
+            font-weight: 900;
+            margin-bottom: 6px;
+            text-shadow: 0 0 30px rgba(255, 51, 51, 0.4);
+        }
+
+        .subtitle {
+            color: #ff6666;
+            font-size: 0.95em;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .desc {
+            color: #aaa;
+            font-size: 1em;
+            margin-bottom: 28px;
+            line-height: 1.6;
+        }
+
+        .meta-row {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 51, 51, 0.1);
+            border: 1px solid rgba(255, 51, 51, 0.35);
+            color: #ff8888;
+            font-size: 0.82em;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 999px;
+        }
+
+        .badge i { color: #ff3333; }
+
+        .features {
+            text-align: left;
+            list-style: none;
+            margin-bottom: 24px;
+            color: #ccc;
+            font-size: 0.92em;
+            line-height: 1.9;
+        }
+
+        .features li { display: flex; align-items: flex-start; gap: 10px; }
+        .features i { color: #ff3333; margin-top: 3px; }
+
+        .credit {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #888;
+            font-size: 0.85em;
+            margin-bottom: 30px;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            flex-wrap: wrap;
+        }
+
+        .credit i { color: #ff3333; }
+
+        .credit a {
+            color: #ff6666;
+            font-weight: 700;
+            text-decoration: none;
+            transition: color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .credit a:hover {
+            color: #fff;
+            text-decoration: underline;
+        }
+
+        .credit a i.fa-youtube {
+            font-size: 0.95em;
+        }
+
+        .btn-download {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #ff3333;
+            color: #fff;
+            text-decoration: none;
+            padding: 15px 34px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.05em;
+            border: 2px solid #ff3333;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(255, 51, 51, 0.3);
+            cursor: pointer;
+        }
+
+        .btn-download:hover {
+            background: transparent;
+            color: #ff3333;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(255, 51, 51, 0.4);
+        }
+
+        .counter-wrap {
+            margin-top: 22px;
+            color: #777;
+            font-size: 0.88em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .counter-wrap i { color: #ff3333; }
+
+        #download-count {
+            color: #fff;
+            font-weight: 800;
+        }
+
+        .version {
+            margin-top: 6px;
+            color: #555;
+            font-size: 0.78em;
+        }
+
+        .suggestion {
+            margin-top: 30px;
+            color: #555;
+            font-size: 0.85em;
+        }
+
+        .suggestion a {
+            color: #ff3333;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .suggestion a:hover { color: #ff6666; }
+
+        @media (max-width: 480px) {
+            .container { padding: 30px 20px; }
+            .title { font-size: 1.6em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">Sypherox Texturepack</div>
+
+        <div class="desc">
+            A small PvP overlay texture pack designed to fix
+            many common issues while looking absolutely great!
+        </div>
+
+        <div class="meta-row">
+            <span class="badge"><i class="fas fa-cube"></i> 32x32</span>
+            <span class="badge"><i class="fas fa-code-branch"></i> MC 1.21.11 - 26.2</span>
+            <span class="badge"><i class="fas fa-weight-hanging"></i> ca. 114&nbsp;MB</span>
+        </div>
+
+        <ul class="features">
+            <li><i class="fas fa-check"></i> Optimized PvP textures for better visibility.</li>
+            <li><i class="fas fa-check"></i> Beautiful custom sky, compatible with all popular mods.</li>
+            <li><i class="fas fa-check"></i> Regular updates!</li>
+        </ul>
+
+        <div class="credit">
+            <i class="fas fa-heart"></i>
+            Huge thanks to
+            <a href="https://www.youtube.com/@yuxaaa" target="_blank" rel="noopener noreferrer">
+                 Yuxa
+            </a>
+            who created the base of the overlay!
+        </div>
+
+        <a href="https://github.com/Sypherox/Sypherox.github.io/releases/download/v1.0/Overlay.zip"
+           id="download-btn"
+           class="btn-download">
+            <i class="fas fa-download"></i> Download Texturepack
+        </a>
+
+        <div class="counter-wrap">
+            <i class="fas fa-arrow-down"></i>
+            <span><span id="download-count">&hellip;</span> Downloads</span>
+        </div>
+        <div class="version" id="version-info">Loading version&hellip;</div>
+    </div>
+
+    <script>
+        const REPO = "Sypherox/Sypherox.github.io";
+        const ASSET_FILENAME = "Overlay.zip";
+        const BASE_DOWNLOAD_COUNT = 21;
+
+        async function loadStats() {
+            const countEl = document.getElementById('download-count');
+            const versionEl = document.getElementById('version-info');
+            const btn = document.getElementById('download-btn');
+
+            try {
+                const res = await fetch(`https://api.github.com/repos/${REPO}/releases`, {
+                    headers: { 'Accept': 'application/vnd.github+json' },
+                    cache: 'no-store'
+                });
+
+                if (res.status === 403) throw new Error('rate-limited');
+                if (!res.ok) throw new Error('API error ' + res.status);
+
+                const releases = await res.json();
+                if (!Array.isArray(releases) || releases.length === 0) {
+                    throw new Error('no releases');
+                }
+
+                let total = 0;
+                let trackedAsset = null;
+                let trackedTag = null;
+                let newestAsset = null;
+                let newestTag = null;
+
+                releases.forEach((release, idx) => {
+                    (release.assets || []).forEach(asset => {
+                        total += asset.download_count;
+
+                        if (asset.name === ASSET_FILENAME && !trackedAsset) {
+                            trackedAsset = asset;
+                            trackedTag = release.tag_name;
+                        }
+                        if (idx === 0 && !newestAsset) {
+                            newestAsset = asset;
+                            newestTag = release.tag_name;
+                        }
+                    });
+                });
+
+                const displayAsset = trackedAsset || newestAsset;
+                const displayTag = trackedAsset ? trackedTag : newestTag;
+                const realCount = displayAsset ? displayAsset.download_count : total;
+
+                countEl.textContent = (BASE_DOWNLOAD_COUNT + realCount).toLocaleString('de-DE');
+
+                if (displayAsset) {
+                    versionEl.textContent = `Version: ${displayTag}`;
+                    btn.href = displayAsset.browser_download_url;
+                } else {
+                    versionEl.textContent = 'Texture pack cannot currently be found.';
+                }
+            } catch (e) {
+                countEl.textContent = BASE_DOWNLOAD_COUNT.toLocaleString('de-DE');
+                versionEl.textContent = e.message === 'rate-limited'
+                    ? 'GitHub API rate limit reached, try again in a bit'
+                    : 'Statistics currently unavailable';
+            }
+        }
+
+        loadStats();
+    </script>
+</body>
+</html>
