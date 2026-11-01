@@ -1131,7 +1131,7 @@ const players = [
     { rank:132, uuid:"6a0689bac0f44c32a00f936db8e38399",  name:"KlaxTV",            kills:42108,  deaths:18410, kd:2.29,  games:25600, wins:7880,  wl:30.78 },
     { rank:133, uuid:"775e8b7b2b77487bbd6488bfa85112d9",  name:"leQuaxx",           kills:35355,  deaths:14175, kd:2.49,  games:21635, wins:7878,  wl:36.41 },
     { rank:134, uuid:"510ab60eb68a465a9bffabb34b00ac6b",  name:"Cruuzer",           kills:40819,  deaths:10713, kd:3.81,  games:18383, wins:7875,  wl:42.84 },
-    { rank:135, uuid:"deb338ba565d48379984af2dc01c4114",  name:"wwwwwwwwwwwwwwwz",  kills:24968,  deaths:7407,  kd:3.37,  games:14446, wins:7865,  wl:54.44, note: "aka YoureStein" },
+    { rank:135, uuid:"6ccbef479e7e4fdc8f778efab5cb4ae8",  name:"6969696969696966",  kills:24968,  deaths:7407,  kd:3.37,  games:14446, wins:7865,  wl:54.44, note: "aka YoureStein" },
     { rank:136, uuid:"b13dcf7d469e46c199c046ae4ec2232b",  name:"zReox",             kills:31593,  deaths:8629,  kd:3.66,  games:15857, wins:7857,  wl:49.55, retired: "06/2016 – 11/2016" },
     { rank:137, uuid:"53d0dd2d9bf444688442e81f28923995",  name:"ItsBecause0fYou",   kills:40813,  deaths:24841, kd:1.64,  games:31577, wins:7843,  wl:24.84 },
     { rank:138, uuid:"9582ea657afc4fa980ea8f053705fc0c",  name:"Vorimon",           kills:24733,  deaths:8817,  kd:2.81,  games:15320, wins:7830,  wl:51.11 },
@@ -1410,8 +1410,8 @@ function showPlayerProfile(playerName) {
     const cleanRankMap = getBaseRankMap(false);
 	const deletedRankMap = getBaseRankMap(true);
 	const playerRank = p.deleted
-		? (deletedRankMap.get(p.uuid + "|" + p.name) ?? null)
-		: (cleanRankMap.get(p.uuid + "|" + p.name) ?? null);
+	    ? (deletedRankMap.get(p) ?? null)
+	    : (cleanRankMap.get(p) ?? null);
 
     document.getElementById('leaderboardView').style.display = 'none';
     document.getElementById('playerProfile').style.display = 'block';
