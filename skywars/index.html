@@ -13,7 +13,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://sypherox.dev/leaderboard">
     <meta property="og:title" content="SkyWars Leaderboard">
-    <meta property="og:description" content="SkyWars Top 100 Leaderboard Statistic Archive.">
+    <meta property="og:description" content="SkyWars Top 200 Leaderboard Statistic Archive.">
     <meta property="og:image" content="https://emojicdn.elk.sh/🏆?style=twitter">
     <meta name="theme-color" content="#ff3333">
     <title>Leaderboard</title>
@@ -345,7 +345,7 @@
 			border: 1px solid rgba(139, 90, 43, 0.5);
 		}
 
-		.note-icon::after, .best-icon::after, .worst-icon::after {
+		.note-icon::after, .best-icon::after, .worst-icon::after, .retired-icon::after {
 			content: attr(data-note);
 			position: absolute;
 			bottom: calc(100% + 6px);
@@ -497,6 +497,19 @@
 			color: #ff8c00;
 		}
 		
+		.retired-icon {
+			display: inline-flex; align-items: center; justify-content: center;
+			width: 18px; height: 18px;
+			border-radius: 50%;
+			border: 1px solid #ffd700;
+			background: rgba(255, 215, 0, 0.15);
+			box-shadow: 0 0 6px rgba(255, 215, 0, 0.45);
+			font-size: 11px;
+			cursor: help;
+			position: relative;
+			flex-shrink: 0;
+		}
+		
 		a.player-name {
 			color: #fff;
 			font-weight: 600;
@@ -514,12 +527,14 @@
 		.best-icon:hover::after  { opacity: 1; border-color: rgba(255, 215, 0, 0.4); }
 		.worst-icon:hover::after { opacity: 1; border-color: rgba(139, 90, 43, 0.5); }
 		.deleted-icon:hover::after { opacity: 1; border-color: rgba(255, 140, 0, 0.5); }
+		.retired-icon:hover::after  { opacity: 1; }
 		
 		.note-icon.active::after,
 		.best-icon.active::after,
 		.worst-icon.active::after,
 		.owner-icon.active::after { opacity: 1; }
 		.deleted-icon.active::after { opacity: 1; }
+		.retired-icon.active::after { opacity: 1; }
 		
 		.stats-counter {
 			display: flex;
@@ -571,6 +586,8 @@
 			padding: 24px;
 			text-align: center;
 			backdrop-filter: blur(10px);
+			position: relative;
+			z-index: 2;
 		}
 
 		.profile-skin {
@@ -618,6 +635,8 @@
 			display: flex;
 			flex-direction: column;
 			flex: 1;
+			position: relative;
+			z-index: 1;
 		}
 
 		.profile-right h2 {
@@ -905,7 +924,7 @@
 				<i class="fas fa-trophy"></i>
 			</div>
 			<h1>Leaderboard</h1>
-			<p class="subtitle">SkyWars Top 100 Players Alltime</p>
+			<p class="subtitle">SkyWars Top 200 Players Alltime</p>
 		</div>
 
 		<div class="table-wrapper">
@@ -979,7 +998,7 @@ const socialIcons = {
 
 const players = [
     { rank:1, 	uuid:"a22aaa1c89cc46f48bda929559035df6",  name:"lyqas", 			kills:125715, deaths:14285, kd:8.80,  games:52291, wins:40000, wl:76.49, best: ["most Kills", "most Wins"], socials: {youtube: "https://www.youtube.com/@lyqas", twitter: "https://x.com/lyqcs", twitch:  "https://www.twitch.tv/lyqass", }},
-	{ rank:2, 	uuid:"8abbc94c6263421f923a07820f85d4af",  name:"lolitsfabi", 		kills:111008, deaths:12272, kd:9.05,  games:45599, wins:34690, wl:76.08, socials: { youtube: "https://www.youtube.com/@laqezsw", twitter: "https://x.com/imlaqez", twitch:  "https://www.twitch.tv/laqez", }},
+	{ rank:2, 	uuid:"8abbc94c6263421f923a07820f85d4af",  name:"lolitsfabi", 		kills:111008, deaths:12272, kd:9.05,  games:45599, wins:34690, wl:76.08, note: "aka laqezYT", socials: { youtube: "https://www.youtube.com/@laqezsw", twitter: "https://x.com/imlaqez", twitch:  "https://www.twitch.tv/laqez", }},
 	{ rank:3,   uuid:"2c89a5bc05904a1e8beb6a3defd70242",  name:"xZiooo",            kills:105917, deaths:22997, kd:4.61,  games:54258, wins:34689, wl:63.93, best: ["most Games"], socials: {youtube: "https://www.youtube.com/@Ziooo", twitter: "https://x.com/lolitsziooo", twitch:  "https://www.twitch.tv/ziooolive", }},
     { rank:4,   uuid:"a174e39d75d54b1786c65fd1d9820d1f",  name:"zImRyze",           kills:92355,  deaths:11886, kd:7.77,  games:44801, wins:34080, wl:76.07, socials: { twitter: "https://x.com/zImRyze", twitch: "https://www.twitch.tv/zImRyze", }},
     { rank:5,   uuid:"76848a2a6f654c6586796c5ff217d195",  name:"yiruzi",            kills:76854,  deaths:22137, kd:3.47,  games:50827, wins:31052, wl:61.09 },
@@ -988,36 +1007,36 @@ const players = [
     { rank:8,   uuid:"eb717746d0df401e864e290444ab3781",  name:"Quitox",            kills:74874,  deaths:11314, kd:6.62,  games:37781, wins:28540, wl:75.54, socials: { youtube: "https://www.youtube.com/@quitox_746", twitter: "https://x.com/Quitox4", twitch:  "https://www.twitch.tv/quitox_", }},
     { rank:9,   uuid:"5b95f77962f74187b7432a5ddeb22328",  name:"Kai_Crafting09",    kills:81072,  deaths:17449, kd:4.65,  games:43819, wins:28538, wl:65.08 },
     { rank:10, 	uuid:"66c1336a5961430796aa8845468cfa6d",  name:"Sypherox",          kills:54984,  deaths:13250, kd:4.15,  games:36670, wins:25620, wl:69.87, owner: "website Owner",  socials: {youtube: "https://youtube.com/@sypherox", twitter: "https://x.com/syphercx", twitch:  "https://twitch.tv/sypherox",  }},
-    { rank:11,  uuid:"750ed3cce18f4dc1813a0e59c8f63df2",  name:"DoktorMotte",  		kills:66259,  deaths:18586, kd:3.56,  games:42377, wins:25588, wl:60.38 },
+    { rank:11,  uuid:"750ed3cce18f4dc1813a0e59c8f63df2",  name:"DoktorMotte",  		kills:66259,  deaths:18586, kd:3.56,  games:42377, wins:25588, wl:60.38, retired:"09/2025 – 05/2026" },
     { rank:12,  uuid:"fb91cc8074aa482e9d9e901b18c08447",  name:"zTotito",           kills:69256,  deaths:14224, kd:4.87,  games:35597, wins:23481, wl:65.96, socials: { youtube: "https://www.youtube.com/@ztotito", twitter: "https://x.com/totito_z", twitch:  "https://www.twitch.tv/totito_o", }},
-    { rank:13,  uuid:"b9e2d59bfdd84c22a525e0429562295a",  name:"mxlte78",           kills:67864,  deaths:13721, kd:4.95,  games:35151, wins:23077, wl:65.65, socials: { twitter: "https://x.com/mxlte78", twitch:  "https://www.twitch.tv/mxlte78_live", }},
-    { rank:14,  uuid:"53b3a89b775b4199a12335a7e7e8fe51",  name:"zAimed",            kills:58797,  deaths:12889, kd:4.56,  games:32926, wins:21791, wl:66.18, socials: { youtube: "https://www.youtube.com/@zaimed2175", twitter: "https://x.com/zAimed_", twitch:  "https://www.twitch.tv/zaimedsw", }},
-    { rank:15,  uuid:"e76121a9c7044b9983b50fd43468b733",  name:"NoName_",           kills:56808,  deaths:13067, kd:4.35,  games:31228, wins:20425, wl:65.41 },
+    { rank:13,  uuid:"b9e2d59bfdd84c22a525e0429562295a",  name:"mxlte78",           kills:67864,  deaths:13721, kd:4.95,  games:35151, wins:23077, wl:65.65, retired:"05/2017 – 07/2021", socials: { twitter: "https://x.com/mxlte78", twitch:  "https://www.twitch.tv/mxlte78_live", }},
+    { rank:14,  uuid:"53b3a89b775b4199a12335a7e7e8fe51",  name:"zAimed",            kills:58797,  deaths:12889, kd:4.56,  games:32926, wins:21791, wl:66.18, retired:"02/2019 – 03/2021", socials: { youtube: "https://www.youtube.com/@zaimed2175", twitter: "https://x.com/zAimed_", twitch:  "https://www.twitch.tv/zaimedsw", }},
+    { rank:15,  uuid:"e76121a9c7044b9983b50fd43468b733",  name:"NoName_",           kills:56808,  deaths:13067, kd:4.35,  games:31228, wins:20425, wl:65.41, retired:"06/2016 – 03/2017 & 03/2020 – 04/2021" },
     { rank:16,  uuid:"41273075fb4246e89c38128e1816931b",  name:"ImNooah",           kills:63740,  deaths:10084, kd:6.32,  games:29025, wins:20350, wl:70.11, note: "aka Melonen_Banger", socials: { youtube: "https://www.youtube.com/channel/UCL9E5f4VSc7xRPiGvLgfE7g", twitter: "https://x.com/Noah33899158", twitch:  "https://www.twitch.tv/melonen_banger", }},
     { rank:17,  uuid:"31da57fceec54644a22897c7ed4b684b",  name:"DontTouchMyLife",   kills:42111,  deaths:15771, kd:2.67,  games:32968, wins:19818, wl:60.11, socials: { youtube: "https://www.youtube.com/@DontTouchMyLife", twitch:  "https://www.twitch.tv/donttouchmylife", }},
-    { rank:18,  uuid:"b15842d16708418e884336bdb1a52b65",  name:"nyppel",            kills:38681,  deaths:5477,  kd:7.06,  games:23015, wins:18512, wl:80.43, socials: { youtube: "https://www.youtube.com/channel/UCFtxGmc-UYFrG5I78ho2XRQ", twitter: "https://x.com/nyppel72", }},
-    { rank:19,  uuid:"023f88c576e5410f85360717fc0d931a",  name:"stnd",              kills:57764,  deaths:10989, kd:5.26,  games:27648, wins:18056, wl:65.31, note: "aka nxlqon", socials: { youtube:  "https://www.youtube.com/@nelsonskywars3627", }}, 
+    { rank:18,  uuid:"b15842d16708418e884336bdb1a52b65",  name:"nyppel",            kills:38681,  deaths:5477,  kd:7.06,  games:23015, wins:18512, wl:80.43, retired:"08/2020 – 09/2020", socials: { youtube: "https://www.youtube.com/channel/UCFtxGmc-UYFrG5I78ho2XRQ", twitter: "https://x.com/nyppel72", }},
+    { rank:19,  uuid:"023f88c576e5410f85360717fc0d931a",  name:"stnd",              kills:57764,  deaths:10989, kd:5.26,  games:27648, wins:18056, wl:65.31, retired:"05/2019 – 06/2020", note: "aka nxlqon", socials: { youtube:  "https://www.youtube.com/@nelsonskywars3627", }}, 
     { rank:20,  uuid:"49863bce45ec44fc8364d3481b6bce1a",  name:"Lcis",              kills:56071,  deaths:16873, kd:3.32,  games:31700, wins:16528, wl:52.14 },
-    { rank:21,  uuid:"a33c38a5c5df4b78a8ff653a771d73df",  name:"dennis74",          kills:35879,  deaths:7334,  kd:4.89,  games:21410, wins:16524, wl:77.18, socials: {youtube: "https://www.youtube.com/channel/UCopDNRpxDZZHi3aAF7VcIjA", }},
+    { rank:21,  uuid:"a33c38a5c5df4b78a8ff653a771d73df",  name:"dennis74",          kills:35879,  deaths:7334,  kd:4.89,  games:21410, wins:16524, wl:77.18, retired:"06/2020 – 08/2020", socials: {youtube: "https://www.youtube.com/channel/UCopDNRpxDZZHi3aAF7VcIjA", }},
     { rank:22,  uuid:"cd99cfd9935345f78079e2e2b992c883",  name:"ryqs",              kills:46112,  deaths:17248, kd:2.67,  games:33257, wins:16512, wl:49.65, socials: { youtube: "https://www.youtube.com/@ryqsOG", twitter: "https://x.com/ryqs_s", twitch:  "https://www.twitch.tv/ryqs_s", }},
     { rank:23,  uuid:"f2dfb6e65b9e4c0595ff8690d0858392",  name:"HotKeyGod",         kills:39987,  deaths:3841,  kd:10.41, games:18876, wins:15876, wl:84.11, socials: { youtube: "https://www.youtube.com/@SoupFerrerox7ohann", twitter: "https://x.com/7ohannYT", twitch:  "https://www.twitch.tv/7ohannn", }},
-    { rank:24,  uuid:"88fce9073cd44c20a74e8c5027bc3a41",  name:"FadeReturns",       kills:49925,  deaths:9350,  kd:5.34,  games:24550, wins:15622, wl:63.63, socials: { youtube: "https://www.youtube.com/@fadereturns4157", twitter: "https://x.com/FadeReturns", twitch: "https://twitch.tv/live_fade", }},
-    { rank:25,  uuid:"7da267aa940f438c9c1a81f87155daff",  name:"Logisch_XD",        kills:51929,  deaths:26008, kd:2.00,  games:40308, wins:15596, wl:38.69, worst: "most Deaths", socials: { youtube: "https://www.youtube.com/@LogischXD", twitter: "https://x.com/LogischXD", twitch:  "https://www.twitch.tv/zlogischsw", }},
+    { rank:24,  uuid:"88fce9073cd44c20a74e8c5027bc3a41",  name:"FadeReturns",       kills:49925,  deaths:9350,  kd:5.34,  games:24550, wins:15622, wl:63.63, retired:"04/2018 – 09/2019", socials: { youtube: "https://www.youtube.com/@fadereturns4157", twitter: "https://x.com/FadeReturns", twitch: "https://twitch.tv/live_fade", }},
+    { rank:25,  uuid:"7da267aa940f438c9c1a81f87155daff",  name:"Logisch_XD",        kills:51929,  deaths:26008, kd:2.00,  games:40308, wins:15596, wl:38.69, socials: { youtube: "https://www.youtube.com/@LogischXD", twitter: "https://x.com/LogischXD", twitch:  "https://www.twitch.tv/zlogischsw", }},
     { rank:26,  uuid:"c98fbfbf6f474350bc6ba10233a2cd8d",  name:"BusfahrerRobert",   kills:36649,  deaths:10344, kd:3.54,  games:24160, wins:15498, wl:64.15, note: "aka xBigMac69", socials: { twitch:  "https://www.twitch.tv/xbiqmac69", }}, 
     { rank:27,  uuid:"9adac6250c3b453b89511c6d835aa5e7",  name:"Sineax",            kills:41312,  deaths:8351,  kd:4.95,  games:22638, wins:15304, wl:67.60, socials: { twitter: "https://x.com/Sineaxo", twitch:  "https://www.twitch.tv/Sineax78", }},
     { rank:28,  uuid:"7e225f9b2e424d2eabb6ef092d4690c3",  name:"J4rn",              kills:37826,  deaths:3160,  kd:11.97, games:17321, wins:15169, wl:87.58 },
-    { rank:29,  uuid:"263bc9e0957040c690a1bde307b4283d",  name:"Kaaai",             kills:54871,  deaths:9473,  kd:5.79,  games:23229, wins:15140, wl:65.18, socials: { twitter: "https://x.com/SE_Kaaai", youtube: "https://www.youtube.com/@kaaaise", }},
+    { rank:29,  uuid:"263bc9e0957040c690a1bde307b4283d",  name:"Kaaai",             kills:54871,  deaths:9473,  kd:5.79,  games:23229, wins:15140, wl:65.18, retired:"08/2017 – 04/2018 & 08/2018 – 08/2019", socials: { twitter: "https://x.com/SE_Kaaai", youtube: "https://www.youtube.com/@kaaaise", }},
     { rank:30,  uuid:"431882b9b28241d9911ee054647ceb07",  name:"SorrowFlame",       kills:47574,  deaths:11025, kd:4.32,  games:24913, wins:14809, wl:59.44, socials: { youtube: "https://www.youtube.com/@rwoawrclique-skywars4690", }},
     { rank:31,  uuid:"264b7dab03414e0a9cdccc845f4288f0",  name:"_Qmega_",           kills:48928,  deaths:11259, kd:4.35,  games:25084, wins:14619, wl:58.28, socials: { twitter: "https://x.com/_Qmega_", twitch:  "https://www.twitch.tv/qmega_", }}, 
     { rank:32,  uuid:"450d4beec3704472b1e7ccb6c323c588",  name:"Klimaanlaqe",       kills:42150,  deaths:22192, kd:1.90,  games:35642, wins:14544, wl:40.81 },
     { rank:33,  uuid:"a83fc986d9be4169b54501b08b37f828",  name:"AustrianGaming",    kills:56467,  deaths:11993, kd:4.71,  games:25988, wins:14371, wl:55.30, socials: { youtube: "https://www.youtube.com/@AustrianGaming", twitter: "https://x.com/AustrianGamingg", twitch:  "https://www.twitch.tv/austriangamingg", }},
-    { rank:34,  uuid:"d63034a8fa364f2c9f732df702522302",  name:"youngdaggerdikkk",  kills:43624,  deaths:11768, kd:3.71,  games:24303, wins:14134, wl:58.16 },
+    { rank:34,  uuid:"d63034a8fa364f2c9f732df702522302",  name:"youngdaggerdikkk",  kills:43624,  deaths:11768, kd:3.71,  games:24303, wins:14134, wl:58.16, retired:"05/2018" },
     { rank:35,  uuid:"cbd6c34631db490595a97eb84ebdffba",  name:"Chiiara88",         kills:25128,  deaths:5689,  kd:4.42,  games:18316, wins:14102, wl:76.99, socials: { youtube: "https://www.youtube.com/@Chiara-fb9np", twitter: "https://x.com/xChiiara21", }},
-    { rank:36,  uuid:"d949a157279840d6b78137d364ee19e0",  name:"Uru361YT",          kills:40630,  deaths:14903, kd:2.73,  games:26799, wins:13994, wl:52.22, socials: { youtube: "https://www.youtube.com/channel/UC5MWZz7bVZpvNYSKx2dS6Eg/", twitter: "https://x.com/SDunkler", }},
+    { rank:36,  uuid:"d949a157279840d6b78137d364ee19e0",  name:"Uru361YT",          kills:40630,  deaths:14903, kd:2.73,  games:26799, wins:13994, wl:52.22, retired:"02/2017 – 09/2018", socials: { youtube: "https://www.youtube.com/channel/UC5MWZz7bVZpvNYSKx2dS6Eg/", twitter: "https://x.com/SDunkler", }},
     { rank:37,  uuid:"f68636ee3eec4f6e8406956ac4211eb1",  name:"skywars88",         kills:31798,  deaths:9524,  kd:3.34,  games:21985, wins:13953, wl:63.47, note: "aka NXKKES ⇄ Account got hacked", socials: { youtube: "https://www.youtube.com/@Leekung999", twitter: "https://x.com/NXKKES", twitch:  "https://www.twitch.tv/NXKKES", }},
     { rank:38,  uuid:"2f286505844445199d79e1fd6b2a82a8",  name:"Reichweite",        kills:30567,  deaths:3487,  kd:8.77,  games:16749, wins:13922, wl:83.12, socials: { youtube: "https://www.youtube.com/@reichweite69", twitter: "https://x.com/reichweite669", }},
     { rank:39,  uuid:"150c1d25d8264b2aaf56085a81876f62",  name:"xRem0ke",           kills:39751,  deaths:9583,  kd:4.15,  games:21869, wins:13537, wl:61.90, note: "aka Lxqa_" },
-    { rank:40,  uuid:"c06cb2c7a8884c96b2f0939741e682bc",  name:"CriticalWolf",      kills:37277,  deaths:9933,  kd:3.75,  games:21296, wins:13223, wl:62.09, socials: { youtube: "https://www.youtube.com/@CriticalWolf", twitter: "https://x.com/CriticalWolfyt", }},
+    { rank:40,  uuid:"c06cb2c7a8884c96b2f0939741e682bc",  name:"CriticalWolf",      kills:37277,  deaths:9933,  kd:3.75,  games:21296, wins:13223, wl:62.09, retired:"07/2015 – 12/2017", socials: { youtube: "https://www.youtube.com/@CriticalWolf", twitter: "https://x.com/CriticalWolfyt", }},
     { rank:41,  uuid:"40db6aaec32843268df5f96a0c6211e5",  name:"TwitchVerplanter",  kills:62824,  deaths:17900, kd:3.51,  games:30429, wins:13207, wl:43.40 },
     { rank:42,  uuid:"a9c53710a6a74648903e5c6b85e0624f",  name:"oxeam",             kills:37748,  deaths:4231,  kd:8.92,  games:16709, wins:13190, wl:78.94, note: "aka maexo", socials: { twitter: "https://x.com/Maexo100", twitch:  "https://www.twitch.tv/maexolive", }},
     { rank:43,  uuid:"a36a990f469d4aa0b4f70650da48517a",  name:"zLxnkInPark",       kills:32506,  deaths:5167,  kd:6.28,  games:17572, wins:13061, wl:74.33, socials: {twitter: "https://x.com/zLxnkSW", }},
@@ -1041,18 +1060,18 @@ const players = [
     { rank:61,  uuid:"ee582296860b4427bc1e97f581b3a16a",  name:"gymaddict",         kills:24140,  deaths:5009,  kd:4.82,  games:15252, wins:11301, wl:74.10 },
     { rank:62,  uuid:"1d81ef0240044fd0aa8870b6ebbc775d",  name:"HoelySteve",        kills:40097,  deaths:7886,  kd:5.08,  games:18658, wins:11125, wl:59.63, socials: {youtube: "https://www.youtube.com/channel/UCbu3bY3AhYIEJaRMTAU3Z5Q" }},
     { rank:63,  uuid:"8142ca44b5254987aca0b1de3e14ad9f",  name:"Sandroon",          kills:37761,  deaths:13177, kd:2.87,  games:22918, wins:10995, wl:47.98, socials: {youtube: "https://www.youtube.com/@sandroon5307" }}, 
-    { rank:64,  uuid:"2dd544189f1e4a7d9090212921a49d9a",  name:"Mxffy",             kills:31671,  deaths:9604,  kd:3.30,  games:18999, wins:10958, wl:57.68, socials: {youtube: "https://www.youtube.com/channel/UCNglCSL1Z06iPVDU0RtFcog", twitter: "https://x.com/zMuffyYT" }},
+    { rank:64,  uuid:"2dd544189f1e4a7d9090212921a49d9a",  name:"Mxffy",             kills:31671,  deaths:9604,  kd:3.30,  games:18999, wins:10958, wl:57.68, retired:"04/2016 – 05/2017", socials: {youtube: "https://www.youtube.com/channel/UCNglCSL1Z06iPVDU0RtFcog", twitter: "https://x.com/zMuffyYT" }},
     { rank:65,  uuid:"11aba9c4428840a8ae532df382b9feae",  name:"Scheqiii",          kills:27666,  deaths:4459,  kd:6.20,  games:14951, wins:10936, wl:73.15, socials: {youtube: "https://www.youtube.com/@2trysxscheqiii217", twitter: "https://x.com/Scheqiii", twitch: "https://www.twitch.tv/Scheqiii" }},
     { rank:66,  uuid:"de6087051d5d4972a3c953959243b049",  name:"westeuropa",        kills:28429,  deaths:7120,  kd:3.99,  games:17239, wins:10823, wl:62.78, socials: {youtube: "https://www.youtube.com/watch?v=83_Jdy__Uzs" }},
     { rank:67,  uuid:"8a42f74de98d460a870beb3c0fa53c09",  name:"BekiffterRaphi",    kills:28493,  deaths:12314, kd:2.31,  games:23606, wins:10784, wl:45.68, socials: {youtube: "https://www.youtube.com/@bekiffterraphi7082", }},
-    { rank:68,  uuid:"8636e24d60fe4460b6fe835d473c2c09",  name:"ImWindy",           kills:33520,  deaths:12299, kd:2.73,  games:21333, wins:10756, wl:50.42, socials: {youtube: "https://www.youtube.com/channel/UCYsYD9dGiRh00XpV7DemlUQ", }},
+    { rank:68,  uuid:"8636e24d60fe4460b6fe835d473c2c09",  name:"ImWindy",           kills:33520,  deaths:12299, kd:2.73,  games:21333, wins:10756, wl:50.42, retired:"11/2016 – 07/2017", socials: {youtube: "https://www.youtube.com/channel/UCYsYD9dGiRh00XpV7DemlUQ", }},
     { rank:69,  uuid:"7e1173b5960245a2ba5418af8179c547",  name:"qniix",             kills:27856,  deaths:8121,  kd:3.43,  games:17347, wins:10734, wl:61.88, socials: {twitter: "https://x.com/Godqniix", }},
     { rank:70,  uuid:"d1ffb0569da8463b9cd4ea1edf5ae633",  name:"zDarkKeks",         kills:37529,  deaths:8063,  kd:4.65,  games:18149, wins:10656, wl:58.71, socials: {youtube: "https://www.youtube.com/@shyqaxgcttness1807", twitter: "https://x.com/DarkKeks" }},
     { rank:71,  uuid:"5e3ab5a450cb4c08811e81e0fc428984",  name:"Analqhabet",        kills:34589,  deaths:16255, kd:2.13,  games:25976, wins:10655, wl:41.02, socials: {youtube: "https://www.youtube.com/@analqhabet" }},
-    { rank:72,  uuid:"f8cdd3b1685a4b79beeb0d99af933198",  name:"Tassimo",           kills:30301,  deaths:8366,  kd:3.62,  games:17531, wins:10493, wl:59.85, socials: {youtube: "https://www.youtube.com/@mondarmytassimo3923", twitter: "https://x.com/FreeTassimo" }},
+    { rank:72,  uuid:"f8cdd3b1685a4b79beeb0d99af933198",  name:"Tassimo",           kills:30301,  deaths:8366,  kd:3.62,  games:17531, wins:10493, wl:59.85, retired:"07/2015 – 08/2017", socials: {youtube: "https://www.youtube.com/@mondarmytassimo3923", twitter: "https://x.com/FreeTassimo" }},
     { rank:73,  uuid:"93f960ea1e014f44b7d844fa519d2b44",  name:"Rumpelstyle",       kills:36429,  deaths:9285,  kd:3.92,  games:18804, wins:10485, wl:55.76, socials: {youtube: "https://www.youtube.com/@Rumpelstyle", twitch: "https://www.twitch.tv/rumpelstyleog", twitter: "https://x.com/rumpel_style" }},
     { rank:74,  uuid:"227c921120df4b7d8d6b99612caaa29d",  name:"zRqlex",            kills:37914,  deaths:8377,  kd:4.53,  games:18288, wins:10461, wl:57.20, socials: {youtube: "https://www.youtube.com/channel/UCGfPG4VCJplBC5-SsssXWCQ/", twitch: "https://www.twitch.tv/rolexSW", twitter: "https://x.com/zRqlex" }},
-    { rank:75,  uuid:"100ad5535b9f42399405c52f0cbdfefe",  name:"pctrik_",           kills:37081,  deaths:21480, kd:1.73,  games:30891, wins:10357, wl:33.53, worst: "lowest K/D" },
+    { rank:75,  uuid:"100ad5535b9f42399405c52f0cbdfefe",  name:"pctrik_",           kills:37081,  deaths:21480, kd:1.73,  games:30891, wins:10357, wl:33.53 },
     { rank:76,  uuid:"335c86f64b294e63921cc8f34edabd38",  name:"Threadsmanship",    kills:45758,  deaths:17215, kd:2.66,  games:27163, wins:10160, wl:37.40, note: "aka SoupFerrero", socials: { youtube: "https://www.youtube.com/@SoupFerrerox7ohann", }},
     { rank:77,  uuid:"b8d6e1de550646879c6deb09e54d9566",  name:"kinqkirito",        kills:30165,  deaths:14765, kd:2.04,  games:23147, wins:10107, wl:43.66, socials: {youtube: "https://www.youtube.com/@s1nanxsilbernoxkinqkirito398", twitter: "https://x.com/kinqkirito" }},
     { rank:78,  uuid:"8cec077ef5344b7386aa3ef8adeeb824",  name:"2trys",             kills:28401,  deaths:5098,  kd:5.57,  games:14725, wins:10094, wl:68.55, socials: {youtube: "https://www.youtube.com/@2trysxscheqiii217", twitter: "https://x.com/zweiversuche" }},
@@ -1061,7 +1080,7 @@ const players = [
     { rank:81,  uuid:"aa49c0dff26d43fc8e0ecc8732d67e37",  name:"ItalyMafia",        kills:22327,  deaths:9911,  kd:2.25,  games:18519, wins:9878,  wl:53.34, socials: {twitter: "https://x.com/ItalyMafiaDE", youtube: "https://www.youtube.com/@italymafia4063", }},
     { rank:82,  uuid:"bf898ac01d664e23a43c8608a27bf007",  name:"Ten4You",           kills:23718,  deaths:8344,  kd:2.84,  games:16596, wins:9736,  wl:58.66, socials: {twitter: "https://x.com/Ten4You_", twitch: "https://www.twitch.tv/ten4you", }},
     { rank:83,  uuid:"49236ed5722049c0ac8b6d685f6fd074",  name:"zeyqo",             kills:25502,  deaths:8604,  kd:2.96,  games:17641, wins:9602,  wl:54.43 },
-    { rank:84,  uuid:"54a07bf782154cc4ae9715f8aa334b5d",  name:"Lrroy",             kills:20569,  deaths:3071,  kd:6.70,  games:12052, wins:9597,  wl:79.63, worst: "least Kills" },
+    { rank:84,  uuid:"54a07bf782154cc4ae9715f8aa334b5d",  name:"Lrroy",             kills:20569,  deaths:3071,  kd:6.70,  games:12052, wins:9597,  wl:79.63 },
     { rank:85,  uuid:"36922df1f4cc41b7aa379b4fd2902265",  name:"FreundPlus",        kills:34297,  deaths:13139, kd:2.61,  games:21350, wins:9552,  wl:44.74, socials: {youtube: "https://www.youtube.com/@sneqs/"}},
     { rank:86,  uuid:"0c98bdefec5247018e9d44125b4c0e65",  name:"CaveRoyale",        kills:36544,  deaths:12701, kd:2.88,  games:21596, wins:9545,  wl:44.20, socials: {twitter: "https://x.com/CaveRoyale", twitch: "https://www.twitch.tv/caveroyale", youtube: "https://www.youtube.com/@caveroyale1452/" }},
     { rank:87,  uuid:"1f7828cf72314a178a129a0d2e16cfc9",  name:"T_co",              kills:26623,  deaths:8153,  kd:3.27,  games:16859, wins:9534,  wl:56.55 },
@@ -1070,7 +1089,7 @@ const players = [
     { rank:90,  uuid:"e7638f7a586040e49c7531c0670700e0",  name:"godness",           kills:22383,  deaths:1380,  kd:16.22, games:10519, wins:9424,  wl:89.59, note: "aka zanqy", socials: { youtube: "https://www.youtube.com/@chamq", twitter: "https://x.com/zanqyy" }}, 
     { rank:91,  uuid:"ec0355027d3b4ae5b13cd5312aa34b83",  name:"Prainex",           kills:29088,  deaths:7445,  kd:3.91,  games:16003, wins:9288,  wl:58.04, socials: {youtube: "https://www.youtube.com/@prainex5458" }},
     { rank:92,  uuid:"2938696b1f334bf3ba1e74f47a08e766",  name:"athletisch",        kills:27260,  deaths:7557,  kd:3.61,  games:16124, wins:9284,  wl:57.58, socials: {youtube: "https://www.youtube.com/channel/UCd2DXzt-BqLsrmZqETFfszg" }},
-    { rank:93,  uuid:"65929ae8e7464d90a2aab5c5a8caf26f",  name:"ryqi",              kills:25431,  deaths:572,   kd:44.46, games:9507,  wins:9152,  wl:96.27, best: ["highest K/D", "highest W/L", "fewest Deaths", "least Games"], socials: {youtube: "https://www.youtube.com/cheatin", twitter: "https://x.com/ryqiOG" }},
+    { rank:93,  uuid:"65929ae8e7464d90a2aab5c5a8caf26f",  name:"ryqi",              kills:25431,  deaths:572,   kd:44.46, games:9507,  wins:9152,  wl:96.27, socials: {youtube: "https://www.youtube.com/cheatin", twitter: "https://x.com/ryqiOG" }},
     { rank:94,  uuid:"78e746ac392840a5b199289832d779da",  name:"miro49_",           kills:30046,  deaths:13524, kd:2.22,  games:19921, wins:9138,  wl:45.87, note: "aka Lublas", socials: { twitter: "https://x.com/lub1as", youtube: "https://www.youtube.com/@lublas2141" }},
     { rank:95,  uuid:"2f3b8e158a0f495fbe3247d3596777e0",  name:"obv_Enes",          kills:39390,  deaths:12679, kd:3.11,  games:21441, wins:9077,  wl:42.33 },
     { rank:96,  uuid:"345ab45dba6d478c965a41d500c31024",  name:"Jayzox",            kills:28167,  deaths:4773,  kd:5.90,  games:13422, wins:9027,  wl:67.26, socials: {youtube: "https://www.youtube.com/channel/UC4fYYw9OA38VMS0QA8tsLiQ", twitter: "https://x.com/JayzoxYT", twitch: "https://www.twitch.tv/jayzox" }},
@@ -1078,29 +1097,123 @@ const players = [
     { rank:98,  uuid:"5010159502a04a2dbbfe562f684f893c",  name:"VilsaLimetteKorn",  kills:36782,  deaths:13929, kd:2.64,  games:21619, wins:8978,  wl:41.53, note: "aka P4n0x" },
     { rank:99,  uuid:"ecdaa5ba26284b36a84d4703fd290f19",  name:"Motiq",             kills:33652,  deaths:10877, kd:3.09,  games:19161, wins:8976,  wl:46.85, socials: {youtube: "https://www.youtube.com/@motiq871", twitter: "https://x.com/xIBlizzard" }},
     { rank:100, uuid:"3058cd97e96a4c4a9ff2d00c79f2b553",  name:"nassau_",           kills:39411,  deaths:11536, kd:3.42,  games:20011, wins:8920,  wl:44.58, worst: "least Wins" },
-	{ rank:101, uuid:"442ee08edb2a490c80db72dd952bf743",  name:"oedtlic",           kills:32772,  deaths:6246,  kd:5.25,  games:14918, wins:8808,  wl:59.04 },
-	{ rank:102, uuid:"4cb34b20d35148a6953a756388ebf6e6",  name:"DungeonCBE",        kills:26268,  deaths:8054,  kd:3.26,  games:16149, wins:8760,  wl:54.24, note: "aka Rxem", socials: { youtube: "https://www.youtube.com/@rxem1813", twitter: "https://x.com/rxem" }}, 
-	{ rank:103, uuid:"3f9d98ebe5d247d18ae217e1d5e61173",  name:"sadopweb",          kills:17884,  deaths:2934,  kd:6.10,  games:10948, wins:8727,  wl:79.71, socials: {youtube: "https://www.youtube.com/@opwebxchain" }},
-	{ rank:104, uuid:"217751afb1474b32b90bae429b2380f2",  name:"Luzzz",          	kills:23956,  deaths:3411,  kd:7.02,  games:11621, wins:8700,  wl:74.86, socials: {twitter: "https://x.com/Luzzz0815", youtube: "https://www.youtube.com/channel/UCvmrP9kdmpz6LYJKDgWLwLA", twitch: "https://www.twitch.tv/xluzzz"}},
-	{ rank:105, uuid:"df61415c900345d7adbbf8f182c2b8a7",  name:"Sturmcraftt",       kills:28610,  deaths:7140,  kd:4.01,  games:14940, wins:8666,  wl:58.01, socials: {youtube: "https://www.youtube.com/@sturmcrafttxprime8427" }},
+    { rank:101, uuid:"442ee08edb2a490c80db72dd952bf743",  name:"oedtlic",           kills:32772,  deaths:6246,  kd:5.25,  games:14918, wins:8808,  wl:59.04 },
+    { rank:102, uuid:"4cb34b20d35148a6953a756388ebf6e6",  name:"DungeonCBE",        kills:26268,  deaths:8054,  kd:3.26,  games:16149, wins:8760,  wl:54.24, note: "aka Rxem", socials: { youtube: "https://www.youtube.com/@rxem1813", twitter: "https://x.com/rxem" }},
+    { rank:103, uuid:"3f9d98ebe5d247d18ae217e1d5e61173",  name:"sadopweb",          kills:17884,  deaths:2934,  kd:6.10,  games:10948, wins:8727,  wl:79.71, socials: {youtube: "https://www.youtube.com/@opwebxchain" }},
+    { rank:104, uuid:"217751afb1474b32b90bae429b2380f2",  name:"Luzzz",             kills:23956,  deaths:3411,  kd:7.02,  games:11621, wins:8700,  wl:74.86, socials: {twitter: "https://x.com/Luzzz0815", youtube: "https://www.youtube.com/channel/UCvmrP9kdmpz6LYJKDgWLwLA", twitch: "https://www.twitch.tv/xluzzz"}},
+    { rank:105, uuid:null,                                name:null,                kills:null,   deaths:null,  kd:null,  games:null,  wins:null,  wl:null },
+    { rank:106, uuid:"df61415c900345d7adbbf8f182c2b8a7",  name:"Sturmcraftt",       kills:28610,  deaths:7140,  kd:4.01,  games:14940, wins:8666,  wl:58.01, socials: {youtube: "https://www.youtube.com/@sturmcrafttxprime8427" }},
+    { rank:107, uuid:null,                                name:null,                kills:null,   deaths:null,  kd:null,  games:null,  wins:null,  wl:null },
+    { rank:108, uuid:"b621da6219e54dc092d94aa75cd5834a",  name:"TopscorerDirk",     kills:36319,  deaths:19093, kd:1.90,  games:26634, wins:8487,  wl:31.87 },
+    { rank:109, uuid:"c52bb0d7c8d240ecb1ab423f6712daa2",  name:"ImLegend",          kills:27237,  deaths:6416,  kd:4.25,  games:13579, wins:8477,  wl:62.43 },
+    { rank:110, uuid:"d62dc40678bf4f1a9e40b73e9a8b717a",  name:"quekslOG",          kills:23800,  deaths:5213,  kd:4.57,  games:13258, wins:8475,  wl:63.92 },
+    { rank:111, uuid:"20914eb741654cd094494dd486b72004",  name:"ElevenmsYT",        kills:35306,  deaths:6107,  kd:5.78,  games:14023, wins:8438,  wl:60.17, retired: "10/2016 – 01/2017" },
+    { rank:112, uuid:null,                                name:null,                kills:null,   deaths:null,  kd:null,  games:null,  wins:null,  wl:null },
+    { rank:113, uuid:null,                                name:null,                kills:null,   deaths:null,  kd:null,  games:null,  wins:null,  wl:null },
+    { rank:114, uuid:"52da57d98bf148d18d2e8e5827dc40e2",  name:"WildesFlxme",       kills:21681,  deaths:5522,  kd:3.93,  games:13089, wins:8390,  wl:64.10, note: "aka zFlameSW" },
+    { rank:115, uuid:"736e4e0cd15c45c3ae975a39ceafd2f5",  name:"Zaranty",           kills:29407,  deaths:6871,  kd:4.28,  games:14914, wins:8372,  wl:56.14 },
+    { rank:116, uuid:"5e96edd915634fb981a3374b1d350742",  name:"Fretzi",            kills:30790,  deaths:13570, kd:2.27,  games:21861, wins:8366,  wl:38.27 },
+    { rank:117, uuid:null,                                name:null,                kills:null,   deaths:null,  kd:null,  games:null,  wins:null,  wl:null },
+    { rank:118, uuid:"32118fbaa2ab4f2d9d12a0d74ff475e4",  name:"zSxndro",           kills:33555,  deaths:7924,  kd:4.23,  games:15565, wins:8333,  wl:53.54 },
+    { rank:119, uuid:"227aa4d4c93f4c3982a9b99e23066b68",  name:"DunklerCR7",        kills:34698,  deaths:13455, kd:2.58,  games:20216, wins:8189,  wl:40.51 },
+    { rank:120, uuid:"d99ca99822fb46c7931f044a8c87353f",  name:"FxllmannHasAGun_",  kills:24725,  deaths:7130,  kd:3.47,  games:14975, wins:8188,  wl:54.68 },
+    { rank:121, uuid:"0cb1f8e8195b4006b5990a7cae86f310",  name:"JqnisReturns",      kills:29336,  deaths:11229, kd:2.61,  games:18030, wins:8178,  wl:45.36 },
+    { rank:122, uuid:"32067db5247147b0beda1f64e43f7a08",  name:"kiuuu",             kills:27078,  deaths:12646, kd:2.14,  games:19134, wins:8145,  wl:42.57 },
+    { rank:123, uuid:"f50aef7a821049dfbddfda947bfba545",  name:"EinHalbYT",         kills:28619,  deaths:5121,  kd:5.59,  games:12684, wins:8121,  wl:64.03 },
+    { rank:124, uuid:null,                                name:null,                kills:null,   deaths:null,  kd:null,  games:null,  wins:null,  wl:null },
+    { rank:125, uuid:"a6b7f871a4ff4458b8b4e4204618b822",  name:"JunkieJqn88",       kills:27736,  deaths:9381,  kd:2.96,  games:15822, wins:8097,  wl:51.18 },
+    { rank:126, uuid:"d894b2c2c60a4b59bbc564bced2f7b3d",  name:"Mxcz",              kills:26461,  deaths:9217,  kd:2.87,  games:16337, wins:8025,  wl:49.12 },
+    { rank:127, uuid:"097febf336d243499aaff727225c6152",  name:"ZetraxYs",          kills:28497,  deaths:16487, kd:1.73,  games:23894, wins:8018,  wl:33.56, note: "aka PasteteFrosch78" },
+    { rank:128, uuid:"05a46b9f978a40e696682da83bcf3174",  name:"Isolated98",        kills:30485,  deaths:9710,  kd:3.14,  games:16299, wins:7941,  wl:48.72, note: "aka GigedyGun", retired: "02/2016 – 12/2016" },
+    { rank:129, uuid:"2d0f0975479a4b27a9958b11aec35a15",  name:"K5rlo",             kills:23533,  deaths:4287,  kd:5.49,  games:11572, wins:7940,  wl:68.61, socials: {youtube: "https://www.youtube.com/channel/UCJdG2IpGah6YLfKkbgWcW6g", twitch: "https://www.twitch.tv/k4rlo", twitter: "https://x.com/K4rlo6"}},
+    { rank:130, uuid:"7add7831dda34dc3a57f5817e19de0d9",  name:"Berechtigt",        kills:30008,  deaths:12192, kd:2.46,  games:19788, wins:7906,  wl:39.95 },
+    { rank:131, uuid:"736712a801e940428bc46c69007d3bea",  name:"Kliffi78",          kills:29386,  deaths:11175, kd:2.63,  games:18897, wins:7905,  wl:41.83 },
+    { rank:132, uuid:"6a0689bac0f44c32a00f936db8e38399",  name:"KlaxTV",            kills:42108,  deaths:18410, kd:2.29,  games:25600, wins:7880,  wl:30.78 },
+    { rank:133, uuid:"775e8b7b2b77487bbd6488bfa85112d9",  name:"leQuaxx",           kills:35355,  deaths:14175, kd:2.49,  games:21635, wins:7878,  wl:36.41 },
+    { rank:134, uuid:"510ab60eb68a465a9bffabb34b00ac6b",  name:"Cruuzer",           kills:40819,  deaths:10713, kd:3.81,  games:18383, wins:7875,  wl:42.84 },
+    { rank:135, uuid:"deb338ba565d48379984af2dc01c4114",  name:"wwwwwwwwwwwwwwwz",  kills:24968,  deaths:7407,  kd:3.37,  games:14446, wins:7865,  wl:54.44, note: "aka YoureStein" },
+    { rank:136, uuid:"b13dcf7d469e46c199c046ae4ec2232b",  name:"zReox",             kills:31593,  deaths:8629,  kd:3.66,  games:15857, wins:7857,  wl:49.55, retired: "06/2016 – 11/2016" },
+    { rank:137, uuid:"53d0dd2d9bf444688442e81f28923995",  name:"ItsBecause0fYou",   kills:40813,  deaths:24841, kd:1.64,  games:31577, wins:7843,  wl:24.84 },
+    { rank:138, uuid:"9582ea657afc4fa980ea8f053705fc0c",  name:"Vorimon",           kills:24733,  deaths:8817,  kd:2.81,  games:15320, wins:7830,  wl:51.11 },
+    { rank:139, uuid:"002e894e3162473c975f05f84a106e55",  name:"RechtsSchelle",     kills:21593,  deaths:5967,  kd:3.62,  games:12732, wins:7784,  wl:61.14, note: "aka Berano", retired: "01/2016 – 10/2016" },
+    { rank:140, uuid:"070e77ff3e8448d0a3bc924518a22793",  name:"TaigaHasstDich",    kills:30144,  deaths:17377, kd:1.73,  games:24488, wins:7774,  wl:31.75 },
+    { rank:141, uuid:"23ab8cac5e14470f83763a6a5852218a",  name:"nyqia",             kills:27120,  deaths:10406, kd:2.61,  games:17597, wins:7706,  wl:43.79, socials: {youtube: "https://www.youtube.com/@nyqia", twitch: "https://www.twitch.tv/nyqia", twitter: "https://x.com/nyqiia"}},
+    { rank:142, uuid:"3397ae8525154d919486f952cd9e4884",  name:"zSimonSW",          kills:25389,  deaths:9373,  kd:2.71,  games:16398, wins:7698,  wl:46.94 },
+    { rank:143, uuid:"10c078e7877d404cb19bd6d56e3888d5",  name:"nuacy",             kills:18748,  deaths:7057,  kd:2.66,  games:14246, wins:7695,  wl:54.02 },
+    { rank:144, uuid:"7147e793aee042acb6972eba5c445ac7",  name:"Geisterbob",        kills:39056,  deaths:8606,  kd:4.54,  games:15586, wins:7663,  wl:49.17 },
+    { rank:145, uuid:"2c54ffc51a1d49b28736a7e2c3d2ba67",  name:"reety474",          kills:22889,  deaths:4209,  kd:5.44,  games:11203, wins:7655,  wl:68.33 },
+    { rank:146, uuid:"2246e9f0d1004157978ef64d1ca4ce3f",  name:"oOMarcOo",          kills:41072,  deaths:16850, kd:2.44,  games:24500, wins:7651,  wl:31.23 },
+    { rank:147, uuid:"893ef41b9fa54697a6ea9ec0a828b915",  name:"YourDejaVu",        kills:23935,  deaths:7857,  kd:3.05,  games:14588, wins:7627,  wl:52.28 },
+    { rank:148, uuid:"c27177d2d0984f17a89932a21d1eeb67",  name:"PoisenEXE",         kills:25604,  deaths:6948,  kd:3.69,  games:13848, wins:7599,  wl:54.87 },
+    { rank:149, uuid:"f359f8c8413c45b1bee0c969d1c85ce8",  name:"UrganagelIsBae",    kills:31299,  deaths:11321, kd:2.76,  games:17770, wins:7546,  wl:42.46, note: "aka GismoReturnZ" },
+    { rank:150, uuid:"9658c9326ee046b3ab7daee866f083eb",  name:"LavaFausti",        kills:39672,  deaths:17728, kd:2.24,  games:24114, wins:7537,  wl:31.26 },
+    { rank:151, uuid:"0fd7dc8c129b435396ac82ca583b7911",  name:"mvnchxn",           kills:20412,  deaths:8877,  kd:2.30,  games:16050, wins:7520,  wl:46.85 },
+    { rank:152, uuid:"180ce682ab74401d812dcf7165a50285",  name:"yazuko",            kills:17151,  deaths:6607,  kd:2.60,  games:13720, wins:7455,  wl:54.34 },
+    { rank:153, uuid:"3d0aa097feab4d25b513fea4cdf92fbf",  name:"AlaudySW",          kills:23274,  deaths:6740,  kd:3.45,  games:13127, wins:7364,  wl:56.10 },
+    { rank:154, uuid:"7e3ef951b41b497ca8c788ed3d995298",  name:"Hoebs",             kills:28107,  deaths:7857,  kd:3.58,  games:14835, wins:7355,  wl:49.58, socials: {youtube: "https://www.youtube.com/@Pvyn"}},
+    { rank:155, uuid:"cbd50a68b5334e608de4371b45d0bb72",  name:"xMusti69",          kills:22196,  deaths:7295,  kd:3.04,  games:13917, wins:7295,  wl:52.42 },
+    { rank:156, uuid:null,                                name:null,                kills:null,   deaths:null,  kd:null,  games:null,  wins:null,  wl:null },
+    { rank:157, uuid:null,                                name:null,                kills:null,   deaths:null,  kd:null,  games:null,  wins:null,  wl:null },
+    { rank:158, uuid:"2fcedfe293b245dc9c0abcc2a8396c9e",  name:"SirGeistreich",     kills:19124,  deaths:7764,  kd:2.46,  games:12688, wins:7285,  wl:57.42 },
+    { rank:159, uuid:"83c4e3438e28425ab6b3f3bcded8b21a",  name:"chrzc",             kills:24193,  deaths:6421,  kd:3.77,  games:13588, wins:7264,  wl:53.46 },
+    { rank:160, uuid:"f44a1321040b43378e2b692ae4b1fb0f",  name:"NojayYT",           kills:22120,  deaths:13042, kd:1.70,  games:19600, wins:7255,  wl:37.02, socials: {youtube: "https://www.youtube.com/@Nojay", twitch: "https://www.twitch.tv/Nojay", twitter: "https://x.com/NojayHD"}},
+    { rank:161, uuid:"6bb79cfb123649cc90c1fd55c6afae05",  name:"DragonToqqelt",     kills:41385,  deaths:17315, kd:2.39,  games:23906, wins:7245,  wl:30.31, socials: {youtube: "https://www.youtube.com/@DragonToqqelt", twitch: "https://www.twitch.tv/DragonToqqelt", twitter: "https://x.com/dragontoqqelt"}},
+    { rank:162, uuid:"38b7d368103d489c933e3268c777e321",  name:"zCyaan",            kills:24663,  deaths:14254, kd:1.73,  games:20103, wins:7235,  wl:35.99 },
+    { rank:163, uuid:"1d87eb7d5d3b48e3b9b95627deb06a03",  name:"Iqel",              kills:30875,  deaths:7702,  kd:4.01,  games:14825, wins:7221,  wl:48.71 },
+    { rank:164, uuid:"b0a5993522fe4d769ea257af48c11799",  name:"legend_quit",       kills:25419,  deaths:12196, kd:2.08,  games:16840, wins:7214,  wl:42.84 },
+    { rank:165, uuid:"1a4e1eb14dad42f1afdfe726a134ffad",  name:"emql",              kills:18568,  deaths:4129,  kd:4.50,  games:10901, wins:7210,  wl:66.14 },
+    { rank:166, uuid:"352732c78bb24da8a6349ae9762c11ea",  name:"lugg3rs",           kills:26509,  deaths:13792, kd:1.92,  games:19178, wins:7181,  wl:37.44 },
+    { rank:167, uuid:"d352a484673f489f957bdbad73d95020",  name:"Paaa",              kills:31418,  deaths:10325, kd:3.04,  games:16386, wins:7172,  wl:43.77 },
+    { rank:168, uuid:"992fc9ac61eb4d6f88e14c37497dc231",  name:"xCricks",           kills:23574,  deaths:19908, kd:1.18,  games:26092, wins:7164,  wl:27.46, socials: {youtube: "https://www.youtube.com/@xCricks", twitch: "https://www.twitch.tv/xCricks", twitter: "https://x.com/x_Cricks"}},
+    { rank:169, uuid:"113a13f0a1f4445385b86950b0044c3a",  name:"DomihIsUebergott",  kills:24132,  deaths:8450,  kd:2.86,  games:14373, wins:7154,  wl:49.77, note: "aka exzellent", retired: "11/2015 – 04/2016" },
+    { rank:170, uuid:"5b91e67c5af040358453efa5af061811",  name:"EinSchredder",      kills:35054,  deaths:17216, kd:2.04,  games:24415, wins:7149,  wl:29.28 },
+    { rank:171, uuid:"619bba54040746c1b1f6860df9b6fc73",  name:"alib0n",            kills:31341,  deaths:6573,  kd:4.77,  games:12664, wins:7128,  wl:56.29, note: "aka AgroDunkelLP", retired: "07/2015 – 11/2015 + 01/2016" },
+    { rank:172, uuid:"d334ee25c98642159312b0c056613fb9",  name:"69imWater",         kills:33065,  deaths:29696, kd:1.11,  games:36094, wins:7110,  wl:19.70, worst: ["most Deaths", " lowest K/D"] },
+    { rank:173, uuid:"f14f7c20e65b4a8c922c5edb9483abce",  name:"Knooppii",          kills:21019,  deaths:4333,  kd:4.85,  games:11292, wins:7088,  wl:62.77 },
+    { rank:174, uuid:"d095a33e778e4a5ea3c014edcdbaab7b",  name:"xIGreZg",           kills:40141,  deaths:22310, kd:1.80,  games:28955, wins:7048,  wl:24.34 },
+    { rank:175, uuid:"cddbc716a6af4e6f9eb7f38c2c4c5cf9",  name:"100Sxchen80",       kills:24030,  deaths:9897,  kd:2.43,  games:16133, wins:7025,  wl:43.54, note: "aka zRansacked / SirBumbajau" },
+    { rank:176, uuid:"aacb7265dec44f329693b0f8bf04afa3",  name:"Jazoom",            kills:41716,  deaths:21661, kd:1.93,  games:27858, wins:7021,  wl:25.20 },
+    { rank:177, uuid:"20c82b46fd83471a9b7e2139ce4f085a",  name:"SHOWMEGOD",         kills:28350,  deaths:12589, kd:2.25,  games:19140, wins:7002,  wl:36.58 },
+    { rank:178, uuid:"946e2ae75ec34cfc88e680a3fe0c2893",  name:"zJxson",            kills:22027,  deaths:7047,  kd:3.13,  games:13348, wins:6998,  wl:52.43 },
+    { rank:179, uuid:"8b19ab31ca4e483ab1eeacdfebac5d24",  name:"DasKarateKid",      kills:37065,  deaths:21567, kd:1.72,  games:28189, wins:6912,  wl:24.52 },
+    { rank:180, uuid:"6791f34feb8d49bf91470c8eadec5992",  name:"zWxlfi",            kills:21506,  deaths:3212,  kd:6.70,  games:9603,  wins:6900,  wl:71.85 },
+    { rank:181, uuid:"292d5c2a1b21406d85380c093e36a855",  name:"GravityLennard",    kills:25265,  deaths:8457,  kd:2.99,  games:14829, wins:6894,  wl:46.49 },
+    { rank:182, uuid:"e0d6a334f8404b96b7f3f31264d2cb76",  name:"xTheq",             kills:30295,  deaths:11926, kd:2.54,  games:18558, wins:6879,  wl:37.07 },
+    { rank:183, uuid:"d5afa0509d284c73993b0330d2b59738",  name:"NxklasImBunker",    kills:33699,  deaths:8304,  kd:4.06,  games:14872, wins:6875,  wl:46.23 },
+    { rank:184, uuid:"b766a25a6e0843ccb658fc8434ed6277",  name:"Gipsy8869",         kills:22194,  deaths:5583,  kd:3.98,  games:11564, wins:6852,  wl:59.25, retired: "01/2016 – 04/2016" },
+    { rank:185, uuid:"af8e72622b2643a88bd879fbe69ef033",  name:"Vollsize",          kills:18122,  deaths:10533, kd:1.72,  games:16551, wins:6850,  wl:41.39, socials: {youtube: "https://www.youtube.com/@vollsizetv6188"}},
+    { rank:186, uuid:"20133926ceb54412aa3e9c3f69e3e423",  name:"cqumy",             kills:21944,  deaths:12967, kd:1.69,  games:19253, wins:6834,  wl:35.50 },
+    { rank:187, uuid:null,                                name:null,                kills:null,   deaths:null,  kd:null,  games:null,  wins:null,  wl:null },
+    { rank:188, uuid:"e3b43c17b4ba4000ac05dba100ea605e",  name:"lquris",            kills:28754,  deaths:7887,  kd:3.65,  games:14374, wins:6780,  wl:47.17 },
+    { rank:189, uuid:"e247b3126202421195493f0257536dd1",  name:"nycls",             kills:19554,  deaths:631,   kd:30.99, games:7308,  wins:6773,  wl:92.68, socials: {youtube: "https://www.youtube.com/@nyclsxnaqez864"}},
+    { rank:190, uuid:"f19b057ff398423a820f0923df470c08",  name:"Luxerex",           kills:18108,  deaths:6695,  kd:2.70,  games:12086, wins:6756,  wl:55.90, note: "aka Wad0x", retired: "09/2015 – 05/2016" },
+    { rank:191, uuid:"1716655662cc45eaacbb3ee94506478e",  name:"kooperarieren",     kills:33631,  deaths:20714, kd:1.62,  games:27099, wins:6754,  wl:24.92 },
+    { rank:192, uuid:"3369e10a3a654de4b3a8809283ecd18d",  name:"queenasuna",        kills:23755,  deaths:10219, kd:2.32,  games:15928, wins:6714,  wl:42.15, note: "aka unnoetige" },
+    { rank:193, uuid:"210390f6b6fb4f49a954ca3e59018235",  name:"Luca_ZocktMC",      kills:40268,  deaths:11649, kd:3.46,  games:18281, wins:6698,  wl:36.64, socials: {youtube: "https://www.youtube.com/channel/UCESBnhL9yJeQJ58y_fwaxTg", twitch: "https://www.twitch.tv/lugga_zockt"}},
+    { rank:194, uuid:"12c534d2a84a4e5f8fb0dd9a533b8dea",  name:"Anqeber",           kills:20063,  deaths:8237,  kd:2.44,  games:14372, wins:6691,  wl:46.56, socials: {youtube: "https://www.youtube.com/@Anqeber", twitch: "https://www.twitch.tv/angeber"}},
+	{ rank:195, uuid:"f9ec22c56d2d49a4ba111fb72142c710",  name:"HansenHelly",       kills:29437,  deaths:9509,  kd:3.1,   games:15955, wins:6621,  wl:41.5, note: "aka saraku_u", socials: {youtube: "https://www.youtube.com/@saraaku", twitch: "https://www.twitch.tv/robinvnz", twitter: "https://x.com/robinvnzz"}},
+    { rank:196, uuid:"4db7db6803c0445cb24120738d3dc36a",  name:"yParadox",          kills:21950,  deaths:6308,  kd:3.48,  games:12816, wins:6600,  wl:51.50 },
+    { rank:197, uuid:"77cc59e7672d4a64bc287ef94e98e3ed",  name:"GoatKami",          kills:16519,  deaths:204,   kd:80.98, games:6642,  wins:6582,  wl:99.10, best: ["fewest Deaths", "least Games", "highest K/D", "highest W/L"], worst: "least Kills" },
+    { rank:198, uuid:"2ec2b149d7744faea3c7fe7cf3e06958",  name:"shi9ez",            kills:21108,  deaths:4925,  kd:4.29,  games:12236, wins:6575,  wl:53.73 },
+    { rank:199, uuid:"5b1240f72e124015b0635f3c4039d358",  name:"Gebaf_",            kills:26517,  deaths:10909, kd:2.43,  games:17048, wins:6567,  wl:38.52 },
+    { rank:200, uuid:"b2666958143147b082c7b31e0819c646",  name:"Trymiix",           kills:29181,  deaths:11792, kd:2.47,  games:17508, wins:6542,  wl:37.37 },
 	{ rank:null,uuid:"e5de7e3bef9c437281e3de350f08d3ef",  name:"ySantiago",         kills:null,   deaths:null,  kd:4.97,  games:null,  wins:30644, wl:null, deleted: "banned for Cheating on February 3, 2023", socials: { youtube: "https://www.youtube.com/@ySantiagoTheG", twitter: "https://x.com/ySantiagoo", }},
-	{ rank:null, uuid:"b03a6b8c638f4d2eac513c135b520f21", name:"ynachten",          kills:39742,  deaths:10391, kd:3.82,  games:23028, wins:14660, wl:63.66, deleted: "banned for cheating, thanks to IllusKoala", note: "aka DarkL4bel" },
-	{ rank:null,uuid:"0cb53c46b76a4f83913f3604f4b5afa9",  name:"Karamell_Jonas",    kills:null,   deaths:null,  kd:2.96,  games:null,  wins:13380, wl:null, deleted: "most likely banned for Cheating in October 2018", note: "aka emplority" },
-	{ rank:null,uuid:"582ddbdb1c1d46a18f9171baba0e5dfa",  name:"Icqas",             kills:null,   deaths:null,  kd:4.43,  games:null,  wins:27877, wl:null, deleted: "banned for Cheating with ESP live on May 28, 2023", note: "aka FireZ0ne" },
-	{ rank:null,uuid:"bd5e2fd242ee47a18af6a928ed4108d9",  name:"XXXRIPBROTHERXXX",  kills:null,   deaths:null,  kd:5.32,  games:null,  wins:19562, wl:null, deleted: "banned for cheating on September 11, 2019", note: "aka vanqs, originally laqez" },
-	{ rank:null,uuid:"6930449c43df4cc3ba68260e6a6966d9",  name:"Intox69",           kills:null,   deaths:null,  kd:null,  games:null,  wins:14785, wl:null, deleted: "banned for cheating in April 2018 thanks to monty", socials: { youtube: "https://www.youtube.com/@intox6972" }},
+	{ rank:null, uuid:"b03a6b8c638f4d2eac513c135b520f21", name:"ynachten",          kills:39742,  deaths:10391, kd:3.82,  games:23028, wins:14660, wl:63.66, retired:"12/2015 – 05/2019", deleted: "banned for cheating, thanks to IllusKoala", note: "aka DarkL4bel" },
+	{ rank:null,uuid:"0cb53c46b76a4f83913f3604f4b5afa9",  name:"Karamell_Jonas",    kills:null,   deaths:null,  kd:2.96,  games:null,  wins:13380, wl:null, retired:"02/2016 – 02/2019", deleted: "most likely banned for Cheating in October 2018", note: "aka emplority" },
+	{ rank:null,uuid:"582ddbdb1c1d46a18f9171baba0e5dfa",  name:"Icqas",             kills:null,   deaths:null,  kd:4.43,  games:null,  wins:27877, wl:null, retired:"08/2017", deleted: "banned for Cheating with ESP live on May 28, 2023", note: "aka FireZ0ne" },
+	{ rank:null,uuid:"bd5e2fd242ee47a18af6a928ed4108d9",  name:"XXXRIPBROTHERXXX",  kills:null,   deaths:null,  kd:5.32,  games:null,  wins:19562, wl:null, retired:"12/2016 – 09/2019", deleted: "banned for cheating on September 11, 2019", note: "aka vanqs, originally laqez" },
+	{ rank:null,uuid:"6930449c43df4cc3ba68260e6a6966d9",  name:"Intox69",           kills:null,   deaths:null,  kd:null,  games:null,  wins:14785, wl:null, retired:"03/2017 – 03/2018", deleted: "banned for cheating in April 2018 thanks to monty", socials: { youtube: "https://www.youtube.com/@intox6972" }},
 	{ rank:null,uuid:"6018fa9504ed40ecb7a99d080d4aafda",  name:"SWLegende",         kills:null,   deaths:null,  kd:10.70, games:null,  wins:33972, wl:78.48, deleted: "banned for Cheating on April 29, 2022", socials: { youtube: "https://www.youtube.com/channel/UC6ApnCSV708YfD41M50VitA", twitter: "https://x.com/SWLegende", twitch:  "https://www.twitch.tv/SWLegende", }},
 	{ rank:null,uuid:"431088364a4c4ea1bee6ac85fbac3784",  name:"rcsh",         		kills:null,   deaths:null,  kd:4.96,  games:null,  wins:34353, wl:null, deleted: "banned for Boosting in SpeedUHC thanks to DxrkFlo in May 2023", socials: { youtube: "https://www.youtube.com/@rcsh4622", twitter: "https://x.com/xru5h", }},
 	{ rank:null,uuid:"df71e062476b4c12be7c937069f5b36a",  name:"10Rodhits",         kills:null,   deaths:null,  kd:2.73,  games:null,  wins:32378, wl:null, deleted: "banned for Boosting in SpeedUHC thanks to DxrkFlo in May 2023", note: "aka LegitPascal" },
 	{ rank:null,uuid:"6af2b9793e5248cbae455683c370acc7",  name:"Deisuki",  			kills:null,   deaths:null,  kd:4.32,  games:null,  wins:38280, wl:null, deleted: "banned for Boosting in SpeedUHC thanks to DxrkFlo in May 2023", note: "aka ByLolbobYT" }, 
-	{ rank:null,uuid:"05412e514d404b55a2e5a25993161b1d",  name:"steelpatrickYT",  	kills:null,   deaths:null,  kd:5.12,  games:null,  wins:20103, wl:null, deleted: "banned for National Socialism & hacking across multiple accounts", note: "aka ryqi's old account", socials: {youtube: "https://www.youtube.com/cheatin", twitter: "https://x.com/ryqiOG" }},
+	{ rank:null,uuid:"05412e514d404b55a2e5a25993161b1d",  name:"steelpatrickYT",  	kills:null,   deaths:null,  kd:5.12,  games:null,  wins:20103, wl:null, retired:"01/2017 – 08/2018", deleted: "banned for National Socialism & hacking across multiple accounts", note: "aka ryqi's old account", socials: {youtube: "https://www.youtube.com/cheatin", twitter: "https://x.com/ryqiOG" }},
 	{ rank:null,uuid:"cd7cf44ec05146e5a03a33a6f215d803",  name:"mancsl",  			kills:43938,  deaths:7718,  kd:5.69,  games:24778, wins:18052, wl:72.85, deleted: "banned for Doxxing", note: "aka searness' old account", socials: { youtube: "https://www.youtube.com/@dxrkfloxsearness2032" }},
 	{ rank:null,uuid:"2fcc5810fb964be18471fa7c5b580979",  name:"SwiftieLukas",      kills:null,   deaths:null,  kd:null,  games:null,  wins:17421, wl:null, deleted: "Account got Hacked", note: "aka DxrkFlo", socials: { youtube: "https://www.youtube.com/@dxrkfloxsearness2032", twitter: "https://x.com/CryMember4000" }},
 	{ rank:null,uuid:"15738672ba4141b6848a6cf032b68ee7",  name:"noying",            kills:null,   deaths:null,  kd:null,  games:null,  wins:null,  wl:null, deleted: "banned for Boosting", note: "aka DarkL4bel V2 / searching for the stats", socials: { twitch: "https://www.twitch.tv/sandroslifestyle", youtube: "https://www.youtube.com/channel/UCAX-Ri0KOXPwnbEkPB7hdxQ" }},
-	{ rank:null,uuid:"8aa371aa05514214929111a6fddce665",  name:"Vxltar",            kills:null,   deaths:null,  kd:3.54,  games:null,  wins:10077, wl:null, deleted: "banned for Cheating", socials: { twitch: "https://www.twitch.tv/voltartwitch", youtube: "https://www.youtube.com/@JohannesST-qk8db" }},
-	{ rank:null,uuid:"fc17a9963cc34e69976c46c0efa27612",  name:"pvpatryck",  		kills:null,   deaths:null,  kd:3.45,  games:null,  wins:14715, wl:null, deleted: "banned in November 2018 thanks to ryqi", note: "aka ZwochiOP" },
-	{ rank:null,uuid:"f9ec22c56d2d49a4ba111fb72142c710",  name:"saraku_u",          kills:29437,  deaths:9509,  kd:3.1,   games:15955, wins:6621,  wl:41.5, socials: {youtube: "https://www.youtube.com/@saraaku", twitch: "https://www.twitch.tv/robinvnz", twitter: "https://x.com/robinvnzz"}},
-	{ rank:null,uuid:"f5cefe27bc7a41cdaf155ebae770fda5",  name:"ILuvvvcattsss",  	kills:26347,  deaths:7682,  kd:3.43,  games:16406, wins:10000, wl:60.95,deleted: "banned for Cheating on November 5, 2019", note: "aka Praviness", socials: { youtube: "https://www.youtube.com/watch?v=1WnifdLFi4I", twitter: "https://x.com/Finn3Yt" }},
+	{ rank:null,uuid:"8aa371aa05514214929111a6fddce665",  name:"Vxltar",            kills:null,   deaths:null,  kd:3.54,  games:null,  wins:10077, wl:null, retired:"07/2017", deleted: "banned for Cheating", socials: { twitch: "https://www.twitch.tv/voltartwitch", youtube: "https://www.youtube.com/@JohannesST-qk8db" }},
+	{ rank:null,uuid:"fc17a9963cc34e69976c46c0efa27612",  name:"pvpatryck",  		kills:null,   deaths:null,  kd:3.45,  games:null,  wins:14715, wl:null, retired:"11/2017 – 11/2018", deleted: "banned in November 2018 thanks to ryqi", note: "aka ZwochiOP" },
+	{ rank:null,uuid:"f5cefe27bc7a41cdaf155ebae770fda5",  name:"ILuvvvcattsss",  	kills:26347,  deaths:7682,  kd:3.43,  games:16406, wins:10000, wl:60.95, deleted: "banned for Cheating on November 5, 2019", note: "aka Praviness", socials: { youtube: "https://www.youtube.com/watch?v=1WnifdLFi4I", twitter: "https://x.com/Finn3Yt" }},
 ];
 
 let sortCol = "rank";
@@ -1137,19 +1250,23 @@ function compareValues(a, b, col, asc) {
 }
 
 function getBaseRankMap(includeDeleted) {
-    const basePool = includeDeleted ? [...players] : players.filter(p => !p.deleted);
-    const rankedByWins = [...basePool].sort((a, b) => {
-        if (a.wins === null && b.wins === null) return 0;
-        if (a.wins === null) return 1;
-        if (b.wins === null) return -1;
-        if (b.wins !== a.wins) return b.wins - a.wins;
-        return a.name.localeCompare(b.name);
+    const pool = includeDeleted ? [...players] : players.filter(p => !p.deleted);
+    const ranked = pool.filter(p => p.rank !== null).sort((a, b) => a.rank - b.rank);
+
+    const keyOf = new Map();
+    pool.forEach(p => {
+        if (p.rank !== null) { keyOf.set(p, p.rank); return; }
+        let key = ranked.length + 1;
+        for (const r of ranked) {
+            if (r.wins !== null && p.wins !== null && r.wins <= p.wins) { key = r.rank - 0.5; break; }
+        }
+        if (p.wins === null) key = 99999;
+        keyOf.set(p, key);
     });
 
+    const sorted = [...pool].sort((a, b) => keyOf.get(a) - keyOf.get(b));
     const rankMap = new Map();
-    rankedByWins.forEach((p, index) => {
-        rankMap.set(p.uuid + "|" + p.name, index + 1);
-    });
+    sorted.forEach((p, i) => rankMap.set(p, i + 1));
     return rankMap;
 }
 
@@ -1159,9 +1276,9 @@ function getProcessedPlayers() {
     const baseRankMap = getBaseRankMap(showDeleted);
 
     let processed = visiblePlayers.map(p => ({
-        ...p,
-        baseRank: baseRankMap.get(p.uuid + "|" + p.name) ?? null
-    }));
+		...p,
+		baseRank: baseRankMap.get(p) ?? null
+	}));
 
     processed = processed.filter(p => !query || (p.name && p.name.toLowerCase().includes(query)));
 
@@ -1171,7 +1288,12 @@ function getProcessedPlayers() {
         p.displayRank = index + 1;
     });
 
-    return processed.slice(0, 100);
+    return processed.slice(0, 200);
+}
+
+function toList(v) {
+    if (!v) return [];
+    return (Array.isArray(v) ? v : [v]).map(s => String(s).trim()).filter(Boolean);
 }
 
 function renderTable(data) {
@@ -1207,9 +1329,10 @@ function renderTable(data) {
                 <div class="player-cell">
                     <img class="player-head" src="${imgUrl}" alt="${p.name}" loading="lazy">
                     <span class="player-name clickable-name" onclick="showPlayerProfile('${p.name}')">${p.name}</span>
-                    ${p.best ? p.best.map(b => `<span class="best-icon" data-note="${b}">🏆</span>`).join('') : ''}
-                    ${p.worst ? `<span class="worst-icon" data-note="${p.worst}">💩</span>` : ''}
+                    ${toList(p.best).map(b => `<span class="best-icon" data-note="${b}">🏆</span>`).join('')}
+					${toList(p.worst).map(w => `<span class="worst-icon" data-note="${w}">💩</span>`).join('')}
                     ${p.note ? `<span class="note-icon" data-note="${p.note}">?</span>` : ''}
+					${p.retired ? `<span class="retired-icon" data-note="Alltop: ${p.retired}" style="vertical-align:middle;margin-left:4px;">🐐</span>` : ''}
                     ${p.owner ? `<span class="owner-icon" data-note="${p.owner}">✏️</span>` : ''}
                     ${p.deleted ? `<span class="deleted-icon" data-note="${p.deleted}"><i class="fas fa-trash"></i></span>` : ''}
                 </div>`;
@@ -1325,10 +1448,11 @@ function showPlayerProfile(playerName) {
 
     document.getElementById('profileName').innerHTML = `
 		${p.name}
-		${p.best ? p.best.map(b => `<span class="best-icon" data-note="${b}">🏆</span>`).join('') : ''}
-		${p.worst ? `<span class="worst-icon" data-note="${p.worst}">💩</span>` : ''}
+		${toList(p.best).map(b => `<span class="best-icon" data-note="${b}">🏆</span>`).join('')}
+		${toList(p.worst).map(w => `<span class="worst-icon" data-note="${w}">💩</span>`).join('')}
 		${p.note ? `<span class="note-icon" data-note="${p.note}">?</span>` : ''}
 		${p.owner ? `<span class="owner-icon" data-note="${p.owner}" style="font-size:0.55em;vertical-align:middle;margin-left:4px;">✏️</span>` : ''}
+		${p.retired ? `<span class="retired-icon" data-note="Alltop: ${p.retired}" style="vertical-align:middle;margin-left:4px;">🐐</span>` : ''}
 		${p.deleted ? `<span class="deleted-icon" data-note="${p.deleted}" style="font-size:0.55em;vertical-align:middle;margin-left:4px;"><i class="fas fa-trash"></i></span>` : ''}
 	`;
 
@@ -1446,12 +1570,11 @@ function showLeaderboard() {
 }
 
 document.addEventListener("click", function(e) {
-    const icon = e.target.closest(".note-icon, .best-icon, .worst-icon, .owner-icon, .deleted-icon");
-
-    document.querySelectorAll(".note-icon, .best-icon, .worst-icon, .owner-icon, .deleted-icon")
-        .forEach(el => {
-            if (el !== icon) el.classList.remove("active");
-        });
+    const sel = ".note-icon, .best-icon, .worst-icon, .owner-icon, .deleted-icon, .retired-icon";
+	const icon = e.target.closest(sel);
+	document.querySelectorAll(sel).forEach(el => {
+		if (el !== icon) el.classList.remove("active");
+	});
 
     if (icon) {
         e.stopPropagation();
